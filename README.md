@@ -47,12 +47,22 @@ Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir ara
 | -------- | ----------------------- | -------------------------------- | ------------------------------------------- |
 | **Body** | **body** <br>_required_ | Arama yaratmak için gerekli şema | [CreateSearchRequest](#createSearchRequest) |
 
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                       | Şema                              |
+| --------- | -------------------------------------------------------------- | --------------------------------- |
+| **200**   | Başarılı                                                       | [SearchResponse](#searchResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                   |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                   |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                   |
+
 <a name="definitions"></a>
 
 ## Tanımlar
 
 <a name="createSearchRequest"></a>
-###CreateSearchRequest
+
+### CreateSearchRequest
 
 | Ad                                   | Açıklama                                                                                                                                                               | Şema                    |
 | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
@@ -62,7 +72,9 @@ Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir ara
 | **loads** <br>_zorunlu_              | Taşıması yapılacak yüklere ait paket bilgileri                                                                                                                         | < [Load](#load) > array |
 
 <a name="load"></a>
-###Load
+
+### Load
+
 Taşıması yapılacak yüke ait paketleme bilgisi.
 
 | Ad                         | Açıklama                                                                     | Şema    |
@@ -73,3 +85,45 @@ Taşıması yapılacak yüke ait paketleme bilgisi.
 | **width** <br>_opsiyonel_  | Paketin eni. Box tipindeki paketlerde bu değer zorunludur.                   | decimal |
 | **length** <br>_opsiyonel_ | Paketin boyu. Box tipindeki paketlerde bu değer zorunludur.                  | decimal |
 | **height** <br>_opsiyonel_ | Paketin yüksekliği. Box tipindeki paketlerde bu değer zorunludur.            | decimal |
+
+<a name="searchResponse"></a>
+
+### SearchResponse
+
+| Ad                                | Açıklama                                                                    | Şema                      |
+| --------------------------------- | --------------------------------------------------------------------------- | ------------------------- |
+| **searchReference** <br>_zorunlu_ | Aramanın referans id'si                                                     | string                    |
+| **quotes** <br>_opsiyonel_        | Arama sonucunda üretilen teklifler. Hiç teklif üretilemezse boş dizi döner. | < [Quote](#quote) > array |
+
+<a name="quote"></a>
+
+### Quote
+
+Express aramaya üretilen teklif bilgisi
+
+| Ad                                 | Açıklama                            | Şema    |
+| ---------------------------------- | ----------------------------------- | ------- |
+| **quoteReference** <br>_zorunlu_   | Teklifin referans id'si             | string  |
+| **price** <br>_zorunlu_            | Teklif tutarı                       | decimal |
+| **currency** <br>_zorunlu_         | Teklif kuru                         | string  |
+| **proposal** <br>_zorunlu_         | Teklif türü. ( express, ecoExpress) | string  |
+| **minTransitTime** <br>_opsiyonel_ | Minimum taşıma süresi(gün)          | int     |
+| **maxTransitTime** <br>_opsiyonel_ | Maksimum taşıma süresi(gün)         | int     |
+| **description** <br>_zorunlu_      | Teklif açıklaması                   | string  |
+| **isDoorToDoor** <br>_zorunlu_     | Kapıdan kapıya mı?                  | bool    |
+
+<a name="error"></a>
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
