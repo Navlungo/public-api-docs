@@ -26,6 +26,10 @@ _Schemes_ : HTTPS
 ### Operasyonlar
 
 [createSearch](#searches)<br>
+[createStore](#createStore)<br>
+[getStore](#getStore)<br>
+[updateStore](#updateStore)<br>
+[updateStoreAddress](#updateStoreAddress)<br>
 
 <a name="paths"></a>
 
@@ -33,7 +37,7 @@ _Schemes_ : HTTPS
 
 <a name="searches"></a>
 
-### POST /v1/searches
+- ### POST /v1/searches
 
 **Operasyon: createSearch**
 
@@ -113,6 +117,96 @@ Express aramaya üretilen teklif bilgisi
 | **isDoorToDoor** <br>_zorunlu_     | Kapıdan kapıya mı?                  | bool    |
 
 <a name="error"></a>
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<a name="createStore"></a>
+
+<hr/>
+
+### POST /v1/stores
+
+**Operasyon: createStore**
+
+#### Açıklama
+
+İşlem yapılan kullanıcıya ait bir mağaza kaydı oluşturur ve mağazanın varsayılan fatura ile gönderim adres bilgilerini yaratır.
+
+#### Parametreler
+
+| Tip      | İsim                    | Açıklama                          | Şema                                      |
+| -------- | ----------------------- | --------------------------------- | ----------------------------------------- |
+| **Body** | **body** <br>_required_ | Mağaza yaratmak için gerekli şema | [CreateStoreRequest](#createStoreRequest) |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                        | Şema                                        |
+| --------- | --------------------------------------------------------------- | ------------------------------------------- |
+| **200**   | Başarılı                                                        | [CreateStoreResponse](#createStoreResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error)                             |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error)                             |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error)                             |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="createStoreRequest"></a>
+
+### CreateStoreRequest
+
+| Ad                               | Açıklama                                                                                                                                                      | Şema                                     |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| **name** <br>_zorunlu_           | Yükün çıkışının yapılacağı ülkenin ISO2 kodu                                                                                                                  | string                                   |
+| **url** <br>_opsiyonel_          | Url'i üzerinden tanım yapılan mağazalar için store url bilgisidir.                                                                                            | string                                   |
+| **storeId** <br>_optional_       | Mağazanın tekil Id'sidir. Gönderilmediği takdirde Navlungo'da yaratılan tekil id geri döndürülecektir. Mağaza için iletişim bu id üzerinden gerçekleşecektir. | string                                   |
+| **storeAddress** <br>_zorunlu_   | Mağaza adresi bilgisidir.                                                                                                                                     | < [StoreAddress](#storeAddress) > object |
+| **invoiceAddress** <br>_zorunlu_ | Mağaza'nın gönderi oluştururken kullanılacak fatura adresidir.                                                                                                | < [StoreAddress](#storeAddress) > object |
+
+<a name="storeAddress"></a>
+
+### storeAddress
+
+Mağazanın adres bilgilerinin modelidir.
+
+| Ad                                      | Açıklama                                                                                      | Şema   |
+| --------------------------------------- | --------------------------------------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_                  | Adres bireysel mi kurumsal mı olduğunun bilgisidir. Bireysel: Individual, Kurumsal: Corporate | string |
+| **companyName** <br>_optional_          | Kurumsal adres için şirket ismi                                                               | string |
+| **identificationNumber** <br>_required_ | Veri kimlik numarası veya TC Kimlik numarası                                                  | string |
+| **taxOffice** <br>_opsiyonel_           | Vergi dairesi                                                                                 | string |
+| **contactName** <br>_zorunlu_           | Kontak kişi adı                                                                               | string |
+| **contactPhone** <br>_zorunlu_          | Kontak kişinin telefon numarası                                                               | string |
+| **contactMail** <br>_zorunlu_           | Kontak kişinin email adresi                                                                   | string |
+| **countryCode** <br>_zorunlu_           | 2 haneli global ülke kodu                                                                     | string |
+| **state** <br>_optional_                | Global eyalet kodu                                                                            | string |
+| **city** <br>_zorunlu_                  | Şehir bilgisi                                                                                 | string |
+| **town** <br>_zorunlu_                  | İlçe bilgisi                                                                                  | string |
+| **postalCode** <br>_zorunlu_            | Posta kodu                                                                                    | string |
+| **firstLine** <br>_zorunlu_             | İlk adres satırı. Minimum 10 karakter, maximum 30 karakter.                                   | string |
+| **secondLine** <br>_optional_           | İkinci adres satırı.Maximum 30 karakter.                                                      | string |
+| **thirdLine** <br>_optional_            | Üçüncü adres satırı. Maximum 30 karakter.                                                     | string |
+| **thirdLine** <br>_zorunlu_             | Üçüncü adres satırı                                                                           | string |
+
+<a name="createStoreResponse"></a>
+
+### createStoreResponse
+
+| Ad                        | Açıklama                         | Şema   |
+| ------------------------- | -------------------------------- | ------ |
+| **storeId** <br>_zorunlu_ | Yaratılan mağazanın tekil Id'si. | string |
 
 ### Error
 
