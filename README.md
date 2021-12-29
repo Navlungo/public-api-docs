@@ -134,7 +134,8 @@ Genel hata nesnesi
 
 <hr/>
 <a name="createStore"></a>
-### POST /v1/stores
+
+- ### POST /v1/stores
 
 **Operasyon: createStore**
 
@@ -234,7 +235,8 @@ Genel hata nesnesi
 
 <hr/>
 <a name="getStores"></a>
-### GET /v1/stores
+
+- ### GET /v1/stores
 
 **Operasyon: getStores**
 
@@ -281,7 +283,8 @@ Genel hata nesnesi
 
 <hr/>
 <a name="getStore"></a>
-### GET /v1/stores/{id}
+
+- ### GET /v1/stores/{id}
 
 **Operasyon: getStore**
 
@@ -289,11 +292,11 @@ Genel hata nesnesi
 
 Kullanıcıya ait tüm mağazalardan talep edilen mağazanın detaylarını getirir.
 
-#### Query Parametreleri
+#### Parametreler
 
-| Ad                     | Açıklama                                     | Şema   |
-| ---------------------- | -------------------------------------------- | ------ |
-| **{id}** <br>_zorunlu_ | Bilgileri talep edilen mağazanın tekil id'si | string |
+| Ad        | Açıklama                | Şema                  |
+| --------- | ----------------------- | --------------------- | ------ |
+| **Query** | **{id}** <br>_required_ | Mağazanın tekil id'si | string |
 
 #### Yanıtlar
 
@@ -315,6 +318,96 @@ Kullanıcıya ait tüm mağazalardan talep edilen mağazanın detaylarını geti
 | Ad                      | Açıklama         | Şema                       |
 | ----------------------- | ---------------- | -------------------------- |
 | **store** <br>_zorunlu_ | Mağaza bilgileri | < [Store](#store) > object |
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="updateStore"></a>
+
+- ### PUT /v1/stores/{id}
+
+**Operasyon: updateStore**
+
+#### Açıklama
+
+Query parametresi olarak verilen id'ye ait mağazanın bilgilerini günceller.
+
+#### Parametreler
+
+| Tip       | İsim                    | Açıklama              | Şema   |
+| --------- | ----------------------- | --------------------- | ------ |
+| **Query** | **{id}** <br>_required_ | Mağazanın tekil id'si | string |
+| **Body**  | **Name** <br>_required_ | Mağaza adı            | string |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                        | Şema            |
+| --------- | --------------------------------------------------------------- | --------------- |
+| **200**   | Başarılı                                                        |                 |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="updateStoreAddress"></a>
+
+- ### PUT /v1/stores/{id}
+
+**Operasyon: updateStoreAddress**
+
+#### Açıklama
+
+Query parametresi olarak verilen id'ye ait mağazanın bilgilerini günceller.
+
+#### Parametreler
+
+| Tip       | İsim                    | Açıklama              | Şema   |
+| --------- | ----------------------- | --------------------- | ------ |
+| **Query** | **{id}** <br>_required_ | Mağazanın tekil id'si | string |
+| **Body**  | **Name** <br>_required_ | Mağaza adı            | string |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                        | Şema            |
+| --------- | --------------------------------------------------------------- | --------------- |
+| **200**   | Başarılı                                                        |                 |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
+
+<a name="definitions"></a>
+
+## Tanımlar
 
 ### Error
 
