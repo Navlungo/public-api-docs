@@ -132,10 +132,8 @@ Genel hata nesnesi
 | **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
 | **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
 
-<a name="createStore"></a>
-
 <hr/>
-
+<a name="createStore"></a>
 ### POST /v1/stores
 
 **Operasyon: createStore**
@@ -167,17 +165,17 @@ Genel hata nesnesi
 
 ### CreateStoreRequest
 
-| Ad                               | Açıklama                                                                                                                                                      | Şema                                     |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| **name** <br>_zorunlu_           | Yükün çıkışının yapılacağı ülkenin ISO2 kodu                                                                                                                  | string                                   |
-| **url** <br>_opsiyonel_          | Url'i üzerinden tanım yapılan mağazalar için store url bilgisidir.                                                                                            | string                                   |
-| **storeId** <br>_optional_       | Mağazanın tekil Id'sidir. Gönderilmediği takdirde Navlungo'da yaratılan tekil id geri döndürülecektir. Mağaza için iletişim bu id üzerinden gerçekleşecektir. | string                                   |
-| **storeAddress** <br>_zorunlu_   | Mağaza adresi bilgisidir.                                                                                                                                     | < [StoreAddress](#storeAddress) > object |
-| **invoiceAddress** <br>_zorunlu_ | Mağaza'nın gönderi oluştururken kullanılacak fatura adresidir.                                                                                                | < [StoreAddress](#storeAddress) > object |
+| Ad                               | Açıklama                                                                                                                                                      | Şema                           |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| **name** <br>_zorunlu_           | Yükün çıkışının yapılacağı ülkenin ISO2 kodu                                                                                                                  | string                         |
+| **url** <br>_opsiyonel_          | Url'i üzerinden tanım yapılan mağazalar için store url bilgisidir.                                                                                            | string                         |
+| **storeId** <br>_optional_       | Mağazanın tekil Id'sidir. Gönderilmediği takdirde Navlungo'da yaratılan tekil id geri döndürülecektir. Mağaza için iletişim bu id üzerinden gerçekleşecektir. | string                         |
+| **storeAddress** <br>_zorunlu_   | Mağaza adresi bilgisidir.                                                                                                                                     | < [Address](#address) > object |
+| **invoiceAddress** <br>_zorunlu_ | Mağaza'nın gönderi oluştururken kullanılacak fatura adresidir.                                                                                                | < [Address](#address) > object |
 
-<a name="storeAddress"></a>
+<a name="address"></a>
 
-### storeAddress
+### Address
 
 Mağazanın adres bilgilerinin modelidir.
 
@@ -207,6 +205,116 @@ Mağazanın adres bilgilerinin modelidir.
 | Ad                        | Açıklama                         | Şema   |
 | ------------------------- | -------------------------------- | ------ |
 | **storeId** <br>_zorunlu_ | Yaratılan mağazanın tekil Id'si. | string |
+
+<a name="store"></a>
+
+### Store
+
+| Ad                              | Açıklama               | Şema                         |
+| ------------------------------- | ---------------------- | ---------------------------- |
+| **storeId** <br>_zorunlu_       | Mağaza'nın tekil id'si | string                       |
+| **name** <br>_zorunlu_          | Mağaza'nın adı         | string                       |
+| **url** <br>_optional_          | Mağaza'nın url bilgisi | string                       |
+| **storeType** <br>_optional_    | Çözüm ortağı           | string                       |
+| **storeAddress** <br>_optional_ | Çözüm ortağı           | <[Address](#address)> object |
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="getStores"></a>
+### GET /v1/stores
+
+**Operasyon: getStores**
+
+#### Açıklama
+
+Kullanıcıya ait tüm mağazaları getirir.
+
+#### Parametreler
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                        | Şema                                    |
+| --------- | --------------------------------------------------------------- | --------------------------------------- |
+| **200**   | Başarılı                                                        | [GetStoresResponse](#GetStoresResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error)                         |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error)                         |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error)                         |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="GetStoresResponse"></a>
+
+### GetStoresResponse
+
+| Ad                       | Açıklama       | Şema                      |
+| ------------------------ | -------------- | ------------------------- |
+| **stores** <br>_zorunlu_ | Mağaza listesi | < [Store](#store) > array |
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="getStore"></a>
+### GET /v1/stores/{id}
+
+**Operasyon: getStore**
+
+#### Açıklama
+
+Kullanıcıya ait tüm mağazalardan talep edilen mağazanın detaylarını getirir.
+
+#### Query Parametreleri
+
+| Ad                     | Açıklama                                     | Şema   |
+| ---------------------- | -------------------------------------------- | ------ |
+| **{id}** <br>_zorunlu_ | Bilgileri talep edilen mağazanın tekil id'si | string |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                        | Şema                                  |
+| --------- | --------------------------------------------------------------- | ------------------------------------- |
+| **200**   | Başarılı                                                        | [GetStoreResponse](#GetStoreResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error)                       |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error)                       |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error)                       |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="GetStoreResponse"></a>
+
+### GetStoreResponse
+
+| Ad                      | Açıklama         | Şema                       |
+| ----------------------- | ---------------- | -------------------------- |
+| **store** <br>_zorunlu_ | Mağaza bilgileri | < [Store](#store) > object |
 
 ### Error
 
