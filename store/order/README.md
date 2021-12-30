@@ -43,10 +43,10 @@ _Schemes_ : HTTPS
 
 #### Parametreler
 
-| Tip       | İsim                    | Açıklama                             | Şema                                      |
-| --------- | ----------------------- | ------------------------------------ | ----------------------------------------- |
-| **Query** | **{id}** <br>_required_ | Kullanıcının mağazasının tekil Id'si | string                                    |
-| **Body**  | **body** <br>_required_ | Order yaratmak için gerekli şema     | [CreateOrderRequest](#createOrderRequest) |
+| Tip       | İsim                   | Açıklama                             | Şema                                      |
+| --------- | ---------------------- | ------------------------------------ | ----------------------------------------- |
+| **Query** | **{id}** <br>_zorunlu_ | Kullanıcının mağazasının tekil Id'si | string                                    |
+| **Body**  | **body** <br>_zorunlu_ | Order yaratmak için gerekli şema     | [CreateOrderRequest](#createOrderRequest) |
 
 #### Yanıtlar
 
@@ -83,7 +83,7 @@ Kaydedilecek olan siparişin modelidir.
 | **receiverEmail** <br>_opsiyonel_       | Alıcının email bilgisi                      | string                                 |
 | **currencyCode** <br>_zorunlu_          | 3 haneli döviz kodu                         | string                                 |
 | **orderLines** <br>_zorunlu_            | Kontak kişinin telefon numarası             | <[OrderLine](#orderLine)> array        |
-| **creationDateInStore** <br>_optional_  | Siparişin mağazasında ilk yaratıldığı tarih | long                                   |
+| **creationDateInStore** <br>_opsiyonel_ | Siparişin mağazasında ilk yaratıldığı tarih | long                                   |
 
 <a name="orderLine"></a>
 

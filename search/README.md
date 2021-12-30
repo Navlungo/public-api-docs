@@ -33,7 +33,7 @@ _Schemes_ : HTTPS
 
 <a name="searches"></a>
 
-- ### POST /v1/searches
+### POST /v1/searches
 
 **Operasyon: createSearch**
 
@@ -43,9 +43,9 @@ Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir ara
 
 #### Parametreler
 
-| Tip      | İsim                    | Açıklama                         | Şema                                        |
-| -------- | ----------------------- | -------------------------------- | ------------------------------------------- |
-| **Body** | **body** <br>_required_ | Arama yaratmak için gerekli şema | [CreateSearchRequest](#createSearchRequest) |
+| Tip      | İsim                   | Açıklama                         | Şema                                        |
+| -------- | ---------------------- | -------------------------------- | ------------------------------------------- |
+| **Body** | **body** <br>_zorunlu_ | Arama yaratmak için gerekli şema | [CreateSearchRequest](#createSearchRequest) |
 
 #### Yanıtlar
 
