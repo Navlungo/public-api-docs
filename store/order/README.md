@@ -75,19 +75,19 @@ _Schemes_ : HTTPS
 
 Kaydedilecek olan siparişin modelidir.
 
-| Ad                                      | Açıklama                                    | Şema                                   |
-| --------------------------------------- | ------------------------------------------- | -------------------------------------- |
-| **receiverAddress** <br>_zorunlu_       | Alıcının adres bilgisidir.                  | <[OrderAddress](#orderAddress)> object |
-| **orderReference** <br>_zorunlu_        | Siparişin uniq reference Id'si              | string                                 |
-| **receiverPhoneNumber** <br>_opsiyonel_ | Alıcının telefon numarası                   | string                                 |
-| **receiverEmail** <br>_opsiyonel_       | Alıcının email bilgisi                      | string                                 |
-| **currencyCode** <br>_zorunlu_          | 3 haneli döviz kodu                         | string                                 |
-| **orderLines** <br>_zorunlu_            | Kontak kişinin telefon numarası             | <[OrderLine](#orderLine)> array        |
-| **creationDateInStore** <br>_opsiyonel_ | Siparişin mağazasında ilk yaratıldığı tarih | long                                   |
+| Ad                                      | Açıklama                                | Şema                                   |
+| --------------------------------------- | --------------------------------------- | -------------------------------------- |
+| **receiverAddress** <br>_zorunlu_       | Alıcının adres bilgisidir.              | <[OrderAddress](#orderAddress)> object |
+| **orderReference** <br>_zorunlu_        | Siparişin uniq reference Id'si          | string                                 |
+| **receiverPhoneNumber** <br>_opsiyonel_ | Alıcının telefon numarası               | string                                 |
+| **receiverEmail** <br>_opsiyonel_       | Alıcının email bilgisi                  | string                                 |
+| **currencyCode** <br>_zorunlu_          | 3 haneli döviz kodu(USD,EUR,GBP)        | string                                 |
+| **orderItems** <br>_zorunlu_            | Siparişin alt kırılımları               | <[OrderItem](#orderItem)> array        |
+| **creationDateInStore** <br>_opsiyonel_ | Unix epoch timestamp (saniye cinsinden) | long                                   |
 
-<a name="orderLine"></a>
+<a name="orderItem"></a>
 
-### OrderLine
+### orderItem
 
 Siparişin içindeki ürünlerin detay bilgileridir.
 

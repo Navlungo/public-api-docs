@@ -64,12 +64,12 @@ Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir ara
 
 ### CreateSearchRequest
 
-| Ad                                   | Açıklama                                                                                                                                                               | Şema                    |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| **originCountry** <br>_zorunlu_      | Yükün çıkışının yapılacağı ülkenin ISO2 kodu                                                                                                                           | string                  |
-| **originRegion** <br>_opsiyonel_     | Yükün çıkışının yapılcağı bölgenin kodu. Tercihen posta kodu gönderilmeli. Bu alanın doğru gönderilmemesi durumunda fiyatlara ek iç taşıma maliyetleri yansıtılabilir. | string                  |
-| **destinationCountry** <br>_zorunlu_ | Yükün gönderileceği ülkenin ISO2 kodu                                                                                                                                  | string                  |
-| **loads** <br>_zorunlu_              | Taşıması yapılacak yüklere ait paket bilgileri                                                                                                                         | < [Load](#load) > array |
+| Ad                                   | Açıklama                                                                                                                                                                | Şema                    |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| **originCountry** <br>_zorunlu_      | Yükün çıkışının yapılacağı ülkenin ISO2 kodu                                                                                                                            | string                  |
+| **originRegion** <br>_opsiyonel_     | Yükün çıkışının yapılacağı bölgenin kodu. Tercihen posta kodu gönderilmeli. Bu alanın doğru gönderilmemesi durumunda fiyatlara ek iç taşıma maliyetleri yansıtılabilir. | string                  |
+| **destinationCountry** <br>_zorunlu_ | Yükün gönderileceği ülkenin ISO2 kodu                                                                                                                                   | string                  |
+| **loads** <br>_zorunlu_              | Taşıması yapılacak yüklere ait paket bilgileri                                                                                                                          | < [Load](#load) > array |
 
 <a name="load"></a>
 
@@ -79,8 +79,8 @@ Taşıması yapılacak yüke ait paketleme bilgisi.
 
 | Ad                         | Açıklama                                                                     | Şema    |
 | -------------------------- | ---------------------------------------------------------------------------- | ------- |
+| **type** <br>_zorunlu_     | Paket türü. Box veya Envelope olmalı. (Case sensitive)                       | string  |
 | **count** <br>_zorunlu_    | Paket adedi. Envelope tipindeki paketler için yalnızca 1 olabilir.           | string  |
-| **type** <br>_zorunlu_     | Paket türü. Box veya Envelope olmalı. (büyük küçük harf duyarlı)             | string  |
 | **weight** <br>_zorunlu_   | Paketin ağırlığı. Envelope tipindeki paketler için en fazla 2.5 kg olabilir. | decimal |
 | **width** <br>_opsiyonel_  | Paketin eni. Box tipindeki paketlerde bu değer zorunludur.                   | decimal |
 | **length** <br>_opsiyonel_ | Paketin boyu. Box tipindeki paketlerde bu değer zorunludur.                  | decimal |

@@ -2,7 +2,7 @@
 
 ## Genel Bakış
 
-Navlungo, faturalanabilir ağırlığı 300kg'a kadar olan yükler için yapılan aramalara express hizmet verebilmektedir. Api'ler kullanılarak Navlungo'da mağaza yaratılabilir ve bu mağazalara siparişler eklenebilir. Bir sipariş için birden fazla rekabetçi alınarak içlerinden en uygun olan seçilebilir.
+Navlungo, faturalanabilir ağırlığı 300kg'a kadar olan yükler için yapılan aramalara express hizmet verebilmektedir. Api'ler kullanılarak Navlungo'da mağaza yaratılabilir ve bu mağazalara siparişler eklenebilir. Bir sipariş için birden fazla rekabetçi teklif alınarak içlerinden en uygun olan seçilebilir.
 
 ### Operasyonlar
 

@@ -4,7 +4,7 @@
 
 ## Genel Bakış
 
-Express aramalar api'si kullanılarak faturalanabilir ağırlığı 300 kg'a kadar olan yükler için birden fazla teklik alınabilir. Bu teklif seçme api'si kullanılarakta sistemde bulunun bir order ile tekliflerden biri seçilerek ilişkilendirilebilir.
+Express aramalar api'si kullanılarak faturalanabilir ağırlığı 300 kg'a kadar olan yükler için birden fazla teklif alınabilir. Bu teklif seçme api'si kullanılarak sistemde bulunun bir teklif ile tekliflerden biri seçilerek ilişkilendirilebilir.
 
 ### Versiyon Bilgisi
 
