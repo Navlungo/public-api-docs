@@ -77,14 +77,14 @@ Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir ara
 
 Taşıması yapılacak yüke ait paketleme bilgisi.
 
-| Ad                         | Açıklama                                                                     | Şema    |
-| -------------------------- | ---------------------------------------------------------------------------- | ------- |
-| **type** <br>_zorunlu_     | Paket türü. Box veya Envelope olmalı. (Case sensitive)                       | string  |
-| **count** <br>_zorunlu_    | Paket adedi. Envelope tipindeki paketler için yalnızca 1 olabilir.           | string  |
-| **weight** <br>_zorunlu_   | Paketin ağırlığı. Envelope tipindeki paketler için en fazla 2.5 kg olabilir. | decimal |
-| **width** <br>_opsiyonel_  | Paketin eni. Box tipindeki paketlerde bu değer zorunludur.                   | decimal |
-| **length** <br>_opsiyonel_ | Paketin boyu. Box tipindeki paketlerde bu değer zorunludur.                  | decimal |
-| **height** <br>_opsiyonel_ | Paketin yüksekliği. Box tipindeki paketlerde bu değer zorunludur.            | decimal |
+| Ad                         | Açıklama                                                                                        | Şema    |
+| -------------------------- | ----------------------------------------------------------------------------------------------- | ------- |
+| **type** <br>_zorunlu_     | Paket türü. Box veya Envelope olmalı. (Case sensitive)                                          | string  |
+| **count** <br>_zorunlu_    | Paket adedi. Envelope tipindeki paketler için yalnızca 1 olabilir.                              | string  |
+| **weight** <br>_zorunlu_   | Kilogram cinsinden paketin ağırlığı. Envelope tipindeki paketler için en fazla 2.5 kg olabilir. | decimal |
+| **width** <br>_opsiyonel_  | Santimetre cinsinden paketin eni. Box tipindeki paketlerde bu değer zorunludur.                 | decimal |
+| **length** <br>_opsiyonel_ | Santimetre cinsinden paketin boyu. Box tipindeki paketlerde bu değer zorunludur.                | decimal |
+| **height** <br>_opsiyonel_ | Santimetre cinsinden paketin yüksekliği. Box tipindeki paketlerde bu değer zorunludur.          | decimal |
 
 <a name="searchResponse"></a>
 

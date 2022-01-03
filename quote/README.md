@@ -43,10 +43,10 @@ Query parametre olarak verilen teklif seçilerek order id ile ilişkilendirilir.
 
 #### Parametreler
 
-| Tip       | İsim                   | Açıklama                         | Şema                                      |
-| --------- | ---------------------- | -------------------------------- | ----------------------------------------- |
-| **Query** | **id** <br>_zorunlu_   | Teklifin tekil id'si             | string                                    |
-| **Body**  | **body** <br>_zorunlu_ | Arama yaratmak için gerekli şema | [selectQuoteRequest](#selectQuoteRequest) |
+| Tip       | İsim                   | Açıklama                        | Şema                                      |
+| --------- | ---------------------- | ------------------------------- | ----------------------------------------- |
+| **Query** | **id** <br>_zorunlu_   | Teklifin tekil id'si            | string                                    |
+| **Body**  | **body** <br>_zorunlu_ | Teklif seçmek için gerekli şema | [selectQuoteRequest](#selectQuoteRequest) |
 
 #### Yanıtlar
 

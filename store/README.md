@@ -4,7 +4,7 @@
 
 ## Genel Bakış
 
-Navlungo kullanıcıları mağazalarını bağlarak siparişlerini Navlungo arayüzlerinde görüntüleyebilmektedir. Bu Api'ler ile sisteme kayıt olmuş bir kullanıcı arayüze girmeden mağazasını bağlayabilir ve mağaza siparişlerinde kullanılacak olan varsayılan adreslerini belirleyebilir.
+Navlungo kullanıcıları mağazalarını bağlayarak siparişlerini Navlungo arayüzlerinde görüntüleyebilmektedir. Bu Api'ler ile sisteme kayıt olmuş bir kullanıcı arayüze girmeden mağazasını bağlayabilir ve mağaza siparişlerinde kullanılacak olan varsayılan adreslerini belirleyebilir.
 
 ### Versiyon Bilgisi
 
@@ -72,7 +72,7 @@ _Schemes_ : HTTPS
 
 | Ad                               | Açıklama                                                                                                                                                      | Şema                           |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| **name** <br>_zorunlu_           | Yükün çıkışının yapılacağı ülkenin ISO2 kodu                                                                                                                  | string                         |
+| **name** <br>_zorunlu_           | Mağaza adı                                                                                                                                                    | string                         |
 | **url** <br>_opsiyonel_          | Url'i üzerinden tanım yapılan mağazalar için store url bilgisidir.                                                                                            | string                         |
 | **storeId** <br>_opsiyonel_      | Mağazanın tekil Id'sidir. Gönderilmediği takdirde Navlungo'da yaratılan tekil id geri döndürülecektir. Mağaza için iletişim bu id üzerinden gerçekleşecektir. | string                         |
 | **storeAddress** <br>_zorunlu_   | Mağaza adresi bilgisidir.                                                                                                                                     | < [Address](#address) > object |
@@ -101,7 +101,6 @@ Mağazanın adres bilgilerinin modelidir.
 | **firstLine** <br>_zorunlu_            | İlk adres satırı. Minimum 10 karakter, maximum 30 karakter.                                   | string |
 | **secondLine** <br>_opsiyonel_         | İkinci adres satırı.Maximum 30 karakter.                                                      | string |
 | **thirdLine** <br>_opsiyonel_          | Üçüncü adres satırı. Maximum 30 karakter.                                                     | string |
-| **thirdLine** <br>_zorunlu_            | Üçüncü adres satırı                                                                           | string |
 
 <a name="createStoreResponse"></a>
 
@@ -298,7 +297,7 @@ Query parametresi olarak verilen id'ye ait mağazanın adres bilgilerini güncel
 | Tip       | İsim                      | Açıklama              | Şema                         |
 | --------- | ------------------------- | --------------------- | ---------------------------- |
 | **Query** | **{id}** <br>_zorunlu_    | Mağazanın tekil id'si | string                       |
-| **Body**  | **address** <br>_zorunlu_ | Mağaza adı            | <[Address](#address)> object |
+| **Body**  | **address** <br>_zorunlu_ | Mağazanın yeni adresi | <[Address](#address)> object |
 
 #### Yanıtlar
 
@@ -339,7 +338,7 @@ Query parametresi olarak verilen id'ye ait mağazanın fatura adres bilgilerini 
 | Tip       | İsim                      | Açıklama              | Şema                         |
 | --------- | ------------------------- | --------------------- | ---------------------------- |
 | **Query** | **{id}** <br>_zorunlu_    | Mağazanın tekil id'si | string                       |
-| **Body**  | **address** <br>_zorunlu_ | Mağaza adı            | <[Address](#address)> object |
+| **Body**  | **address** <br>_zorunlu_ | Mağazanın yeni adresi | <[Address](#address)> object |
 
 #### Yanıtlar
 
