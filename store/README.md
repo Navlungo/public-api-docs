@@ -110,18 +110,6 @@ Mağazanın adres bilgilerinin modelidir.
 | ------------------------- | -------------------------------- | ------ |
 | **storeId** <br>_zorunlu_ | Yaratılan mağazanın tekil Id'si. | string |
 
-<a name="store"></a>
-
-### Store
-
-| Ad                               | Açıklama               | Şema                         |
-| -------------------------------- | ---------------------- | ---------------------------- |
-| **storeId** <br>_zorunlu_        | Mağaza'nın tekil id'si | string                       |
-| **name** <br>_zorunlu_           | Mağaza'nın adı         | string                       |
-| **url** <br>_opsiyonel_          | Mağaza'nın url bilgisi | string                       |
-| **storeType** <br>_opsiyonel_    | Çözüm ortağı           | string                       |
-| **storeAddress** <br>_opsiyonel_ | Çözüm ortağı           | <[Address](#address)> object |
-
 ### Error
 
 Genel hata nesnesi
@@ -169,6 +157,19 @@ Kullanıcıya ait tüm mağazaları getirir.
 | Ad                       | Açıklama       | Şema                      |
 | ------------------------ | -------------- | ------------------------- |
 | **stores** <br>_zorunlu_ | Mağaza listesi | < [Store](#store) > array |
+
+<a name="store"></a>
+
+### Store
+
+| Ad                                 | Açıklama                  | Şema                         |
+| ---------------------------------- | ------------------------- | ---------------------------- |
+| **storeId** <br>_zorunlu_          | Mağaza'nın tekil id'si    | string                       |
+| **name** <br>_zorunlu_             | Mağaza'nın adı            | string                       |
+| **url** <br>_opsiyonel_            | Mağaza'nın url bilgisi    | string                       |
+| **storeType** <br>_opsiyonel_      | Çözüm ortağı              | string                       |
+| **storeAddress** <br>_opsiyonel_   | Mağazanın gönderim adresi | <[Address](#address)> object |
+| **invoiceAddress** <br>_opsiyonel_ | Mağazanın fatura adresi   | <[Address](#address)> object |
 
 ### Error
 
