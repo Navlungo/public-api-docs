@@ -98,7 +98,7 @@ Siparişin içindeki ürünlerin detay bilgileridir.
 | **quantity** <br>_zorunlu_    | Adet bilgisi                                                         | integer |
 | **imageUrl** <br>_opsiyonel_  | Ürünün tanımlayıcı resminin url'i                                    | string  |
 | **price** <br>_zorunlu_       | Ürünün satış bedeli                                                  | string  |
-| **hsCode** <br>_zorunlu_      | Ürünün sınıflandırılmasında kullanılan muhteviyat kodu               | strig   |
+| **hsCode** <br>_zorunlu_      | Ürünün sınıflandırılmasında kullanılan muhteviyat kodu               | string  |
 
 <a name="createOrderResponse"></a>
 
