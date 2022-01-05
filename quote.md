@@ -1,4 +1,4 @@
-# Express Taşımalar İçin Arama Apisi
+# Express Teklif Apisi
 
 <a name="overview"></a>
 
@@ -25,44 +25,44 @@ _Schemes_ : HTTPS
 
 ### Operasyonlar
 
-[createSearch](#searches)<br>
+[generateQuote](#quotes)<br>
 
 <a name="paths"></a>
 
 ## Paths
 
-<a name="searches"></a>
+<a name="quotes"></a>
 
-### POST /v1/searches
+### POST quotes/v1
 
-**Operasyon: createSearch**
+**Operasyon: generateQuote**
 
 #### Açıklama
 
-Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir arama kaydı oluşturur ve yapılan arama sonucunda oluşturulan teklifleri listeler.
+Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir teklif isteği kaydı oluşturur ve istek sonucunda oluşturulan teklifleri listeler.
 
 #### Parametreler
 
-| Tip      | İsim                   | Açıklama                         | Şema                                        |
-| -------- | ---------------------- | -------------------------------- | ------------------------------------------- |
-| **Body** | **body** <br>_zorunlu_ | Arama yaratmak için gerekli şema | [CreateSearchRequest](#createSearchRequest) |
+| Tip      | İsim                   | Açıklama                         | Şema                                          |
+| -------- | ---------------------- | -------------------------------- | --------------------------------------------- |
+| **Body** | **body** <br>_zorunlu_ | Arama yaratmak için gerekli şema | [GenerateQuoteRequest](#generateQuoteRequest) |
 
 #### Yanıtlar
 
-| HTTP Kodu | Açıklama                                                       | Şema                              |
-| --------- | -------------------------------------------------------------- | --------------------------------- |
-| **200**   | Başarılı                                                       | [SearchResponse](#searchResponse) |
-| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                   |
-| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                   |
-| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                   |
+| HTTP Kodu | Açıklama                                                       | Şema                            |
+| --------- | -------------------------------------------------------------- | ------------------------------- |
+| **200**   | Başarılı                                                       | [QuoteResponse](#quoteResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                 |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                 |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                 |
 
 <a name="definitions"></a>
 
 ## Tanımlar
 
-<a name="createSearchRequest"></a>
+<a name="generateQuoteRequest"></a>
 
-### CreateSearchRequest
+### GenerateQuoteRequest
 
 | Ad                                   | Açıklama                                                                                                                                                                | Şema                    |
 | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
@@ -86,20 +86,20 @@ Taşıması yapılacak yüke ait paketleme bilgisi.
 | **length** <br>_opsiyonel_ | Santimetre cinsinden paketin boyu. Box tipindeki paketlerde bu değer zorunludur.                | decimal |
 | **height** <br>_opsiyonel_ | Santimetre cinsinden paketin yüksekliği. Box tipindeki paketlerde bu değer zorunludur.          | decimal |
 
-<a name="searchResponse"></a>
+<a name="quoteResponse"></a>
 
-### SearchResponse
+### QuoteResponse
 
-| Ad                                | Açıklama                                                                    | Şema                      |
-| --------------------------------- | --------------------------------------------------------------------------- | ------------------------- |
-| **searchReference** <br>_zorunlu_ | Aramanın referans id'si                                                     | string                    |
-| **quotes** <br>_opsiyonel_        | Arama sonucunda üretilen teklifler. Hiç teklif üretilemezse boş dizi döner. | < [Quote](#quote) > array |
+| Ad                                      | Açıklama                                                    | Şema                      |
+| --------------------------------------- | ----------------------------------------------------------- | ------------------------- |
+| **quoteRequestReference** <br>_zorunlu_ | Oluşturulan teklif isteği talebinin referans id'si          | string                    |
+| **quotes** <br>_opsiyonel_              | Üretilen teklifler. Hiç teklif üretilemezse boş dizi döner. | < [Quote](#quote) > array |
 
 <a name="quote"></a>
 
 ### Quote
 
-Express aramaya üretilen teklif bilgisi
+Teklif bilgisi
 
 | Ad                                 | Açıklama                            | Şema    |
 | ---------------------------------- | ----------------------------------- | ------- |
