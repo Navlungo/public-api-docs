@@ -45,8 +45,8 @@ Oauth refresh_token veya authorization_code akışları sonucunda token üretir.
 
 | Tip        | İsim                              | Açıklama                                                                                                                                                   |
 | ---------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **string** | **client_id** <br>_zorunlu_       | İstemciye navlungo tarafından verilen id                                                                                                                   |
-| **string** | **client_secret** <br>_zorunlu_   | İstemciye navlungo tarafından verilen şifre                                                                                                                |
+| **string** | **client_id** <br>_zorunlu_       | İstemciye Navlungo tarafından verilen id                                                                                                                   |
+| **string** | **client_secret** <br>_zorunlu_   | İstemciye Navlungo tarafından verilen şifre                                                                                                                |
 | **string** | **grant_type** <br>_zorunlu_      | Akış tipi. authorization_code veya refresh_token                                                                                                           |
 | **string** | **scope** <br>_opsiyonel_         | Kullanılacak api kapsamları. authorization_code akışında minimumda openid offline_access değerleri gönderilmeli.                                           |
 | **string** | **code** <br>_opsiyonel_          | Authorization code. authorization_code akışı için zorunlu.                                                                                                 |
@@ -70,7 +70,7 @@ Oauth refresh_token veya authorization_code akışları sonucunda token üretir.
 | ------------------------------- | ------------------------------------------------------------------------- | ------ |
 | **access_token** <br>_zorunlu_  | Access Token                                                              | string |
 | **token_type** <br>_zorunlu_    | Token tipi                                                                | int    |
-| **expires_in** <br>_zorunlu_    | Tokenın geçerli olduğu süre sn. cinsinden                                 | string |
+| **expires_in** <br>_zorunlu_    | Tokenin geçerli olduğu süre sn. cinsinden                                 | string |
 | **refresh_token** <br>_zorunlu_ | Üretilen refresh token                                                    | string |
 | **id_token** <br>opsiyonel      | Üretilen Id Token. İstemcinin Navlungo'daki ayarlarına göre boş olabilir. | string |
 
