@@ -39,7 +39,7 @@ _Schemes_ : HTTPS
 
 <a name="createStore"></a>
 
-### POST /v1/stores
+### POST stores/v1
 
 **Operasyon: createStore**
 
@@ -88,8 +88,8 @@ Mağazanın adres bilgilerinin modelidir.
 | -------------------------------------- | --------------------------------------------------------------------------------------------- | ------ |
 | **type** <br>_zorunlu_                 | Adres bireysel mi kurumsal mı olduğunun bilgisidir. Bireysel: Individual, Kurumsal: Corporate | string |
 | **companyName** <br>_opsiyonel_        | Kurumsal adres için şirket ismi                                                               | string |
-| **identificationNumber** <br>_zorunlu_ | Veri kimlik numarası veya TC Kimlik numarası                                                  | string |
-| **taxOffice** <br>_opsiyonel_          | Vergi dairesi                                                                                 | string |
+| **identificationNumber** <br>_zorunlu_ | Vergi kimlik numarası veya TC Kimlik numarası                                                 | string |
+| **taxOffice** <br>_opsiyonel_          | Vergi dairesi(kurumsal adresler için zorunlu)                                                 | string |
 | **contactName** <br>_zorunlu_          | Kontak kişi adı                                                                               | string |
 | **contactPhone** <br>_zorunlu_         | Kontak kişinin telefon numarası                                                               | string |
 | **contactMail** <br>_zorunlu_          | Kontak kişinin email adresi                                                                   | string |
@@ -127,13 +127,13 @@ Genel hata nesnesi
 <hr/>
 <a name="getStores"></a>
 
-### GET /v1/stores
+### GET stores/v1
 
 **Operasyon: getStores**
 
 #### Açıklama
 
-Kullanıcıya ait tüm mağazaları getirir.
+Kullanıcıya ait tüm mağazaları getirir. Mağza yoksa geriye boş dizi döner.
 
 #### Parametreler
 
@@ -167,7 +167,6 @@ Kullanıcıya ait tüm mağazaları getirir.
 | **storeId** <br>_zorunlu_          | Mağaza'nın tekil id'si    | string                       |
 | **name** <br>_zorunlu_             | Mağaza'nın adı            | string                       |
 | **url** <br>_opsiyonel_            | Mağaza'nın url bilgisi    | string                       |
-| **storeType** <br>_opsiyonel_      | Çözüm ortağı              | string                       |
 | **storeAddress** <br>_opsiyonel_   | Mağazanın gönderim adresi | <[Address](#address)> object |
 | **invoiceAddress** <br>_opsiyonel_ | Mağazanın fatura adresi   | <[Address](#address)> object |
 
@@ -188,7 +187,7 @@ Genel hata nesnesi
 <hr/>
 <a name="getStore"></a>
 
-### GET /v1/stores/{id}
+### GET /stores/v1/{id}
 
 **Operasyon: getStore**
 
@@ -209,6 +208,7 @@ Kullanıcıya ait tüm mağazalardan talep edilen mağazanın detaylarını geti
 | **200**   | Başarılı                                                        | [GetStoreResponse](#GetStoreResponse) |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error)                       |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error)                       |
+| **404**   | Aranan mağza bulunamadı.                                        | [Error](#error)                       |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error)                       |
 
 <a name="definitions"></a>
@@ -240,7 +240,7 @@ Genel hata nesnesi
 <hr/>
 <a name="updateStore"></a>
 
-### PUT /v1/stores/{id}
+### PATCH /stores/v1/{id}
 
 **Operasyon: updateStore**
 
@@ -262,6 +262,7 @@ Query parametresi olarak verilen id'ye ait mağazanın bilgilerini günceller.
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
+| **404**   | Mağza bulunamadı                                                | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 <a name="definitions"></a>
@@ -285,7 +286,7 @@ Genel hata nesnesi
 <hr/>
 <a name="updateStoreAddress"></a>
 
-### PUT /v1/stores/{id}/storeAddress
+### PUT /stores/v1/{id}/storeAddress
 
 **Operasyon: updateStoreAddress**
 
@@ -307,6 +308,7 @@ Query parametresi olarak verilen id'ye ait mağazanın adres bilgilerini güncel
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
+| **404**   | Mağza bulunamadı                                                | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 ### Error
@@ -326,7 +328,7 @@ Genel hata nesnesi
 <hr/>
 <a name="updateInvoiceAddress"></a>
 
-### PUT /v1/stores/{id}/invoiceAddress
+### PUT /stores/v1/{id}/invoiceAddress
 
 **Operasyon: updateInvoiceAddress**
 
@@ -348,6 +350,7 @@ Query parametresi olarak verilen id'ye ait mağazanın fatura adres bilgilerini 
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
+| **404**   | Mağza bulunamadı                                                | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 ### Error
@@ -367,7 +370,7 @@ Genel hata nesnesi
 <hr/>
 <a name="deleteStore"></a>
 
-### DELETE /v1/stores/{id}
+### DELETE /stores/v1/{id}
 
 **Operasyon: deleteStore**
 
