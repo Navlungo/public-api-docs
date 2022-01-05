@@ -1,4 +1,4 @@
-# Mağza Apisi
+# Mağaza Apisi
 
 <a name="overview"></a>
 
@@ -135,7 +135,7 @@ Genel hata nesnesi
 
 #### Açıklama
 
-Kullanıcıya ait tüm mağazaları getirir. Mağza yoksa geriye boş dizi döner.
+Kullanıcıya ait tüm mağazaları getirir. Mağaza yoksa geriye boş dizi döner.
 
 #### Parametreler
 
@@ -210,7 +210,7 @@ Kullanıcıya ait tüm mağazalardan talep edilen mağazanın detaylarını geti
 | **200**   | Başarılı                                                        | [GetStoreResponse](#GetStoreResponse) |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error)                       |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error)                       |
-| **404**   | Aranan mağza bulunamadı.                                        | [Error](#error)                       |
+| **404**   | Aranan mağaza bulunamadı.                                        | [Error](#error)                       |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error)                       |
 
 <a name="definitions"></a>
@@ -264,7 +264,7 @@ Query parametresi olarak verilen id'ye ait mağazanın bilgilerini günceller.
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 <a name="definitions"></a>
@@ -310,7 +310,7 @@ Query parametresi olarak verilen id'ye ait mağazanın adres bilgilerini güncel
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 ### Error
@@ -352,7 +352,7 @@ Query parametresi olarak verilen id'ye ait mağazanın fatura adres bilgilerini 
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 ### Error
@@ -420,7 +420,7 @@ Genel hata nesnesi
 
 #### Açıklama
 
-İşlem yapam kullanıcıya ait iletilen id'li mağazaya sipariş ekler.
+İşlem yapan kullanıcıya ait iletilen id'li mağazaya sipariş ekler.
 
 #### Parametreler
 
@@ -436,7 +436,7 @@ Genel hata nesnesi
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 <a name="definitions"></a>
@@ -531,7 +531,7 @@ Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
 
 | Tip       | İsim                   | Açıklama                  | Şema                                |
 | --------- | ---------------------- | ------------------------- | ----------------------------------- |
-| **Query** | **id** <br>_zorunlu_   | Mağza id                  | string                              |
+| **Query** | **id** <br>_zorunlu_   | Mağaza id                  | string                              |
 | **Body**  | **body** <br>_zorunlu_ | Sevkiyat oluşturma şeması | [shipmentRequest](#shipmentRequest) |
 
 #### Yanıtlar
@@ -541,7 +541,7 @@ Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
 | **200**   | Başarılı                                                       |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error) |
-| **404**   | Mağza veya sipariş bulunamadı                                  | [Error](#error) |
+| **404**   | Mağaza veya sipariş bulunamadı                                  | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error) |
 
 <a name="definitions"></a>
@@ -556,7 +556,7 @@ Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
 | -------------------------------- | ---------------------------------------------- | ------ |
 | **orderReference** <br>_zorunlu_ | Siparişin tekil id'si                          | string |
 | **quoteReference** <br>_zorunlu_ | Teklifin tekil id'si                           | string |
-| **shipmentType** <br>_zorunlu_   | Sevkiyatın tipi (Gift,Sample,Sale,MicroExport) | string |
+| **shipmentType** <br>_zorunlu_   | Sevkiyatın tipi (Gift, Sample, Sale, MicroExport) | string |
 
 <a name="error"></a>
 

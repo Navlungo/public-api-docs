@@ -4,11 +4,11 @@
 
 ## Genel Bakış
 
-Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağza yönetim süreçlerine programatik erişim sağlayarak kendi müşterilerine en uygun deneyimi geliştirmelerine yardımcı olmak amaçlanmaktadır.
+Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza yönetim süreçlerine programatik erişim sağlayarak kendi müşterilerine en uygun deneyimi geliştirmelerine yardımcı olmak amaçlanmaktadır.
 
 - Express Teklif Apisi ile; faturalanabilir ağırlığı 300 kg'a kadar olan yükler için teklif alınabilir.
-- Mağza Apisi ile;
-  - Mağza ekleme, güncelleme ve silme işlemleri,
+- Mağaza Apisi ile;
+  - Mağaza ekleme, güncelleme ve silme işlemleri,
   - Sipariş oluşturma,
   - Bir siparişi Navlungo'da sevkiyata dönüştürme işlemleri yapılabilir.
 
@@ -49,4 +49,4 @@ Navlungo.com authorization_code'u başarı ile ürettiği durumda;
 
 [Token Apisi](./token.md)<br>
 [Express Teklif Apisi](./quote.md)<br>
-[Mağza Apisi](./store.md)<br>
+[Mağaza Apisi](./store.md)<br>
