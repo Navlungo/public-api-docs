@@ -33,6 +33,7 @@ _Schemes_ : HTTPS
 - [updateInvoiceAddress](#updateInvoiceAddress)<br>
 - [deleteStore](#deleteStore)<br>
 - [createOrder](#createOrder)<br>
+- [shipOrder](#shipOrder)<br>
 
 <a name="paths"></a>
 
@@ -502,6 +503,62 @@ Siparişin içindeki ürünlerin detay bilgileridir.
 <a name="createOrderResponse"></a>
 
 ### createOrderResponse
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="shipOrder"></a>
+
+### POST /stores/v1/{id}/orders/ship
+
+#### Açıklama
+
+Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
+
+#### Parametreler
+
+| Tip       | İsim                   | Açıklama                  | Şema                                |
+| --------- | ---------------------- | ------------------------- | ----------------------------------- |
+| **Query** | **id** <br>_zorunlu_   | Mağza id                  | string                              |
+| **Body**  | **body** <br>_zorunlu_ | Sevkiyat oluşturma şeması | [shipmentRequest](#shipmentRequest) |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                       | Şema            |
+| --------- | -------------------------------------------------------------- | --------------- |
+| **200**   | Başarılı                                                       |                 |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error) |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error) |
+| **404**   | Mağza veya sipariş bulunamadı                                  | [Error](#error) |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error) |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="shipmentRequest"></a>
+
+### shipmentRequest
+
+| Ad                               | Açıklama                                       | Şema   |
+| -------------------------------- | ---------------------------------------------- | ------ |
+| **orderReference** <br>_zorunlu_ | Siparişin tekil id'si                          | string |
+| **quoteReference** <br>_zorunlu_ | Teklifin tekil id'si                           | string |
+| **shipmentType** <br>_zorunlu_   | Sevkiyatın tipi (Gift,Sample,Sale,MicroExport) | string |
+
+<a name="error"></a>
 
 ### Error
 
