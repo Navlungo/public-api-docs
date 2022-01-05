@@ -1,4 +1,4 @@
-# Marketplace Entegrasyonu için Store Api'leri
+# Mağza Apisi
 
 <a name="overview"></a>
 
@@ -32,6 +32,7 @@ _Schemes_ : HTTPS
 - [updateStoreAddress](#updateStoreAddress)<br>
 - [updateInvoiceAddress](#updateInvoiceAddress)<br>
 - [deleteStore](#deleteStore)<br>
+- [createOrder](#createOrder)<br>
 
 <a name="paths"></a>
 
@@ -394,6 +395,113 @@ Query parametresi olarak verilen id'ye ait mağazayı pasife çeker.
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 >
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="createOrder"></a>
+
+### POST /stores/v1/{id}/orders
+
+**Operasyon: createOrder**
+
+#### Açıklama
+
+İşlem yapam kullanıcıya ait iletilen id'li mağazaya sipariş ekler.
+
+#### Parametreler
+
+| Tip       | İsim                   | Açıklama                             | Şema                                      |
+| --------- | ---------------------- | ------------------------------------ | ----------------------------------------- |
+| **Query** | **{id}** <br>_zorunlu_ | Kullanıcının mağazasının tekil Id'si | string                                    |
+| **Body**  | **body** <br>_zorunlu_ | Sipariş yaratmak için gerekli şema   | [CreateOrderRequest](#createOrderRequest) |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                        | Şema            |
+| --------- | --------------------------------------------------------------- | --------------- |
+| **200**   | Başarılı                                                        |                 |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
+| **404**   | Mağza bulunamadı                                                | [Error](#error) |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="createOrderRequest"></a>
+
+### createOrderRequest
+
+| Ad                      | Açıklama        | Şema                       |
+| ----------------------- | --------------- | -------------------------- |
+| **order** <br>_zorunlu_ | Sipariş bilgisi | < [Order](#order) > object |
+
+<a name="order"></a>
+
+### Order
+
+Kaydedilecek olan siparişin modelidir.
+
+| Ad                                      | Açıklama                                                  | Şema                                   |
+| --------------------------------------- | --------------------------------------------------------- | -------------------------------------- |
+| **receiverAddress** <br>_zorunlu_       | Alıcının adres bilgisidir.                                | <[OrderAddress](#orderAddress)> object |
+| **orderReference** <br>_zorunlu_        | Siparişin tekil referans Id'si                            | string                                 |
+| **receiverPhoneNumber** <br>_opsiyonel_ | Alıcının telefon numarası                                 | string                                 |
+| **receiverEmail** <br>_opsiyonel_       | Alıcının email bilgisi                                    | string                                 |
+| **currencyCode** <br>_zorunlu_          | 3 haneli döviz kodu(USD,EUR,GBP)                          | string                                 |
+| **orderItems** <br>_zorunlu_            | Siparişin alt kırılımları. En az 1 alt kırılım olmalıdır. | <[OrderItem](#orderItem)> array        |
+| **creationDateInStore** <br>_opsiyonel_ | Unix epoch timestamp (saniye cinsinden)                   | long                                   |
+
+<a name="orderAddress"></a>
+
+### OrderAddress
+
+Siparişin alıcısına ait adres bilgilerinin modelidir.
+
+| Ad                             | Açıklama                                                    | Şema   |
+| ------------------------------ | ----------------------------------------------------------- | ------ |
+| **contactName** <br>_zorunlu_  | Kontak kişi adı                                             | string |
+| **countryCode** <br>_zorunlu_  | 2 haneli global ülke kodu                                   | string |
+| **state** <br>_opsiyonel_      | Global eyalet kodu                                          | string |
+| **city** <br>_zorunlu_         | Şehir bilgisi                                               | string |
+| **town** <br>_zorunlu_         | İlçe bilgisi                                                | string |
+| **postalCode** <br>_zorunlu_   | Posta kodu                                                  | string |
+| **firstLine** <br>_zorunlu_    | İlk adres satırı. Minimum 10 karakter, maximum 30 karakter. | string |
+| **secondLine** <br>_opsiyonel_ | İkinci adres satırı.Maximum 30 karakter.                    | string |
+| **thirdLine** <br>_opsiyonel_  | Üçüncü adres satırı. Maximum 30 karakter.                   | string |
+
+<a name="orderItem"></a>
+
+### orderItem
+
+Siparişin içindeki ürünlerin detay bilgileridir.
+
+| Ad                            | Açıklama                                                                                   | Şema    |
+| ----------------------------- | ------------------------------------------------------------------------------------------ | ------- |
+| **sku** <br>_opsiyonel_       | Ürünün stok kodu                                                                           | string  |
+| **description** <br>_zorunlu_ | Ürün açıklaması                                                                            | string  |
+| **quantity** <br>_zorunlu_    | Adet bilgisi                                                                               | integer |
+| **imageUrl** <br>_opsiyonel_  | Ürünün tanımlayıcı resminin url'i                                                          | string  |
+| **price** <br>_zorunlu_       | Ürünün satış bedeli (para birimi [Order](#order) objesindeki currency alanı olarak alınır) | string  |
+| **hsCode** <br>_zorunlu_      | Ürünün sınıflandırılmasında kullanılan muhteviyat kodu                                     | string  |
+
+<a name="createOrderResponse"></a>
+
+### createOrderResponse
 
 ### Error
 
