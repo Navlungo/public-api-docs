@@ -25,7 +25,7 @@ Client daha sonra token almakta kullanacağı authorization code isteğini https
 | Ad                               | Açıklama                                                                                                                                                                                                                                   |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **client_id** <br>_zorunlu_      | Navlungo'nun çözüm ortağına sağladığı tekil istemci idsi                                                                                                                                                                                   |
-| **code_challenge** <br>_zorunlu_ | Akışın ilerleyen aşamalarında istemciyi tekrar doğrulamak için kullanılacak bilgi. Istemci authorization_code akışını başlatmadan önce oluşturduğu rastgele bir bilgiyi SHA256 ile hashleyerek, elde ettiği hashi bu alanda göndermelidir. |
+| **code_challenge** <br>_zorunlu_ | Akışın ilerleyen aşamalarında istemciyi tekrar doğrulamak için kullanılacak bilgi. Istemci authorization_code akışını başlatmadan önce oluşturduğu rastgele bir bilgiyi SHA256 ile hashleyip base64 ile encodeladıktan sonra elde ettiği hashi bu alanda göndermelidir. |
 
 İstemci tarafından oluşturulan authorization kod istek örneği;
 
