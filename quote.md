@@ -33,7 +33,7 @@ _Schemes_ : HTTPS
 
 <a name="quotes"></a>
 
-### POST quotes/v1
+### POST expressquotes/v1
 
 **Operasyon: generateQuote**
 
