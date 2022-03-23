@@ -34,6 +34,7 @@ _Schemes_ : HTTPS
 - [deleteStore](#deleteStore)<br>
 - [createOrder](#createOrder)<br>
 - [shipOrder](#shipOrder)<br>
+- [trackOrder](#trackOrder)<br>
 
 <a name="paths"></a>
 
@@ -210,7 +211,7 @@ Kullanıcıya ait tüm mağazalardan talep edilen mağazanın detaylarını geti
 | **200**   | Başarılı                                                        | [GetStoreResponse](#GetStoreResponse) |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error)                       |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error)                       |
-| **404**   | Aranan mağaza bulunamadı.                                        | [Error](#error)                       |
+| **404**   | Aranan mağaza bulunamadı.                                       | [Error](#error)                       |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error)                       |
 
 <a name="definitions"></a>
@@ -264,7 +265,7 @@ Query parametresi olarak verilen id'ye ait mağazanın bilgilerini günceller.
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                               | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 <a name="definitions"></a>
@@ -310,7 +311,7 @@ Query parametresi olarak verilen id'ye ait mağazanın adres bilgilerini güncel
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                               | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 ### Error
@@ -352,7 +353,7 @@ Query parametresi olarak verilen id'ye ait mağazanın fatura adres bilgilerini 
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                               | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 ### Error
@@ -436,7 +437,7 @@ Genel hata nesnesi
 | **200**   | Başarılı                                                        |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
-| **404**   | Mağaza bulunamadı                                                | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                               | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 <a name="definitions"></a>
@@ -531,7 +532,7 @@ Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
 
 | Tip       | İsim                   | Açıklama                  | Şema                                |
 | --------- | ---------------------- | ------------------------- | ----------------------------------- |
-| **Query** | **id** <br>_zorunlu_   | Mağaza id                  | string                              |
+| **Query** | **id** <br>_zorunlu_   | Mağaza id                 | string                              |
 | **Body**  | **body** <br>_zorunlu_ | Sevkiyat oluşturma şeması | [shipmentRequest](#shipmentRequest) |
 
 #### Yanıtlar
@@ -541,7 +542,7 @@ Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
 | **200**   | Başarılı                                                       |                 |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error) |
-| **404**   | Mağaza veya sipariş bulunamadı                                  | [Error](#error) |
+| **404**   | Mağaza veya sipariş bulunamadı                                 | [Error](#error) |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error) |
 
 <a name="definitions"></a>
@@ -552,10 +553,10 @@ Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
 
 ### shipmentRequest
 
-| Ad                               | Açıklama                                       | Şema   |
-| -------------------------------- | ---------------------------------------------- | ------ |
-| **orderReference** <br>_zorunlu_ | Siparişin tekil id'si                          | string |
-| **quoteReference** <br>_zorunlu_ | Teklifin tekil id'si                           | string |
+| Ad                               | Açıklama                                          | Şema   |
+| -------------------------------- | ------------------------------------------------- | ------ |
+| **orderReference** <br>_zorunlu_ | Siparişin tekil id'si                             | string |
+| **quoteReference** <br>_zorunlu_ | Teklifin tekil id'si                              | string |
 | **shipmentType** <br>_zorunlu_   | Sevkiyatın tipi (Gift, Sample, Sale, MicroExport) | string |
 
 <a name="error"></a>
@@ -573,3 +574,74 @@ Genel hata nesnesi
 | **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
 | **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
 | **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="trackOrder"></a>
+
+### POST /stores/v1/{id}/tracking?orderReference={orderId}
+
+#### Açıklama
+
+Bir siparişe ait varsa takip bilgisini geri döndürür. Sipariş ve mağza bilgileri hatalı girilirse 403, siparişe ait takip bilgisi henüz oluşmamışsa 404 döndürür.
+
+#### Parametreler
+
+| Tip             | İsim                             | Açıklama   | Şema   |
+| --------------- | -------------------------------- | ---------- | ------ |
+| **Query**       | **id** <br>_zorunlu_             | Mağaza id  | string |
+| **QueryString** | **orderReference** <br>_zorunlu_ | Sipariş id | string |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                       | Şema                                  |
+| --------- | -------------------------------------------------------------- | ------------------------------------- |
+| **200**   | Başarılı                                                       | [TrackingResponse](#trackingResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                       |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                       |
+| **403**   | Mağaza veya sipariş bilgisi hatalı                             | [Error](#error)                       |
+| **403**   | Takip numarası henüz oluşmamış                                 | [Error](#error)                       |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                       |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="trackingResponse"></a>
+
+### TrackingResponse
+
+| Ad                               | Açıklama                      | Şema                                       |
+| -------------------------------- | ----------------------------- | ------------------------------------------ |
+| **trackingNumber** <br>_zorunlu_ | Takip numarası                | string                                     |
+| **courier** <br>_zorunlu_        | Taşıyıcı firma kodu           | string                                     |
+| **courierTrackingLink**          | Taşıyıcı firmanın takip linki | string                                     |
+| **status** <br>_zorunlu_         | Sevkiyatın durumu             | < [TrackingStatus](#trackingStatus) > Enum |
+| **signedBy**                     | Varsa teslim alan kişi        | string                                     |
+| **shipmentType**                 | Taşıyıcı firmanın servis türü | string                                     |
+| **checkpoints**                  | Sevkiyata dair hareketler     | < [Checkpoint](#checkpoint) > Array        |
+
+<a name="checkpoint"></a>
+
+### Checkpoint
+
+| Ad                               | Açıklama                          | Şema                                       |
+| -------------------------------- | --------------------------------- | ------------------------------------------ |
+| **checkpointTime** <br>_zorunlu_ | Olay zamanı                       | string                                     |
+| **status** <br>_zorunlu_         | Olay sırasında sevkiyatın statüsü | < [TrackingStatus](#trackingStatus) > Enum |
+| **message**                      | Olaya dair mesaj                  | string                                     |
+
+<a name="trackingStatus"></a>
+
+### TrackingStatus
+
+| Ad                     | Açıklama                                                                                                    |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **InfoReceived**       | Carrier has received request from shipper and is about to pick up the shipment.                             |
+| **InTransit**          | Carrier has accepted or picked up shipment from shipper. The shipment is on the way.                        |
+| **OutForDelivery**     | Carrier is about to deliver the shipment , or it is ready to pickup.                                        |
+| **AttemptFail**        | Carrier attempted to deliver but failed, and usually leaves a notice and will try to deliver again.         |
+| **Delivered**          | The shipment was delivered successfully.                                                                    |
+| **AvailableForPickup** | The package arrived at a pickup point near you and is available for pickup.                                 |
+| **Exception**          | Custom hold, undelivered, returned shipment to sender or any shipping exceptions.                           |
+| **Expired**            | Shipment has no tracking information for 30 days since added.                                               |
+| **Pending**            | New shipments added that are pending to track, or new shipments without tracking information available yet. |
