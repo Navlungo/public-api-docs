@@ -578,7 +578,7 @@ Genel hata nesnesi
 <hr/>
 <a name="trackOrder"></a>
 
-### POST /stores/v1/{id}/tracking?orderReference={orderId}
+### GET /stores/v1/{id}/ordertracking?orderReference={orderId}
 
 #### Açıklama
 
