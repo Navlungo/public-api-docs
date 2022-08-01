@@ -27,7 +27,7 @@ Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden il
 
 **Authorization Code İsteği**
 
-Client akışın sonraki aşamalarında token almakta kullanacağı authorization code isteğini https://navlungo.com/authorize adresine aşağıdaki parametrelerin değerini querystring aracılığı ile gönderir.
+Client akışın sonraki aşamalarında token almakta kullanacağı authorization code isteğini https://navlungo.com/authorize adresine ( test ortamı için https://qa.navlungo.com/authorize ) aşağıdaki parametrelerin değerini querystring aracılığı ile gönderir.
 
 | Ad                               | Açıklama                                                                                                                                                                                                                                                                |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
