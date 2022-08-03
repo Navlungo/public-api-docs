@@ -24,6 +24,10 @@ _Schemes_ : HTTPS
 
 - `application/json`
 
+### Yetkilendirme
+
+Bu api Oauth2 **client_credentials** akışı ile oluşturulan token'lar ile çağrılabilir.
+
 ### Operasyonlar
 
 - [getCargoTrackingInfo](#getCargoTrackingInfo)<br>
