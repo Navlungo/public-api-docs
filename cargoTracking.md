@@ -4,7 +4,7 @@
 
 ## Genel Bakış
 
-Bu api ile istemci bir kargoya dair takip bilgilerini anlık olarak sorgulayabilir. Yeni bir takip isteğine ait detaylar Navlungo ilgili sorguyu kaydedip detaylarına ulaştıktan sonra 10-60 dk içerisinde ulaşılabilir olur.
+Bu api ile istemci bir kargoya dair takip bilgilerini anlık olarak sorgulayabilir. Yeni bir takip isteğine ait detaylar, Navlungo ilgili sorguyu kaydedip detaylarına ulaştıktan sonra 10-60 dk içerisinde ulaşılabilir olur.
 
 ### Versiyon Bilgisi
 
