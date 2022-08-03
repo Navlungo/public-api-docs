@@ -2,7 +2,7 @@
 
 <a name="overview"></a>
 
-## Genel Bakış
+## 1. Genel Bakış
 
 Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza yönetim süreçlerine programatik erişim sağlayarak kendi müşterilerine en uygun deneyimi geliştirmelerine yardımcı olmak amaçlanmaktadır.
 
@@ -12,19 +12,26 @@ Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza
   - Sipariş oluşturma,
   - Bir siparişi Navlungo'da sevkiyata dönüştürme işlemleri yapılabilir.
 
-### Yetkilendirme
+### 2. Yetkilendirme
 
-Bu api ile erişim sağlanacak tüm kaynaklara OAuth2 protokolü ile oluşturulan access tokenların gönderilmesi gerekmektedir. Yetkilendirme akışı şu şekilde çalışır;
+Bu api ile erişim sağlanacak tüm kaynaklara OAuth2 protokolü ile oluşturulan access tokenların gönderilmesi gerekmektedir. Navlungo API'lerinde yetkilendirme senaryoya ve istemci tanımına göre iki farklı şekilde yapılır. Bunlar;
+
+- Authorization Code
+- Client Credentials
+
+#### 2.1. Authorization Code
+
+Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden ilgili kaynaklara erişim için kullanıcının rızası alınır. Kullanıcı onayından sonra Navlungo tarafından istemciye gönderilen tek seferlik yetkilendirme kodu ile istemci **kullanıcı adına izin verilen kaynaklar üzerinde işlem yapabilir**.
 
 ![AuthorizationCode](authorization/authorization_code_flow.png?raw=true "AuthorizationCode")
 
 **Authorization Code İsteği**
 
-Client daha sonra token almakta kullanacağı authorization code isteğini https://navlungo.com/authorize adresine aşağıdaki parametrelerin değerini querystring aracılığı ile gönderir.
+Client akışın sonraki aşamalarında token almakta kullanacağı authorization code isteğini https://navlungo.com/authorize adresine ( test ortamı için https://qa.navlungo.com/authorize ) aşağıdaki parametrelerin değerini querystring aracılığı ile gönderir.
 
-| Ad                               | Açıklama                                                                                                                                                                                                                                   |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **client_id** <br>_zorunlu_      | Navlungo'nun çözüm ortağına sağladığı tekil istemci idsi                                                                                                                                                                                   |
+| Ad                               | Açıklama                                                                                                                                                                                                                                                                |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **client_id** <br>_zorunlu_      | Navlungo'nun çözüm ortağına sağladığı tekil istemci idsi                                                                                                                                                                                                                |
 | **code_challenge** <br>_zorunlu_ | Akışın ilerleyen aşamalarında istemciyi tekrar doğrulamak için kullanılacak bilgi. Istemci authorization_code akışını başlatmadan önce oluşturduğu rastgele bir bilgiyi SHA256 ile hashleyip base64 ile encodeladıktan sonra elde ettiği hashi bu alanda göndermelidir. |
 
 İstemci tarafından oluşturulan authorization kod istek örneği;
@@ -45,7 +52,13 @@ Navlungo.com authorization_code'u başarı ile ürettiği durumda;
 - İstemci tarafından yapılan ilk istekteki diğer tüm querystring parametrelerini ve değerlerini de callback url'ye geri döndürür.
 - İstemci aldığı authorization code ile daha sonra [Token Apisi](./token.md) yardımı ile access token ve refresh token alabilir.
 
-### Operasyonlar
+#### 2.2. Client Credentials
+
+Bu akışta Navlungo'nun istemciye verdiği bilgiler ile ( client_id ve client_secret ) ile istemci adına access_token yaratılır. Alınan bu access_token ile **istemci adına uygun Navlungo api kaynakları üzerinde işlem yapılabilir**. Client credentials akışı id ve secret bilgisinin gönderilmesini gerektirdiği için bu akış tipinde yapılacak token istekleri mutlaka güvenli bir **server side** uygulama tarafından yapılmalıdır. Id ve secret bilgileri istenmeyen kişiler tarafından ele geçirilirse istemci adına işlem yapabilirler.
+
+Akıştaki bariz güvenlik çekinceleri sebebi ile Oauth2 protokolü client_credentials akışında refresh_token yaratımına izin vermemektedir.
+
+### 3. Operasyonlar
 
 [Token Apisi](./token.md)<br>
 [Express Teklif Apisi](./quote.md)<br>

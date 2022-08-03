@@ -13,6 +13,7 @@ _Versiyon_ : v1
 ### URI şeması
 
 _Host_ : api.navlungo.com  
+_Host(Test)_ : api-qa.navlungo.com
 _Schemes_ : HTTPS
 
 ### Kabul Edilen Girdi Formatları
@@ -43,15 +44,15 @@ Oauth refresh_token veya authorization_code akışları sonucunda token üretir.
 
 #### Parametreler
 
-| Tip        | İsim                              | Açıklama                                                                                                                                                   |
-| ---------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **string** | **client_id** <br>_zorunlu_       | İstemciye Navlungo tarafından verilen id                                                                                                                   |
-| **string** | **client_secret** <br>_zorunlu_   | İstemciye Navlungo tarafından verilen şifre                                                                                                                |
-| **string** | **grant_type** <br>_zorunlu_      | Akış tipi. authorization_code veya refresh_token                                                                                                           |
-| **string** | **scope** <br>_opsiyonel_         | Kullanılacak api kapsamları. authorization_code akışında minimumda openid offline_access değerleri gönderilmeli.                                           |
-| **string** | **code** <br>_opsiyonel_          | Authorization code. authorization_code akışı için zorunlu.                                                                                                 |
-| **string** | **code_verifier** <br>_opsiyonel_ | authorization_code akışında ilk adımda gönderilen SHA256 ile hashlenmiş code_challenge verisinin hashlenmemiş hali. authorization_code akışı için zorunlu. |
-| **string** | **refresh_token** <br>_opsiyonel_ | Akış tipi refresh_token ise zorunlu.                                                                                                                       |
+| Tip        | İsim                              | Açıklama                                                                                                                                                                                                             |
+| ---------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **string** | **client_id** <br>_zorunlu_       | İstemciye Navlungo tarafından verilen id                                                                                                                                                                             |
+| **string** | **client_secret** <br>_zorunlu_   | İstemciye Navlungo tarafından verilen şifre                                                                                                                                                                          |
+| **string** | **grant_type** <br>_zorunlu_      | Akış tipi. authorization_code, client_credentials veya refresh_token                                                                                                                                                 |
+| **string** | **scope** <br>_opsiyonel_         | Kullanılacak api kapsamları. authorization_code akışında minimumda openid offline_access değerleri gönderilmeli. client_credentials akışı için kullanılacak endpointlerin dökümante edilmiş scope'ları gönderilmeli. |
+| **string** | **code** <br>_opsiyonel_          | Authorization code. authorization_code akışı için zorunlu.                                                                                                                                                           |
+| **string** | **code_verifier** <br>_opsiyonel_ | authorization_code akışında ilk adımda gönderilen SHA256 ile hashlenmiş code_challenge verisinin hashlenmemiş hali. authorization_code akışı için zorunlu.                                                           |
+| **string** | **refresh_token** <br>_opsiyonel_ | Akış tipi refresh_token ise zorunlu.                                                                                                                                                                                 |
 
 #### Yanıtlar
 
@@ -66,13 +67,13 @@ Oauth refresh_token veya authorization_code akışları sonucunda token üretir.
 
 ### TokenResponse
 
-| Ad                              | Açıklama                                                                  | Şema   |
-| ------------------------------- | ------------------------------------------------------------------------- | ------ |
-| **access_token** <br>_zorunlu_  | Access Token                                                              | string |
-| **token_type** <br>_zorunlu_    | Token tipi                                                                | int    |
-| **expires_in** <br>_zorunlu_    | Tokenin geçerli olduğu süre sn. cinsinden                                 | string |
-| **refresh_token** <br>_zorunlu_ | Üretilen refresh token                                                    | string |
-| **id_token** <br>opsiyonel      | Üretilen Id Token. İstemcinin Navlungo'daki ayarlarına göre boş olabilir. | string |
+| Ad                                | Açıklama                                                                         | Şema   |
+| --------------------------------- | -------------------------------------------------------------------------------- | ------ |
+| **access_token** <br>_zorunlu_    | Access Token                                                                     | string |
+| **token_type** <br>_zorunlu_      | Token tipi                                                                       | int    |
+| **expires_in** <br>_zorunlu_      | Tokenin geçerli olduğu süre sn. cinsinden                                        | string |
+| **refresh_token** <br>_opsiyonel_ | Üretilen refresh token ( client_credentials akışında her zaman boş gönderilir. ) | string |
+| **id_token** <br>opsiyonel        | Üretilen Id Token. İstemcinin Navlungo'daki ayarlarına göre boş olabilir.        | string |
 
 <a name="error"></a>
 
