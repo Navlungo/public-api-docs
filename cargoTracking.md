@@ -86,15 +86,15 @@ Express taşımalar için kargo takip bilgilerini döndürür.
 
 **TrackingResponse**
 
-| Ad                               | Açıklama                      | Şema                                       |
-| -------------------------------- | ----------------------------- | ------------------------------------------ |
-| **trackingNumber** <br>_zorunlu_ | Takip numarası                | string                                     |
-| **courier** <br>_zorunlu_        | Taşıyıcı firma kodu           | string                                     |
-| **courierTrackingLink**          | Taşıyıcı firmanın takip linki | string                                     |
-| **status** <br>_zorunlu_         | Sevkiyatın durumu             | < [TrackingStatus](#trackingStatus) > Enum |
-| **signedBy**                     | Varsa teslim alan kişi        | string                                     |
-| **shipmentType**                 | Taşıyıcı firmanın servis türü | string                                     |
-| **checkpoints**                  | Sevkiyata dair hareketler     | < [Checkpoint](#checkpoint) > Array        |
+| Ad                      | Açıklama                      | Her zaman mevcut | Şema                                       |
+| ----------------------- | ----------------------------- | ---------------- | ------------------------------------------ |
+| **trackingNumber**      | Takip numarası                | Evet             | string                                     |
+| **courier** <br>        | Taşıyıcı firma kodu           | Evet             | string                                     |
+| **courierTrackingLink** | Taşıyıcı firmanın takip linki | Hayır            | string                                     |
+| **status** <br>         | Sevkiyatın durumu             | Evet             | < [TrackingStatus](#trackingStatus) > Enum |
+| **signedBy**            | Varsa teslim alan kişi        | Hayır            | string                                     |
+| **shipmentType**        | Taşıyıcı firmanın servis türü | Hayır            | string                                     |
+| **checkpoints**         | Sevkiyata dair hareketler     | Hayır            | < [Checkpoint](#checkpoint) > Array        |
 
 <a name="checkpoint"></a>
 
