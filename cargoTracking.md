@@ -26,7 +26,7 @@ _Schemes_ : HTTPS
 
 ### Yetkilendirme
 
-Bu api Oauth2 **client_credentials** akışı ile oluşturulan token'lar ile çağrılabilir.
+Bu api Oauth2 **client_credentials** akışı ile oluşturulan token'lar ile çağrılabilir. Token alırken scope parametresine **public_cargo_tracking** değeri gönderilmelidir.
 
 ### Operasyonlar
 
