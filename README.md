@@ -16,12 +16,14 @@ Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza
 
 Bu api ile erişim sağlanacak tüm kaynaklara OAuth2 protokolü ile oluşturulan access tokenların gönderilmesi gerekmektedir. Navlungo API'lerinde yetkilendirme senaryoya ve istemci tanımına göre iki farklı şekilde yapılır. Bunlar;
 
-- Authorization Code
-- Client Credentials
+- Authorization Code(varsayılan yetkilendirme türü)
+- Client Credentials (varsayılan olarak verilmez. Sadece server to server kullanımlar için uygundur. Senaryonuz client-credentials akışı gerektiriyorsa Navlungo ekibi ile senaryonunun üzerinden geçmeniz gerekmektedir.)
 
 #### 2.1. Authorization Code
 
 Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden ilgili kaynaklara erişim için kullanıcının rızası alınır. Kullanıcı onayından sonra Navlungo tarafından istemciye gönderilen tek seferlik yetkilendirme kodu ile istemci **kullanıcı adına izin verilen kaynaklar üzerinde işlem yapabilir**.
+
+[Yetkilendirme akışı videolu anlatımı](https://www.loom.com/share/058aec858ee648f4a40390f811ad606b)
 
 ![AuthorizationCode](authorization/authorization_code_flow.png?raw=true "AuthorizationCode")
 
@@ -37,7 +39,7 @@ Client akışın sonraki aşamalarında token almakta kullanacağı authorizatio
 İstemci tarafından oluşturulan authorization kod istek örneği;
 
 ```
-https://navlungo.com/authorize?client_id=fb4cd4c9-5569-43ed-9698-e18de5b77f35code_challenge=y3oUIHf8JtMcKhLTcwpVBdal/6r2uJYErygLZb4VXog=
+https://navlungo.com/authorize?client_id=fb4cd4c9-5569-43ed-9698-e18de5b77f35&code_challenge=y3oUIHf8JtMcKhLTcwpVBdal/6r2uJYErygLZb4VXog=
 ```
 
 Navlungo.com'da tüm kontroller başarılı ise istemciye dönülen authorization code response'u
@@ -57,6 +59,8 @@ Navlungo.com authorization_code'u başarı ile ürettiği durumda;
 Bu akışta Navlungo'nun istemciye verdiği bilgiler ile ( client_id ve client_secret ) ile istemci adına access_token yaratılır. Alınan bu access_token ile **istemci adına uygun Navlungo api kaynakları üzerinde işlem yapılabilir**. Client credentials akışı id ve secret bilgisinin gönderilmesini gerektirdiği için bu akış tipinde yapılacak token istekleri mutlaka güvenli bir **server side** uygulama tarafından yapılmalıdır. Id ve secret bilgileri istenmeyen kişiler tarafından ele geçirilirse istemci adına işlem yapabilirler.
 
 Akıştaki bariz güvenlik çekinceleri sebebi ile Oauth2 protokolü client_credentials akışında refresh_token yaratımına izin vermemektedir.
+
+**ÖNEMLİ** : Bu yetkilendirme mekanizması her senaryoyu desteklememektedir. Varsayılan olarak Navlungo entegrasyon başvurusu yapıldığında authorization code mekanizması için tanımlama yapılır!
 
 ### 3. Operasyonlar
 
