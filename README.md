@@ -12,6 +12,8 @@ Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza
   - Sipariş oluşturma,
   - Bir siparişi Navlungo'da sevkiyata dönüştürme işlemleri yapılabilir.
 
+---
+
 ### 2. Yetkilendirme
 
 Bu api ile erişim sağlanacak tüm kaynaklara OAuth2 protokolü ile oluşturulan access tokenların gönderilmesi gerekmektedir. Navlungo API'lerinde yetkilendirme senaryoya ve istemci tanımına göre iki farklı şekilde yapılır. Bunlar;
@@ -20,6 +22,8 @@ Bu api ile erişim sağlanacak tüm kaynaklara OAuth2 protokolü ile oluşturula
 - Client Credentials (varsayılan olarak verilmez. Sadece server to server kullanımlar için uygundur. Senaryonuz client-credentials akışı gerektiriyorsa Navlungo ekibi ile senaryonunun üzerinden geçmeniz gerekmektedir.)
 
 #### 2.1. Authorization Code
+
+<a name="auth"></a>
 
 Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden ilgili kaynaklara erişim için kullanıcının rızası alınır. Kullanıcı onayından sonra Navlungo tarafından istemciye gönderilen tek seferlik yetkilendirme kodu ile istemci **kullanıcı adına izin verilen kaynaklar üzerinde işlem yapabilir**.
 
@@ -62,7 +66,52 @@ Akıştaki bariz güvenlik çekinceleri sebebi ile Oauth2 protokolü client_cred
 
 **ÖNEMLİ** : Bu yetkilendirme mekanizması her senaryoyu desteklememektedir. Varsayılan olarak Navlungo entegrasyon başvurusu yapıldığında authorization code mekanizması için tanımlama yapılır!
 
-### 3. Operasyonlar
+---
+
+## 3. Sipariş ve Sevkiyat Oluşturma Akışı
+
+Navlungo ile en sık yapılmak istenen senaryo Navlungo.com üzerinden sevkiyat oluşturma olduğu için bu başlık altında sevkiyat akışını detaylandıracağız.
+
+**Tanımlar**
+
+- **Client**: Navlungo public apisini kullanan kurum. (client_id ve client_secret'a sahiptir.)
+- **User**: Navlungo.com kullanıcı hesabı. ( navlungo.com'da kullanıcı adı ve şifresi olan gerçek bir hesap )
+
+**Dikkat Edilmesi Gereken Noktalar**
+
+- Sevkiyat oluşturabilmek için önce bir mağaza oluşturmak ve bu mağzaya sipariş göndermek gerekir.
+- Sipariş oluşturulduktan sonra, yaratılan sipariş bir teklif ile ilişkilendirilip sevkiyata dönüştürülebilir.
+- Mağaza, sipariş ve sevkiyat oluşturma işlemleri için;
+  - Entegrasyon application to application çalışmaz. Yani doğrudan **client** için bu işlemleri yapamazsınız. Bir **user** zorunludur.
+  - **Client**, [Authorization Code](#auth) başlığında da tariflendiği şekilde **user adına** işlem yetkisi alır ve o kullanıcı adına işlem yapar.
+
+**Senaryolar**
+
+_Senaryo 1: Pazaryeri_
+
+Mağaza apisi **Client**'ın kullanıcılarının aynı zamanda Navlungo hesabının da olduğu ( Navlungo User ) **pazaryeri senaryoları** düşünülerek geliştirilmiştir. Yani apinin önceliği **Client**'ın kullanıcılarının Navlungo hesaplarını **Client**'ın platformuna bağlaması, daha sonra platform üzerinden siparişleri Navlungo'ya otomatik göndermeleri ve sevkiyata dönüştürebilmesidir.
+
+_Senaryo 2: Client'ın Navlungo Hesabını Kullanması_
+
+Bazı senaryolarda **Client**, **kendi Navlungo User** 'ını kullanmak isteyebilir. Bu senaryoda Client'ın kullanıcılarının Navlungo hesabı olması gerekmez ve fiyatlama vb. süreçler Client'ın Navlungo hesabı üzerinden yapılır. [Authorization Code](#auth) akışı ile Client'ın Navlungo'daki kendi hesabı için bir kez yetkilendirme akışı çalıştırılıp _refresh_token_ alınabilir. Alınan bu refresh_token access_token alabilmek için tekrar tekrar kullanılabilir. Bu sayede de aslında api-key ile yapılan entegrasyonlara benzer bir akış ortaya çıkar.
+
+**Fakat bu akış her ne kadar api key'le yapılan bir entegrasyona benzese de aynı değildir.Bu senaryo api'nin asıl kullanım amacına uygun olmadığı için daha çok bir alternatif çözüm olarak düşünülmelidir.**
+
+Yukarıdaki iki senaryoda da sevkiyat oluşturma akışı şu şekilde çalışır;
+
+![Shipment Flow](shipment_flow.png?raw=true "AuthorizationCode")
+
+1.1. Client [createStore](/store.md#createStore) ile mağaza yaratır. Navlungo mağazayı başarı ile yarattığında geriye mağaza id'yi döndürür.
+
+1.2. Client, istediği bir mağazasında [createOrder](/store.md#createOrder) ile sipariş yaratır.
+
+1.3. Client, sevkiyata dönüştürmek istediği siparişleri için [generateQuote](/quote.md#quotes) yardımı ile taşıma teklifleri alır. Bu api çağrılırken siparişin paketleme bilgileri apiye argüman olarak gönderilir. Navlungo gelen isteğe göre bir veya birden fazla taşıma teklifi oluşturur.
+
+1.4. Client, [shipOrder](/store.md#shipOrder) ile bir sipariş ve teklifi ilişkilendirerek sevkiyata dönüştürebilir.
+
+---
+
+## 4. Operasyonlar
 
 [Token Apisi](./token.md)<br>
 [Express Teklif Apisi](./quote.md)<br>
