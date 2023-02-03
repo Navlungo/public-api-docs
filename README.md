@@ -68,7 +68,7 @@ Akıştaki bariz güvenlik çekinceleri sebebi ile Oauth2 protokolü client_cred
 
 ---
 
-### 3. Sipariş ve Sevkiyat Oluşturma Akışı
+## 3. Sipariş ve Sevkiyat Oluşturma Akışı
 
 Navlungo ile en sık yapılmak istenen senaryo Navlungo.com üzerinden sevkiyat oluşturma olduğu için bu başlık altında sevkiyat akışını detaylandıracağız.
 
@@ -111,7 +111,7 @@ Yukarıdaki iki senaryoda da sevkiyat oluşturma akışı şu şekilde çalış�
 
 ---
 
-### 4. Operasyonlar
+## 4. Operasyonlar
 
 [Token Apisi](./token.md)<br>
 [Express Teklif Apisi](./quote.md)<br>
