@@ -82,8 +82,8 @@ Navlungo ile en sık yapılmak istenen senaryo Navlungo.com üzerinden sevkiyat 
 - Sevkiyat oluşturabilmek için önce bir mağaza oluşturmak ve bu mağzaya sipariş göndermek gerekir.
 - Sipariş oluşturulduktan sonra, yaratılan sipariş bir teklif ile ilişkilendirilip sevkiyata dönüştürülebilir.
 - Mağaza, sipariş ve sevkiyat oluşturma işlemleri için;
-- Entegrasyon application to application çalışmaz. Yani doğrudan **client** için bu işlemleri yapamazsınız. Bir **user** zorunludur.
-- **Client**, [Authorization Code](#auth) başlığında da tariflendiği şekilde **user adına** işlem yetkisi alır ve o kullanıcı adına işlem yapar.
+  - Entegrasyon application to application çalışmaz. Yani doğrudan **client** için bu işlemleri yapamazsınız. Bir **user** zorunludur.
+  - **Client**, [Authorization Code](#auth) başlığında da tariflendiği şekilde **user adına** işlem yetkisi alır ve o kullanıcı adına işlem yapar.
 
 **Senaryolar**
 
