@@ -99,8 +99,8 @@ Mağazanın adres bilgilerinin modelidir.
 | **contactMail** <br>_zorunlu_          | Kontak kişinin email adresi                                                                   | string |
 | **countryCode** <br>_zorunlu_          | 2 haneli global ülke kodu                                                                     | string |
 | **state** <br>_opsiyonel_              | Global eyalet kodu                                                                            | string |
-| **city** <br>_zorunlu_                 | Şehir bilgisi                                                                                 | string |
-| **town** <br>_zorunlu_                 | İlçe bilgisi                                                                                  | string |
+| **city** <br>_zorunlu_                 | [Şehir bilgisi](./city-town.md)                                                               | string |
+| **town** <br>_zorunlu_                 | [İlçe bilgisi](./city-town.md)                                                                | string |
 | **postalCode** <br>_zorunlu_           | Posta kodu                                                                                    | string |
 | **firstLine** <br>_zorunlu_            | İlk adres satırı. Minimum 10 karakter, maximum 30 karakter.                                   | string |
 | **secondLine** <br>_opsiyonel_         | İkinci adres satırı.Maximum 30 karakter.                                                      | string |
