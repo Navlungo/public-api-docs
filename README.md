@@ -31,7 +31,9 @@ Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden il
 
 ![AuthorizationCode](authorization/authorization_code_flow.png?raw=true "AuthorizationCode")
 
-Video'daki örneğin hesaplamasını yapan örnek C# kod bloğunu aşağıda bulabilirsiniz. Örneği [.Net Fiddle](https://dotnetfiddle.net/) gibi online bir ortamda koşabilirsiniz.
+Video'daki örneğin hesaplamasını yapan örnek C# ve PHP kod bloklarını aşağıda bulabilirsiniz. c# örneğini [.Net Fiddle](https://dotnetfiddle.net/) gibi online bir ortamda koşabilirsiniz.
+
+C#
 ```
 using System;
 
@@ -41,17 +43,23 @@ class Program
 {
    static void Main(string[] args)
    {
-   		var verifier = "b1f711f0-ee78-44e8-b098-84de6df69ad4"; //buraya kendi örnek verifier'ınızı girerek oluşan hash'i görebilirsiniz
-		  var verifierBytes = System.Text.Encoding.UTF8.GetBytes(verifier);
+   	var verifier = "b1f711f0-ee78-44e8-b098-84de6df69ad4"; //buraya kendi örnek verifier'ınızı girerek oluşan hash'i görebilirsiniz
+	var verifierBytes = System.Text.Encoding.UTF8.GetBytes(verifier);
 			
-      var sha256 = System.Security.Cryptography.SHA256.Create();
-		  var sha256ComputedVerifierHashBytes = sha256.ComputeHash(verifierBytes);
+        var sha256 = System.Security.Cryptography.SHA256.Create();
+	var sha256ComputedVerifierHashBytes = sha256.ComputeHash(verifierBytes);
 			
-	  	string verifierHashedBase64String = Convert.ToBase64String(sha256ComputedVerifierHashBytes);
-		  Console.WriteLine($"Verifier: {verifier}");
-		  Console.WriteLine($"Hashed Verifier: {verifierHashedBase64String}");
+	string verifierHashedBase64String = Convert.ToBase64String(sha256ComputedVerifierHashBytes);
+	Console.WriteLine($"Verifier: {verifier}");
+	Console.WriteLine($"Hashed Verifier: {verifierHashedBase64String}");
    }
 }
+```
+
+PHP
+```
+$code_verifier = 'b1f711f0-ee78-44e8-b098-84de6df69ad4';
+$code_challenge = base64_encode(hash('sha256', utf8_encode($code_verifier) , true));
 ```
 
 **Authorization Code İsteği**
