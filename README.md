@@ -32,6 +32,7 @@ Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden il
 ![AuthorizationCode](authorization/authorization_code_flow.png?raw=true "AuthorizationCode")
 
 Video'daki örneğin hesaplamasını yapan örnek C# ve PHP kod bloklarını aşağıda bulabilirsiniz. c# örneğini [.Net Fiddle](https://dotnetfiddle.net/) gibi online bir ortamda koşabilirsiniz.
+
 C#
 ```
 using System;
