@@ -31,6 +31,29 @@ Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden il
 
 ![AuthorizationCode](authorization/authorization_code_flow.png?raw=true "AuthorizationCode")
 
+Video'daki örneğin hesaplamasını yapan örnek C# kod bloğunu aşağıda bulabilirsiniz. Örneği ![.Net Fiddle](https://dotnetfiddle.net/) gibi online bir ortamda koşabilirsiniz.
+```
+using System;
+
+namespace VerifierHasher;
+
+class Program
+{
+   static void Main(string[] args)
+   {
+   		var verifier = "b1f711f0-ee78-44e8-b098-84de6df69ad4"; //buraya kendi örnek verifier'ınızı girerek oluşan hash'i görebilirsiniz
+		  var verifierBytes = System.Text.Encoding.UTF8.GetBytes(verifier);
+			
+      var sha256 = System.Security.Cryptography.SHA256.Create();
+		  var sha256ComputedVerifierHashBytes = sha256.ComputeHash(verifierBytes);
+			
+	  	string verifierHashedBase64String = Convert.ToBase64String(sha256ComputedVerifierHashBytes);
+		  Console.WriteLine($"Verifier: {verifier}");
+		  Console.WriteLine($"Hashed Verifier: {verifierHashedBase64String}");
+   }
+}
+```
+
 **Authorization Code İsteği**
 
 Client akışın sonraki aşamalarında token almakta kullanacağı authorization code isteğini https://navlungo.com/authorize adresine ( test ortamı için https://qa.navlungo.com/authorize ) aşağıdaki parametrelerin değerini querystring aracılığı ile gönderir.
