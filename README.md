@@ -31,7 +31,7 @@ Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden il
 
 ![AuthorizationCode](authorization/authorization_code_flow.png?raw=true "AuthorizationCode")
 
-Video'daki örneğin hesaplamasını yapan örnek C# kod bloğunu aşağıda bulabilirsiniz. Örneği ![.Net Fiddle](https://dotnetfiddle.net/) gibi online bir ortamda koşabilirsiniz.
+Video'daki örneğin hesaplamasını yapan örnek C# kod bloğunu aşağıda bulabilirsiniz. Örneği [.Net Fiddle](https://dotnetfiddle.net/) gibi online bir ortamda koşabilirsiniz.
 ```
 using System;
 
