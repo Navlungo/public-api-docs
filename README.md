@@ -2,7 +2,7 @@
 
 <a name="overview"></a>
 
-> **Note**
+## Önemli Notlar
 
 1. Size iletilen client bilgileri ile yalnızca ilgili ortamda işlem yapabilirsiniz. QA ortam için iletilen client bilgileri ile production apilerine erişemezsiniz.
 2. QA ve Production ortamları izole olduklarından production kullanıcı bilgileriniz ile qa ortamda login olamaz, giriş yapamazsınız. QA'de işlem yapmak için kullanıcı ihtiyacınız var ise, kayıt ol butonu aracılığı ile yeni bir kullanıcı oluşturup testlerinizde kullanabilirsiniz.
