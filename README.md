@@ -2,6 +2,12 @@
 
 <a name="overview"></a>
 
+## Önemli Notlar
+
+1. Size iletilen client bilgileri ile yalnızca ilgili ortamda işlem yapabilirsiniz. QA ortam için iletilen client bilgileri ile production apilerine erişemezsiniz.
+2. QA ve Production ortamları izole olduklarından production kullanıcı bilgileriniz ile qa ortamda login olamaz, giriş yapamazsınız. QA'de işlem yapmak için kullanıcı ihtiyacınız var ise, kayıt ol butonu aracılığı ile yeni bir kullanıcı oluşturup testlerinizde kullanabilirsiniz.
+3. QA ortamı varsayılan olarak hafta içi gece ve hafta sonları kapalıdır, apilerden yanıt alamayabilirsiniz. Çalışma planlamanız ve bilgisini önceden vermeniz halinde, ortamı açık tutabiliriz.
+
 ## 1. Genel Bakış
 
 Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza yönetim süreçlerine programatik erişim sağlayarak kendi müşterilerine en uygun deneyimi geliştirmelerine yardımcı olmak amaçlanmaktadır.
