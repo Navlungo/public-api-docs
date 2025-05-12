@@ -33,8 +33,9 @@ _Schemes_ : HTTPS
 - [updateStoreAddress](#updateStoreAddress)<br>
 - [updateInvoiceAddress](#updateInvoiceAddress)<br>
 - [deleteStore](#deleteStore)<br>
-- [createOrder](#createOrder)<br>
-- [shipOrder](#shipOrder)<br>
+- (**DEPRECATED**)[createOrder](#createOrder)<br>
+- (**DEPRECATED**)[shipOrder](#shipOrder)<br>
+- [shipStoreOrder](#shipStoreOrder) (\*new)<br>
 - [trackOrder](#trackOrder)<br>
 
 <a name="paths"></a>
@@ -416,9 +417,10 @@ Genel hata nesnesi
 <hr/>
 <a name="createOrder"></a>
 
-### POST /stores/v1/{id}/orders
+### (-DEPRECATED-)POST /stores/v1/{id}/orders
 
 **Operasyon: createOrder**
+Bu api deprecate olmuştur. Bunun yerine çağırılması gereken api [Express Teklif Apisi](./quote.md) altındaki [Create Order Quote](./quote.md/#createOrderQuote) Api'dir.
 
 #### Açıklama
 
@@ -523,11 +525,12 @@ Genel hata nesnesi
 <hr/>
 <a name="shipOrder"></a>
 
-### POST /stores/v1/{id}/orders/ship
+### (DEPRECATED) POST /stores/v1/{id}/orders/ship
 
 #### Açıklama
 
 Siparişin, seçilen teklif için sevkiyat işlemlerini başlatır.
+Bu api deprecate olmuştur. Bu api yerine çağırılması gereken api [Ship Store Order](#shipStoreOrder) api'sidir.
 
 #### Parametreler
 
@@ -577,6 +580,55 @@ Genel hata nesnesi
 | **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
 
 <hr/>
+<a name="shipStoreOrder"></a>
+
+### POST /stores/v2/{store_id}/orders/{order_reference}/ship
+
+**Operasyon: shipStoreOrder**
+
+#### Açıklama
+
+Belirtilen mağaza ve sipariş için seçilen teklif üzerinden sevkiyat işlemlerini başlatır.
+
+#### Parametreler
+
+| Tip      | İsim                              | Açıklama           | Şema                                          |
+| -------- | --------------------------------- | ------------------ | --------------------------------------------- |
+| **Path** | **store_id** <br>_zorunlu_        | Mağaza ID          | Guid                                          |
+| **Path** | **order_reference** <br>_zorunlu_ | Sipariş referansı  | string                                        |
+| **Body** | **body** <br>_zorunlu_            | Sevkiyat bilgileri | [StoreShipmentRequest](#storeShipmentRequest) |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                       | Şema                                            |
+| --------- | -------------------------------------------------------------- | ----------------------------------------------- |
+| **200**   | Başarılı                                                       | [StoreShipmentResponse](#storeShipmentResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                                 |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                                 |
+| **404**   | Mağaza veya sipariş bulunamadı                                 | [Error](#error)                                 |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                                 |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="storeShipmentRequest"></a>
+
+### StoreShipmentRequest
+
+| Ad                               | Açıklama                           | Şema |
+| -------------------------------- | ---------------------------------- | ---- |
+| **quoteReference** <br>_zorunlu_ | Teklifin tekil id'si               | Guid |
+| **searchId** <br>_zorunlu_       | Teklif arama işleminin tekil id'si | Guid |
+
+<a name="storeShipmentResponse"></a>
+
+### StoreShipmentResponse
+
+| Ad                            | Açıklama                 | Şema   |
+| ----------------------------- | ------------------------ | ------ |
+| **trackingUrl** <br>_zorunlu_ | Gönderi takip bağlantısı | string |
+
 <a name="trackOrder"></a>
 
 ### GET /stores/v1/{id}/ordertracking?orderReference={orderId}
