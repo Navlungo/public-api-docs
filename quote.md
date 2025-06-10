@@ -26,37 +26,11 @@ _Schemes_ : HTTPS
 
 ### Operasyonlar
 
-**(DEPRECATED)** [generateQuote](#quotes)<br>
 [createOrderQuote](#createOrderQuote)<br>
 
 <a name="paths"></a>
 
 ## Paths
-
-<a name="quotes"></a>
-
-### (**-DEPRECATED-**) POST expressquotes/v1
-
-**Operasyon: generateQuote**
-
-#### Açıklama
-
-Gönderilen yük bilgileri ve taşımanın yapılacağı ülkelere göre bir teklif isteği kaydı oluşturur ve istek sonucunda oluşturulan teklifleri listeler.
-
-#### Parametreler
-
-| Tip      | İsim                   | Açıklama                         | Şema                                          |
-| -------- | ---------------------- | -------------------------------- | --------------------------------------------- |
-| **Body** | **body** <br>_zorunlu_ | Arama yaratmak için gerekli şema | [GenerateQuoteRequest](#generateQuoteRequest) |
-
-#### Yanıtlar
-
-| HTTP Kodu | Açıklama                                                       | Şema                            |
-| --------- | -------------------------------------------------------------- | ------------------------------- |
-| **200**   | Başarılı                                                       | [QuoteResponse](#quoteResponse) |
-| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                 |
-| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                 |
-| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                 |
 
 <a name="createOrderQuote"></a>
 
