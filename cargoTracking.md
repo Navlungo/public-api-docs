@@ -30,30 +30,27 @@ Bu api Oauth2 **client_credentials** akışı ile oluşturulan token'lar ile ça
 
 ### Operasyonlar
 
-- [getCargoTrackingInfo](#getCargoTrackingInfo)<br>
+- [getShipmentTracking](#getShipmentTracking)<br>
 
 <a name="paths"></a>
 
 ## Paths
 
-<a name="getCargoTrackingInfo"></a>
+<a name="getShipmentTracking"></a>
 
-### GET tracking/v1/cargo
+### GET shipments/v1/{reference}/tracking
 
-**Operasyon: getCargoTrackingInfo**
+**Operasyon: getShipmentTracking**
 
 #### Açıklama
 
-Express taşımalar için kargo takip bilgilerini döndürür.
+Gönderi referans numarası ile kargo takip bilgilerini döndürür.
 
 #### Parametreler
 
-| Tip             | İsim                                 | Açıklama                    | Şema                         |
-| --------------- | ------------------------------------ | --------------------------- | ---------------------------- |
-| **Querystring** | **courier** <br>_zorunlu_            | Taşıyıcı firma kodu         | < [Courier](#courier) > Enum |
-| **Querystring** | **trackingNumber** <br>_zorunlu_     | Takip numarası              | -                            |
-| **Querystring** | **originCountry** <br>_zorunlu_      | Kargonun çıkış yaptığı ülke | -                            |
-| **Querystring** | **destinationCountry** <br>_zorunlu_ | Teslimat ülkesi             | -                            |
+| Tip      | İsim                        | Açıklama                  | Şema |
+| -------- | --------------------------- | ------------------------- | ---- |
+| **Path** | **reference** <br>_zorunlu_ | Gönderi referans numarası | long |
 
 #### Yanıtlar
 
@@ -62,62 +59,56 @@ Express taşımalar için kargo takip bilgilerini döndürür.
 | **200**   | Başarılı                                                        | [TrackingResponse](#trackingResponse) |
 | **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error)                       |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error)                       |
+| **404**   | Gönderi bulunamadı.                                             | [Error](#error)                       |
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error)                       |
 
 <a name="definitions"></a>
 
-####Tanımlar
-
-<a name="courier"></a>
-
-| Kod          | Taşıyıcı |
-| ------------ | -------- |
-| **dhl**      | DHL      |
-| **fedex**    | FedEx    |
-| **tnt**      | TNT      |
-| **ups**      | UPS      |
-| **dpd**      | DPD      |
-| **gls**      | GLS      |
-| **aramex**   | ARAMEX   |
-| **hermes**   | HERMES   |
-| **hellmann** | HELLMAN  |
+## Tanımlar
 
 <a name="trackingResponse"></a>
 
-**TrackingResponse**
+### TrackingResponse
 
-| Ad                      | Açıklama                      | Her zaman mevcut | Şema                                       |
-| ----------------------- | ----------------------------- | ---------------- | ------------------------------------------ |
-| **trackingNumber**      | Takip numarası                | Evet             | string                                     |
-| **courier** <br>        | Taşıyıcı firma kodu           | Evet             | string                                     |
-| **courierTrackingLink** | Taşıyıcı firmanın takip linki | Hayır            | string                                     |
-| **status** <br>         | Sevkiyatın durumu             | Evet             | < [TrackingStatus](#trackingStatus) > Enum |
-| **signedBy**            | Varsa teslim alan kişi        | Hayır            | string                                     |
-| **shipmentType**        | Taşıyıcı firmanın servis türü | Hayır            | string                                     |
-| **checkpoints**         | Sevkiyata dair hareketler     | Hayır            | < [Checkpoint](#checkpoint) > Array        |
+| Ad                       | Açıklama                         | Her zaman mevcut | Şema                                |
+| ------------------------ | -------------------------------- | ---------------- | ----------------------------------- |
+| **trackingNumber**       | Takip numarası                   | Evet             | string                              |
+| **originCountry**        | Kargonun çıkış yaptığı ülke kodu | Evet             | string                              |
+| **destinationCountry**   | Teslimat ülkesi kodu             | Evet             | string                              |
+| **pickupDate**           | Alım tarihi                      | Evet             | string (DateTime)                   |
+| **expectedDeliveryDate** | Beklenen teslimat tarihi         | Hayır            | string (DateTime)                   |
+| **carrier**              | Taşıyıcı firma kodu              | Evet             | string                              |
+| **originLocation**       | Çıkış lokasyonu detayı           | Evet             | string                              |
+| **destinationLocation**  | Varış lokasyonu detayı           | Evet             | string                              |
+| **checkpoints**          | Sevkiyata dair hareketler        | Evet             | < [Checkpoint](#checkpoint) > Array |
 
 <a name="checkpoint"></a>
 
-**Checkpoint**
+### Checkpoint
 
-| Ad                               | Açıklama                          | Şema                                       |
-| -------------------------------- | --------------------------------- | ------------------------------------------ |
-| **checkpointTime** <br>_zorunlu_ | Olay zamanı                       | string                                     |
-| **status** <br>_zorunlu_         | Olay sırasında sevkiyatın statüsü | < [TrackingStatus](#trackingStatus) > Enum |
-| **message**                      | Olaya dair mesaj                  | string                                     |
+| Ad                                 | Açıklama               | Her zaman mevcut | Şema              |
+| ---------------------------------- | ---------------------- | ---------------- | ----------------- |
+| **checkpointTime** <br>_zorunlu_   | Olay zamanı            | Evet             | string (DateTime) |
+| **status** <br>_zorunlu_           | Olay durumu            | Evet             | string            |
+| **subStatusMessage** <br>_zorunlu_ | Alt durum mesajı       | Evet             | string            |
+| **subStatusDescription**           | Alt durum açıklaması   | Hayır            | string            |
+| **country**                        | Olay gerçekleşen ülke  | Hayır            | string            |
+| **city**                           | Olay gerçekleşen şehir | Hayır            | string            |
+| **zip**                            | Posta kodu             | Hayır            | string            |
+| **location**                       | Lokasyon detayı        | Hayır            | string            |
 
-<a name="trackingStatus"></a>
+<a name="error"></a>
 
-**TrackingStatus**
+### Error
 
-| Ad                     | Açıklama                                                                                                    |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **InfoReceived**       | Carrier has received request from shipper and is about to pick up the shipment.                             |
-| **InTransit**          | Carrier has accepted or picked up shipment from shipper. The shipment is on the way.                        |
-| **OutForDelivery**     | Carrier is about to deliver the shipment , or it is ready to pickup.                                        |
-| **AttemptFail**        | Carrier attempted to deliver but failed, and usually leaves a notice and will try to deliver again.         |
-| **Delivered**          | The shipment was delivered successfully.                                                                    |
-| **AvailableForPickup** | The package arrived at a pickup point near you and is available for pickup.                                 |
-| **Exception**          | Custom hold, undelivered, returned shipment to sender or any shipping exceptions.                           |
-| **Expired**            | Shipment has no tracking information for 30 days since added.                                               |
-| **Pending**            | New shipments added that are pending to track, or new shipments without tracking information available yet. |
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
