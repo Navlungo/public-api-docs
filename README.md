@@ -40,6 +40,7 @@ Bu akışta istemciye access ve refresh token verilmeden önce web üzerinden il
 Video'daki örneğin hesaplamasını yapan örnek C# ve PHP kod bloklarını aşağıda bulabilirsiniz. c# örneğini [.Net Fiddle](https://dotnetfiddle.net/) gibi online bir ortamda koşabilirsiniz.
 
 C#
+
 ```
 using System;
 
@@ -51,10 +52,10 @@ class Program
    {
    	var verifier = "b1f711f0-ee78-44e8-b098-84de6df69ad4"; //buraya kendi örnek verifier'ınızı girerek oluşan hash'i görebilirsiniz
 	var verifierBytes = System.Text.Encoding.UTF8.GetBytes(verifier);
-			
+
         var sha256 = System.Security.Cryptography.SHA256.Create();
 	var sha256ComputedVerifierHashBytes = sha256.ComputeHash(verifierBytes);
-			
+
 	string verifierHashedBase64String = Convert.ToBase64String(sha256ComputedVerifierHashBytes);
 	Console.WriteLine($"Verifier: {verifier}");
 	Console.WriteLine($"Hashed Verifier: {verifierHashedBase64String}");
@@ -63,6 +64,7 @@ class Program
 ```
 
 PHP
+
 ```
 $code_verifier = 'b1f711f0-ee78-44e8-b098-84de6df69ad4';
 $code_challenge = base64_encode(hash('sha256', utf8_encode($code_verifier) , true));
@@ -140,17 +142,16 @@ Yukarıdaki iki senaryoda da sevkiyat oluşturma akışı şu şekilde çalış�
 
 1.1. Client [createStore](/store.md#createStore) ile mağaza yaratır. Navlungo mağazayı başarı ile yarattığında geriye mağaza id'yi döndürür.
 
-1.2. Client, istediği bir mağazasında [createOrder](/store.md#createOrder) ile sipariş yaratır.
+1.2. Client, istediği bir mağazasında [createOrderQuote](/store.md#createOrderQuote) ile sipariş yaratır ve teklifleri listeler.
 
-1.3. Client, sevkiyata dönüştürmek istediği siparişleri için [generateQuote](/quote.md#quotes) yardımı ile taşıma teklifleri alır. Bu api çağrılırken siparişin paketleme bilgileri apiye argüman olarak gönderilir. Navlungo gelen isteğe göre bir veya birden fazla taşıma teklifi oluşturur.
-
-1.4. Client, [shipOrder](/store.md#shipOrder) ile bir sipariş ve teklifi ilişkilendirerek sevkiyata dönüştürebilir.
+1.3. Client, [shipStoreOrder](/store.md#shipStoreOrder) ile bir sipariş refereansına, istediği teklif referansını ve searchId'sini göndererek ([createOrderQuote](/store.md#createOrderQuote) response'undan dönen) teklifini depoya ulaşması bekleniyor statüde bir sevkiyata dönüştürebilir.
 
 ---
 
 ## 4. Operasyonlar
 
-[Token Apisi](./token.md)<br>
-[Express Teklif Apisi](./quote.md)<br>
-[Mağaza Apisi](./store.md)<br>
-[Kargo Takip Apisi](./cargoTracking.md)<br>
+[Token Apisi](./token.md)</br>
+[Express Teklif Apisi](./quote.md)</br>
+[Mağaza Apisi](./store.md)</br>
+[Kargo Takip Apisi](./cargoTracking.md)</br>
+[Shipment Api](./shipment.md)</br>
