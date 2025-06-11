@@ -35,7 +35,7 @@ _Schemes_ : HTTPS
 
 <a name="createLabel"></a>
 
-### POST shipments/v1/{id}/label
+### POST shipments/v1/{shipmentId}/label
 
 **Operasyon: createLabel**
 
@@ -45,13 +45,13 @@ Belirtilen gönderi referansı için etiket oluşturur. Bu işlem için kullanı
 
 #### Rate Limit
 
-- Her IP ve User-Agent kombinasyonu için 10 dakikada en fazla 3 istek yapılabilir
+- Her IP ve User-Agent kombinasyonu için 10 saniyede en fazla 3 istek yapılabilir
 
 #### Parametreler
 
-| Tip      | İsim                 | Açıklama                                                                                 | Şema |
-| -------- | -------------------- | ---------------------------------------------------------------------------------------- | ---- |
-| **Path** | **id** <br>_zorunlu_ | Gönderi referans numarası (stores/v1/{id}/orders/ship API'sindeki quoteReference değeri) | long |
+| Tip      | İsim                         | Açıklama                                                                                                                 | Şema |
+| -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---- |
+| **Path** | **shipmentId** <br>_zorunlu_ | Gönderinin tekil id'si (/stores/v2/{store_id}/orders/{order_reference}/ship API'sinin response'undaki shipmentId değeri) | Guid |
 
 #### Yanıtlar
 
@@ -75,7 +75,7 @@ Belirtilen gönderi referansı için etiket oluşturur. Bu işlem için kullanı
 
 <a name="getLabel"></a>
 
-### GET shipments/v1/{reference}/label
+### GET shipments/v1/{shipmentId}/label
 
 **Operasyon: getLabel**
 
@@ -85,13 +85,13 @@ Belirtilen gönderi referansı için oluşturulmuş etiketi getirir. Bu işlem i
 
 #### Rate Limit
 
-- Her IP ve User-Agent kombinasyonu için 10 dakikada en fazla 3 istek yapılabilir
+- Her IP ve User-Agent kombinasyonu için 10 saniyede en fazla 3 istek yapılabilir
 
 #### Parametreler
 
-| Tip      | İsim                        | Açıklama                                                                                 | Şema |
-| -------- | --------------------------- | ---------------------------------------------------------------------------------------- | ---- |
-| **Path** | **reference** <br>_zorunlu_ | Gönderi referans numarası (stores/v1/{id}/orders/ship API'sindeki quoteReference değeri) | long |
+| Tip      | İsim                         | Açıklama                                                                                                                 | Şema |
+| -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---- |
+| **Path** | **shipmentId** <br>_zorunlu_ | Gönderinin tekil id'si (/stores/v2/{store_id}/orders/{order_reference}/ship API'sinin response'undaki shipmentId değeri) | Guid |
 
 #### Yanıtlar
 

@@ -433,13 +433,13 @@ Belirtilen mağaza ve sipariş için seçilen teklif üzerinden sevkiyat işleml
 
 #### Yanıtlar
 
-| HTTP Kodu | Açıklama                                                       | Şema                                            |
-| --------- | -------------------------------------------------------------- | ----------------------------------------------- |
-| **200**   | Başarılı                                                       | [StoreShipmentResponse](#storeShipmentResponse) |
-| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                                 |
-| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                                 |
-| **404**   | Mağaza veya sipariş bulunamadı                                 | [Error](#error)                                 |
-| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                                 |
+| HTTP Kodu | Açıklama                                                       | Şema                                    |
+| --------- | -------------------------------------------------------------- | --------------------------------------- |
+| **200**   | Başarılı                                                       | [ShipOrderResponse](#shipOrderResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                         |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                         |
+| **404**   | Mağaza veya sipariş bulunamadı                                 | [Error](#error)                         |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                         |
 
 <a name="definitions"></a>
 
@@ -454,13 +454,14 @@ Belirtilen mağaza ve sipariş için seçilen teklif üzerinden sevkiyat işleml
 | **quoteReference** <br>_zorunlu_ | Teklifin tekil id'si               | Guid |
 | **searchId** <br>_zorunlu_       | Teklif arama işleminin tekil id'si | Guid |
 
-<a name="storeShipmentResponse"></a>
+<a name="shipOrderResponse"></a>
 
-### StoreShipmentResponse
+### ShipOrderResponse
 
-| Ad                            | Açıklama                 | Şema   |
-| ----------------------------- | ------------------------ | ------ |
-| **trackingUrl** <br>_zorunlu_ | Gönderi takip bağlantısı | string |
+| Ad                            | Açıklama                       | Şema   |
+| ----------------------------- | ------------------------------ | ------ |
+| **shipmentId** <br>_zorunlu_  | Sevkiyatın tekil tanımlayıcısı | Guid   |
+| **trackingUrl** <br>_zorunlu_ | Gönderi takip bağlantısı       | string |
 
 <a name="trackOrder"></a>
 
