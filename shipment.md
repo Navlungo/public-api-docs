@@ -35,7 +35,7 @@ _Schemes_ : HTTPS
 
 <a name="createLabel"></a>
 
-### POST shipments/v1/{shipmentId}/label
+### POST api/shipments/v1/{shipmentId}/label
 
 **Operasyon: createLabel**
 
@@ -75,7 +75,7 @@ Belirtilen gönderi referansı için etiket oluşturur. Bu işlem için kullanı
 
 <a name="getLabel"></a>
 
-### GET shipments/v1/{shipmentId}/label
+### GET api/shipments/v1/{shipmentId}/label
 
 **Operasyon: getLabel**
 
@@ -116,7 +116,7 @@ Belirtilen gönderi referansı için oluşturulmuş etiketi getirir. Bu işlem i
 
 <a name="getTracking"></a>
 
-### GET shipments/v1/{reference}/tracking
+### GET api/shipments/v1/{reference}/tracking
 
 **Operasyon: getTracking**
 
