@@ -29,6 +29,7 @@ _Schemes_ : HTTPS
 [getLabel](#getLabel)<br>
 [getTracking](#getTracking)<br>
 [uploadDocument](#uploadDocument)<br>
+[getEtgbDownloadUrl](#getEtgbDownloadUrl)<br>
 
 <a name="paths"></a>
 
@@ -177,6 +178,47 @@ Belirtilen gönderi referansı için takip bilgilerini getirir. Bu işlem için 
 
 ---
 
+<a name="getEtgbDownloadUrl"></a>
+
+### GET api/shipments/v1/{shipmentId}/etgb/download-url
+
+**Operasyon: GetEtgbDownloadUrl**
+
+#### Açıklama
+
+Belirtilen gönderi için ETGB dökümanı indirme linkini getirir. Bu işlem için kullanıcının yetkilendirilmiş olması gerekmektedir. ETGB dökümanı sadece gönderi teslim edildikten sonra indirilebilir.
+
+#### Rate Limit
+
+- Her IP ve User-Agent kombinasyonu için 10 saniyede en fazla 5 istek yapılabilir
+
+#### Parametreler
+
+| Tip      | İsim                         | Açıklama               | Şema |
+| -------- | ---------------------------- | ---------------------- | ---- |
+| **Path** | **shipmentId** <br>_zorunlu_ | Gönderinin tekil id'si | Guid |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                                                                                                                           | Şema                                              |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| **200**   | Başarılı                                                                                                                                                           | [EtgbDownloadUrlReponse](#etgbDownloadUrlReponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz<br> `shipmentnotfound.error` - Gönderi bulunamadı<br> `etgbdocumentnotfound.error` - ETGB dökümanı bulunamadı | [Error](#error)                                   |
+| **401**   | Yetkilendirme hatası.                                                                                                                                              |                                                   |
+| **400**   | Gönderi teslim edilmediği için ETGB dökümanı indirilemez<br> `shipmentnotdelivered.error` - Gönderi teslim edilmedi                                                | [Error](#error)                                   |
+| **429**   | Rate limit aşıldı                                                                                                                                                  | [Error](#error)                                   |
+
+#### Response Model
+
+##### EtgbDownloadUrlReponse
+
+| Ad                            | Açıklama      | Şema   |
+| ----------------------------- | ------------- | ------ |
+| **FileName** <br>_zorunlu_    | Dosya adı     | string |
+| **DownloadUrl** <br>_zorunlu_ | İndirme linki | string |
+
+---
+
 <a name="uploadDocument"></a>
 
 ### POST api/shipments/v1/{shipmentId}/documents
@@ -202,13 +244,13 @@ API, dökümanları yüklemek için bir AWS S3 presigned URL'i döner. Bu URL 10
 
 #### Yanıtlar
 
-| HTTP Kodu | Açıklama                                                       | Şema                                                              |
-| --------- | -------------------------------------------------------------- | ----------------------------------------------------------------- |
-| **200**   | Başarılı                                                       | [UpdateShipmentDocumentResponse](#UpdateShipmentDocumentResponse) |
-| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz           | [Error](#error)                                                   |
-| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                                                   |
-| **404**   | Gönderi bulunamadı                                             | [Error](#error)                                                   |
-| **429**   | Rate limit aşıldı                                              | [Error](#error)                                                   |
+| HTTP Kodu | Açıklama                                             | Şema                                                              |
+| --------- | ---------------------------------------------------- | ----------------------------------------------------------------- |
+| **200**   | Başarılı                                             | [UpdateShipmentDocumentResponse](#UpdateShipmentDocumentResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz | [Error](#error)                                                   |
+| **401**   | Yetkilendirme hatası.                                |
+| **404**   | Gönderi bulunamadı                                   | [Error](#error)                                                   |
+| **429**   | Rate limit aşıldı                                    | [Error](#error)                                                   |
 
 #### Request Model
 
