@@ -28,6 +28,7 @@ _Schemes_ : HTTPS
 [createLabel](#createLabel)<br>
 [getLabel](#getLabel)<br>
 [getTracking](#getTracking)<br>
+[uploadDocument](#uploadDocument)<br>
 
 <a name="paths"></a>
 
@@ -173,6 +174,105 @@ Belirtilen gönderi referansı için takip bilgilerini getirir. Bu işlem için 
 | **city** <br>_opsiyonel_                 | Şehir                  | string   |
 | **zip** <br>_opsiyonel_                  | Posta kodu             | string   |
 | **location** <br>_opsiyonel_             | Lokasyon               | string   |
+
+---
+
+<a name="uploadDocument"></a>
+
+### POST api/shipments/v1/{shipmentId}/documents
+
+**Operasyon: UploadDocument**
+
+#### Açıklama
+
+Belirtilen gönderi için dökümanları yükler. Bu işlem için kullanıcının yetkilendirilmiş olması gerekmektedir.
+
+API, dökümanları yüklemek için bir AWS S3 presigned URL'i döner. Bu URL 10 dakika boyunca geçerlidir. Bu süre zarfında client'ın dosyayı belirtilen URL'e yüklemesi gerekmektedir. Endpoint yanıtı başarılı olduğunda, sistem dosyanın yüklendiğini varsayar. Bu nedenle, dosyanın hemen yüklenmesi için bu endpoint kullanılmalıdır.
+
+#### Rate Limit
+
+- Her IP ve User-Agent kombinasyonu için 2 saniyede en fazla 1 istek yapılabilir
+
+#### Parametreler
+
+| Tip      | İsim                         | Açıklama                          | Şema                                                            |
+| -------- | ---------------------------- | --------------------------------- | --------------------------------------------------------------- |
+| **Path** | **shipmentId** <br>_zorunlu_ | Gönderinin tekil id'si            | Guid                                                            |
+| **Body** | **request** <br>_zorunlu_    | Yüklenecek dökümanların bilgileri | [UpdateShipmentDocumentRequest](#updateShipmentDocumentRequest) |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                       | Şema                                                              |
+| --------- | -------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **200**   | Başarılı                                                       | [UpdateShipmentDocumentResponse](#UpdateShipmentDocumentResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz           | [Error](#error)                                                   |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                                                   |
+| **404**   | Gönderi bulunamadı                                             | [Error](#error)                                                   |
+| **429**   | Rate limit aşıldı                                              | [Error](#error)                                                   |
+
+#### Request Model
+
+##### UpdateShipmentDocumentRequest
+
+| Ad                                  | Açıklama        | Şema                                                      |
+| ----------------------------------- | --------------- | --------------------------------------------------------- |
+| **ShipmentDocuments** <br>_zorunlu_ | Döküman listesi | < [ShipmentDocumentModel](#shipmentDocumentModel) > array |
+
+##### ShipmentDocumentModel
+
+| Ad                               | Açıklama                                                                                                                                                              | Şema                          |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **FileName** <br>_zorunlu_       | Dosya adı                                                                                                                                                             | string                        |
+| **Type** <br>_zorunlu_           | Döküman tipi. Geçerli tipler: `msds`, `e-archive`, `tsca`, `fda`, `eori-no`, `ddp`, `insurance-policy`, `battery-form-label`, `no-amazon-fba-tag`, `original-invoice` | string                        |
+| **EArchiveInfo** <br>_opsiyonel_ | E-Arşiv bilgileri (sadece `Type` `e-archive` ise gereklidir, değil ise göz önünde bulundurulmaz.)                                                                     | [EArchiveInfo](#earchiveInfo) |
+
+##### EArchiveInfo
+
+| Ad                       | Açıklama                                 | Şema     |
+| ------------------------ | ---------------------------------------- | -------- |
+| **Date** <br>_zorunlu_   | E-Arşiv tarihi                           | datetime |
+| **Number** <br>_zorunlu_ | E-Arşiv numarası (16 karakter olmalıdır) | string   |
+
+#### Örnek İstek Body
+
+```json
+{
+	"ShipmentDocuments": [
+		{
+			"Type": "e-archive",
+			"FileName": "x.pdf",
+			"EArchiveInfo": {
+				"Date": "2023-10-27",
+				"Number": "NAV2023000000123"
+			}
+		}
+	]
+}
+```
+
+#### Response Model
+
+##### UpdateShipmentDocumentResponse
+
+| Ad                                         | Açıklama                         | Şema                                                |
+| ------------------------------------------ | -------------------------------- | --------------------------------------------------- |
+| **Documents** <br>_zorunlu_                | Yükleme bilgileri                | < [DocumentUploadInfo](#documentUploadInfo) > array |
+| **AlreadyExistingFileNames** <br>_zorunlu_ | Zaten var olan dosyaların adları | < string > array                                    |
+
+##### DocumentUploadInfo
+
+| Ad                         | Açıklama      | Şema                |
+| -------------------------- | ------------- | ------------------- |
+| **FileName** <br>_zorunlu_ | Dosya adı     | string              |
+| **Type** <br>_zorunlu_     | Döküman tipi  | string              |
+| **UrlInfo** <br>_zorunlu_  | URL bilgileri | [UrlInfo](#urlInfo) |
+
+##### UrlInfo
+
+| Ad                            | Açıklama      | Şema   |
+| ----------------------------- | ------------- | ------ |
+| **ContentType** <br>_zorunlu_ | İçerik tipi   | string |
+| **UploadUrl** <br>_zorunlu_   | Yükleme URL'i | string |
 
 ## Common Models
 
