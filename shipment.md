@@ -12,7 +12,8 @@ _Versiyon_ : v1
 
 ### URI şeması
 
-_Host_ : api.navlungo.com  
+_Host_ : api.navlungo.com
+_Host(Test)_ : api-qa.navlungo.com
 _Schemes_ : HTTPS
 
 ### Kabul Edilen Girdi Formatları
