@@ -187,7 +187,7 @@ Belirtilen gönderi referansı için takip bilgilerini getirir. Bu işlem için 
 
 #### Açıklama
 
-Belirtilen gönderi için ETGB dökümanı indirme linkini getirir. Bu işlem için kullanıcının yetkilendirilmiş olması gerekmektedir. ETGB dökümanı sadece gönderi teslim edildikten sonra indirilebilir.
+Belirtilen gönderi için ETGB dökümanı indirme linkini getirir. Bu işlem için kullanıcının yetkilendirilmiş olması gerekmektedir. ETGB dökümanı sadece gönderi teslim edildikten sonra indirilebilir. Etgb evrağı gümrükten alınmadığı bazı durumlarda download url yerine sadece etgbNumber geri dönebilir.
 
 #### Rate Limit
 
@@ -213,10 +213,11 @@ Belirtilen gönderi için ETGB dökümanı indirme linkini getirir. Bu işlem i�
 
 ##### EtgbDownloadUrlReponse
 
-| Ad                            | Açıklama      | Şema   |
-| ----------------------------- | ------------- | ------ |
-| **FileName** <br>_zorunlu_    | Dosya adı     | string |
-| **DownloadUrl** <br>_zorunlu_ | İndirme linki | string |
+| Ad                             | Açıklama      | Şema   |
+| ------------------------------ | ------------- | ------ |
+| **FileName** <br>_nullable_    | Dosya adı     | string |
+| **DownloadUrl** <br>_nullable_ | İndirme linki | string |
+| **EtgbNumber** <br>_zorunlu_   | Etgb Numarası | string |
 
 ---
 
