@@ -129,7 +129,7 @@ Belirtilen gönderi referansı için takip bilgilerini getirir. Bu işlem için 
 
 #### Rate Limit
 
-- Her IP ve User-Agent kombinasyonu için 2 saniyede en fazla 1 istek yapılabilir
+- Her IP ve User-Agent kombinasyonu için 10 saniyede en fazla 20 istek yapılabilir
 
 #### Parametreler
 
