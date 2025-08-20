@@ -148,16 +148,28 @@ Belirtilen mağaza için sipariş bilgileri ve paket detayları kullanılarak te
 
 ### StoreQuote
 
-| Ad                                 | Açıklama                                | Şema    |
-| ---------------------------------- | --------------------------------------- | ------- |
-| **quoteReference** <br>_zorunlu_   | Teklifin referans id'si                 | string  |
-| **price** <br>_zorunlu_            | Teklif tutarı                           | decimal |
-| **currency** <br>_zorunlu_         | Teklif para birimi                      | string  |
-| **serviceType** <br>_zorunlu_      | Servis türü (express, eco-express, vb.) | string  |
-| **minTransitTime** <br>_opsiyonel_ | Minimum taşıma süresi (gün)             | int     |
-| **maxTransitTime** <br>_opsiyonel_ | Maksimum taşıma süresi (gün)            | int     |
-| **description** <br>_zorunlu_      | Teklif açıklaması                       | string  |
-| **carrier** <br>_zorunlu_          | Taşıyıcı firma                          | string  |
+| Ad                                   | Açıklama                                | Şema                                              |
+| ------------------------------------ | --------------------------------------- | ------------------------------------------------- |
+| **quoteReference** <br>_zorunlu_     | Teklifin referans id'si                 | string                                            |
+| **price** <br>_zorunlu_              | Teklif tutarı                           | decimal                                           |
+| **currency** <br>_zorunlu_           | Teklif para birimi                      | string                                            |
+| **serviceType** <br>_zorunlu_        | Servis türü (express, eco-express, vb.) | string                                            |
+| **minTransitTime** <br>_opsiyonel_   | Minimum taşıma süresi (gün)             | int                                               |
+| **maxTransitTime** <br>_opsiyonel_   | Maksimum taşıma süresi (gün)            | int                                               |
+| **description** <br>_zorunlu_        | Teklif açıklaması                       | string                                            |
+| **carrier** <br>_zorunlu_            | Taşıyıcı firma                          | string                                            |
+| **additionalServices** <br>_zorunlu_ | Ek hizmet bilgileri                     | < [AdditionalService](#additionalService) > array |
+
+<a name="additionalService"></a>
+
+### AdditionalService
+
+| Ad                            | Açıklama                                           | Şema    |
+| ----------------------------- | -------------------------------------------------- | ------- |
+| **serviceCode** <br>_zorunlu_ | Ek hizmet kodu. Geçerli değerler: "ddp"            | string  |
+| **priceAmount** <br>_zorunlu_ | Ek hizmet tutarı                                   | decimal |
+| **currency** <br>_zorunlu_    | Ek hizmet para birimi                              | string  |
+| **isRequired** <br>_zorunlu_  | Ek hizmetin zorunlu olup olmadığını belirten değer | boolean |
 
 <a name="load"></a>
 

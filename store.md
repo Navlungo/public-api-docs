@@ -421,7 +421,7 @@ Genel hata nesnesi
 
 #### Açıklama
 
-Belirtilen mağaza ve sipariş için seçilen teklif üzerinden sevkiyat işlemlerini başlatır.
+Belirtilen mağaza ve sipariş için seçilen teklif üzerinden sevkiyat işlemlerini başlatır. Seçilebilecek ek hizmetler createOrderQuote api'sinden döner. İlgili teklif için dönmeyen bir ek hizmet; shipOrder aşamasında kullanılamaz.
 
 #### Parametreler
 
@@ -449,10 +449,11 @@ Belirtilen mağaza ve sipariş için seçilen teklif üzerinden sevkiyat işleml
 
 ### StoreShipmentRequest
 
-| Ad                               | Açıklama                           | Şema |
-| -------------------------------- | ---------------------------------- | ---- |
-| **quoteReference** <br>_zorunlu_ | Teklifin tekil id'si               | Guid |
-| **searchId** <br>_zorunlu_       | Teklif arama işleminin tekil id'si | Guid |
+| Ad                                           | Açıklama                                                    | Şema             |
+| -------------------------------------------- | ----------------------------------------------------------- | ---------------- |
+| **quoteReference** <br>_zorunlu_             | Teklifin tekil id'si                                        | Guid             |
+| **searchId** <br>_zorunlu_                   | Teklif arama işleminin tekil id'si                          | Guid             |
+| **selectedAdditionalServices** <br>_zorunlu_ | Seçilen ek hizmet kodları listesi. Geçerli değerler: "ddp". | < string > array |
 
 <a name="shipOrderResponse"></a>
 
