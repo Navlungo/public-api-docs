@@ -459,12 +459,13 @@ Belirtilen mağaza ve sipariş için seçilen teklif üzerinden sevkiyat işleml
 
 ### ShipOrderResponse
 
-| Ad                                  | Açıklama                                                                                    | Şema         |
-| ----------------------------------- | ------------------------------------------------------------------------------------------- | ------------ |
-| **shipmentId** <br>_zorunlu_        | Sevkiyatın tekil tanımlayıcısı                                                              | Guid         |
-| **shipmentReference** <br>_zorunlu_ | Gönderi numarası                                                                            | string       |
-| **trackingUrl** <br>_zorunlu_       | Gönderi takip bağlantısı                                                                    | string       |
-| **cargoLabels** <br>_zorunlu_       | Depo'da kargo kabul için gerekli olan barkod numara listesi. Paket başına bir numara döner. | List<string> |
+| Ad                                   | Açıklama                                                                                    | Şema         |
+| ------------------------------------ | ------------------------------------------------------------------------------------------- | ------------ |
+| **shipmentId** <br>_zorunlu_         | Sevkiyatın tekil tanımlayıcısı                                                              | Guid         |
+| **shipmentReference** <br>_zorunlu_  | Gönderi numarası                                                                            | string       |
+| **trackingUrl** <br>_zorunlu_        | Gönderi takip bağlantısı                                                                    | string       |
+| **cargoLabels** <br>_zorunlu_        | Depo'da kargo kabul için gerekli olan barkod numara listesi. Paket başına bir numara döner. | List<string> |
+| **chargeableWeight** <br>_opsiyonel_ | Toplam faturalandırılabilir ağırlık (kg)                                                    | decimal      |
 
 <a name="trackOrder"></a>
 
