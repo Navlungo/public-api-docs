@@ -33,6 +33,8 @@ _Schemes_ : HTTPS
 - [updateStoreAddress](#updateStoreAddress)<br>
 - [updateInvoiceAddress](#updateInvoiceAddress)<br>
 - [deleteStore](#deleteStore)<br>
+- [addStoreIossNumber](#addStoreIossNumber)<br>
+- [deleteStoreIossNumber](#deleteStoreIossNumber)<br>
 - [shipStoreOrder](#shipStoreOrder)<br>
 - [trackOrder](#trackOrder)<br>
 
@@ -397,6 +399,102 @@ Query parametresi olarak verilen id'ye ait mağazayı pasife çeker.
 | **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 >
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="addStoreIossNumber"></a>
+
+### POST /stores/v2/{id}/ioss
+
+**Operasyon: addStoreIossNumber**
+
+#### Açıklama
+
+Belirtilen mağaza için IOSS (Import One-Stop Shop) numarası tanımlar. Tanımlanan numara, mağaza siparişlerinden oluşturulan ve tutarı 150 EUR altında kalan Avrupa Birliği gönderilerinde kullanılır. Mağazanın halihazırda aktif bir IOSS numarası varsa eski numara pasife çekilir ve yeni numara aktif hale gelir.
+
+
+#### Parametreler
+
+| Tip      | İsim                   | Açıklama                                     | Şema                                                        |
+| -------- | ---------------------- | -------------------------------------------- | ----------------------------------------------------------- |
+| **Path** | **{id}** <br>_zorunlu_ | Mağazanın tekil id'si                        | string                                                      |
+| **Body** | **body** <br>_zorunlu_ | IOSS numarası tanımlamak için gerekli şema   | [AddStoreIossNumberRequest](#addStoreIossNumberRequest)     |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                                                             | Şema            |
+| --------- | ----------------------------------------------------------------------------------------------------- | --------------- |
+| **200**   | Başarılı                                                                                             |                 |
+| **400**   | İstek doğrulamasında hata oluştu, IOSS numarası formatı geçersiz veya mağaza IOSS tanımına uygun değil. | [Error](#error) |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş.                                        | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                                                                     | [Error](#error) |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                                                          | [Error](#error) |
+
+<a name="definitions"></a>
+
+## Tanımlar
+
+<a name="addStoreIossNumberRequest"></a>
+
+### AddStoreIossNumberRequest
+
+| Ad                            | Açıklama                                                                        | Şema   |
+| ----------------------------- | -------------------------------------------------------------------------------- | ------ |
+| **iossNumber** <br>_zorunlu_ | IOSS numarası. "IM" ile başlamalı ve toplam 12 karakter olmalıdır. Örnek: IM1234567890 | string |
+
+### Error
+
+Genel hata nesnesi
+
+| Ad                              | Açıklama                                                        | Şema   |
+| ------------------------------- | --------------------------------------------------------------- | ------ |
+| **type** <br>_zorunlu_          | Hata tipi (path şeklinde örneğin Authentication/InvalidToken)   | string |
+| **status** <br>_zorunlu_        | Hataya ait statü kodu                                           | int    |
+| **problemCode** <br>_opsiyonel_ | Hata kodu                                                       | string |
+| **title** <br>_zorunlu_         | Hata başlığı                                                    | string |
+| **detail** <br>_zorunlu_        | Hataya ait detaylı açıklama                                     | string |
+| **path** <br>_zorunlu_          | Hatanın oluştuğu url                                            | string |
+| **extensions** <br>_opsiyonel_  | Hataya ait detay bilgiler. Hata türüne göre içeriği değişebilir | object |
+
+<hr/>
+<a name="deleteStoreIossNumber"></a>
+
+### DELETE /stores/v2/{id}/ioss
+
+**Operasyon: deleteStoreIossNumber**
+
+#### Açıklama
+
+Belirtilen mağazanın aktif IOSS numarasını kaldırır. Mağazanın aktif bir IOSS numarası yoksa da istek başarılı döner.
+
+#### Parametreler
+
+| Tip      | İsim                   | Açıklama              | Şema   |
+| -------- | ---------------------- | --------------------- | ------ |
+| **Path** | **{id}** <br>_zorunlu_ | Mağazanın tekil id'si | string |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                        | Şema            |
+| --------- | --------------------------------------------------------------- | --------------- |
+| **200**   | Başarılı                                                        |                 |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.           | [Error](#error) |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş. | [Error](#error) |
+| **404**   | Mağaza bulunamadı                                               | [Error](#error) |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                    | [Error](#error) |
 
 ### Error
 
