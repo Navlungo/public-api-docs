@@ -29,6 +29,7 @@ _Schemes_ : HTTPS
 [createLabel](#createLabel)<br>
 [getLabel](#getLabel)<br>
 [getTracking](#getTracking)<br>
+[getShipment](#getShipment)<br>
 [uploadDocument](#uploadDocument)<br>
 [getEtgbDownloadUrl](#getEtgbDownloadUrl)<br>
 
@@ -176,6 +177,111 @@ Belirtilen gönderi referansı için takip bilgilerini getirir. Bu işlem için 
 | **city** <br>_opsiyonel_                 | Şehir                  | string   |
 | **zip** <br>_opsiyonel_                  | Posta kodu             | string   |
 | **location** <br>_opsiyonel_             | Lokasyon               | string   |
+
+---
+
+<a name="getShipment"></a>
+
+### GET api/shipments/v1/{reference}
+
+**Operasyon: getShipment**
+
+#### Açıklama
+
+Belirtilen gönderi referansı için gönderinin güncel bilgilerini getirir; güncel fiyat, gönderici ve alıcı adresleri, ürün içerikleri ve paketlerin güncel ölçüleri döner. Bu işlem için kullanıcının yetkilendirilmiş olması gerekmektedir.
+
+#### Rate Limit
+
+- Her IP ve User-Agent kombinasyonu için 10 saniyede en fazla 20 istek yapılabilir
+
+#### Parametreler
+
+| Tip      | İsim                        | Açıklama                                                                                                                          | Şema |
+| -------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| **Path** | **reference** <br>_zorunlu_ | Gönderi referans numarası (/stores/v2/{store_id}/orders/{order_reference}/ship API'sinin response'undaki shipmentReference değeri) | long |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                       | Şema                                              |
+| --------- | -------------------------------------------------------------- | ------------------------------------------------- |
+| **200**   | Başarılı                                                       | [ShipmentDetailResponse](#shipmentDetailResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz           | [Error](#error)                                   |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                                   |
+| **404**   | Gönderi bulunamadı                                             | [Error](#error)                                   |
+| **429**   | Rate limit aşıldı                                              | [Error](#error)                                   |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu                    | [Error](#error)                                   |
+
+#### Response Model
+
+<a name="shipmentDetailResponse"></a>
+
+##### ShipmentDetailResponse
+
+| Ad                                        | Açıklama                                                           | Şema                                    |
+| ----------------------------------------- | ------------------------------------------------------------------ | --------------------------------------- |
+| **shipmentId** <br>_zorunlu_              | Gönderinin tekil id'si                                             | Guid                                    |
+| **reference** <br>_zorunlu_               | Gönderi referans numarası                                          | long                                    |
+| **warehouseArrivalDate** <br>_opsiyonel_  | Gönderinin depoya giriş tarihi (depoya ulaşmadıysa boş döner)      | datetime                                |
+| **warehouseDispatchDate** <br>_opsiyonel_ | Gönderinin depodan çıkış tarihi (depodan çıkmadıysa boş döner)     | datetime                                |
+| **price** <br>_zorunlu_                   | Gönderinin güncel fiyatı                                           | [Price](#shipmentDetailPrice)           |
+| **senderAddress** <br>_zorunlu_           | Gönderici adresi                                                   | [Address](#shipmentDetailAddress)       |
+| **receiverAddress** <br>_zorunlu_         | Alıcı adresi                                                       | [Address](#shipmentDetailAddress)       |
+| **products** <br>_zorunlu_                | Proforma fatura ürün içerikleri                                    | < [Product](#shipmentDetailProduct) > array |
+| **packages** <br>_zorunlu_                | Paketlerin güncel ölçüleri (depo ölçümü sonrası güncellenmiş hali) | < [Package](#shipmentDetailPackage) > array |
+
+<a name="shipmentDetailPrice"></a>
+
+##### Price
+
+| Ad                         | Açıklama    | Şema    |
+| -------------------------- | ----------- | ------- |
+| **amount** <br>_zorunlu_   | Tutar       | decimal |
+| **currency** <br>_zorunlu_ | Para birimi | string  |
+
+<a name="shipmentDetailAddress"></a>
+
+##### Address
+
+| Ad                                     | Açıklama                                       | Şema   |
+| -------------------------------------- | ---------------------------------------------- | ------ |
+| **contactName** <br>_zorunlu_          | İletişim kurulacak kişinin adı                 | string |
+| **companyName** <br>_opsiyonel_        | Şirket adı                                     | string |
+| **countryCode** <br>_zorunlu_          | Ülke kodu (ISO 3166-1 alpha-2)                 | string |
+| **stateCode** <br>_opsiyonel_          | Eyalet kodu                                    | string |
+| **postalCode** <br>_opsiyonel_         | Posta kodu                                     | string |
+| **city** <br>_zorunlu_                 | Şehir                                          | string |
+| **town** <br>_opsiyonel_               | İlçe (sadece gönderici adresinde döner)        | string |
+| **firstLine** <br>_zorunlu_            | Adres satırı 1                                 | string |
+| **secondLine** <br>_opsiyonel_         | Adres satırı 2                                 | string |
+| **thirdLine** <br>_opsiyonel_          | Adres satırı 3                                 | string |
+| **email** <br>_opsiyonel_              | E-posta adresi                                 | string |
+| **phoneCode** <br>_opsiyonel_          | Telefon ülke kodu                              | string |
+| **phoneNumber** <br>_opsiyonel_        | Telefon numarası                               | string |
+
+<a name="shipmentDetailProduct"></a>
+
+##### Product
+
+| Ad                                  | Açıklama          | Şema    |
+| ----------------------------------- | ----------------- | ------- |
+| **description** <br>_opsiyonel_     | Ürün açıklaması   | string  |
+| **hsCode** <br>_zorunlu_            | HS (GTİP) kodu    | string  |
+| **originCountryCode** <br>_zorunlu_ | Menşe ülke kodu   | string  |
+| **unitPrice** <br>_zorunlu_         | Birim fiyat       | decimal |
+| **currency** <br>_zorunlu_          | Para birimi       | string  |
+| **quantity** <br>_zorunlu_          | Adet              | int     |
+
+<a name="shipmentDetailPackage"></a>
+
+##### Package
+
+| Ad                          | Açıklama                                                        | Şema    |
+| --------------------------- | --------------------------------------------------------------- | ------- |
+| **type** <br>_zorunlu_      | Paket tipi (`Box`, `Envelope`, `Document`)                      | string  |
+| **weight** <br>_zorunlu_    | Ağırlık (kg)                                                    | decimal |
+| **length** <br>_opsiyonel_  | Uzunluk (cm) (sadece `Box` tipinde döner)                       | decimal |
+| **height** <br>_opsiyonel_  | Yükseklik (cm) (sadece `Box` tipinde döner)                     | decimal |
+| **width** <br>_opsiyonel_   | Genişlik (cm) (sadece `Box` tipinde döner)                      | decimal |
 
 ---
 
