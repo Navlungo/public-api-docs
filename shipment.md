@@ -32,6 +32,7 @@ _Schemes_ : HTTPS
 [getShipment](#getShipment)<br>
 [uploadDocument](#uploadDocument)<br>
 [getEtgbDownloadUrl](#getEtgbDownloadUrl)<br>
+[voidShipment](#voidShipment)<br>
 
 <a name="paths"></a>
 
@@ -423,6 +424,40 @@ API, dökümanları yüklemek için bir AWS S3 presigned URL'i döner. Bu URL 10
 | ----------------------------- | ------------- | ------ |
 | **ContentType** <br>_zorunlu_ | İçerik tipi   | string |
 | **UploadUrl** <br>_zorunlu_   | Yükleme URL'i | string |
+
+---
+
+<a name="voidShipment"></a>
+
+### POST api/shipments/v1/{shipmentId}/void
+
+**Operasyon: voidShipment**
+
+#### Açıklama
+
+Belirtilen gönderiyi iptal eder. Sadece henüz depoya ulaşmamış gönderiler iptal edilebilir. 
+
+#### Rate Limit
+
+- Her IP ve User-Agent kombinasyonu için 1 saniyede en fazla 2 istek yapılabilir
+
+#### Parametreler
+
+| Tip      | İsim                         | Açıklama                                                                                                                 | Şema |
+| -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---- |
+| **Path** | **shipmentId** <br>_zorunlu_ | Gönderinin tekil id'si (/stores/v2/{store_id}/orders/{order_reference}/ship API'sinin response'undaki shipmentId değeri) | Guid |
+
+#### Yanıtlar
+
+| HTTP Kodu | Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Şema            |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| **200**   | Başarılı (yanıt gövdesi dönmez)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | -               |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz<br> `shipmentnotfound.error` - Gönderi bulunamadı<br> `unauthorized.action` - Bu işlemi yapma yetkiniz yok<br> `notpublicapishipment.error` - Gönderi API üzerinden oluşturulmadığı için iptal edilemez<br> `shipmentalreadyinwarehouse.error` - Gönderi depoya ulaştığı için iptal edilemez<br> `shipment.shipmentalreadycancelled.error` - Gönderi zaten iptal edilmiş<br> `shipment.shipmentcannotbecancelledwhenbundlereferenceisexists.error` - Bundle referansı olan gönderi iptal edilemez | [Error](#error) |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | [Error](#error) |
+| **429**   | Rate limit aşıldı                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | [Error](#error) |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | [Error](#error) |
+
+---
 
 ## Common Models
 
