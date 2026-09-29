@@ -113,13 +113,33 @@ Gönderi referansı ile takip özetini ve hareket listesini döndürür.
 | Ad                       | Açıklama                                                                                                                  | Her zaman mevcut | Şema              |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----------------- |
 | **checkpointTime**       | Olay zamanı                                                                                                               | Evet             | string (DateTime) |
-| **status**               | Olay durumu. Takip servisinden metin olarak gelir, sabit liste değildir (örn. `Info Received`, `In Transit`, `Delivered`) | Evet             | string            |
+| **status**               | Olay durumu. Değerler için [Takip Durumları](#trackingStatuses)                                                           | Evet             | string            |
 | **subStatusMessage**     | Alt durum mesajı                                                                                                          | Evet             | string            |
 | **subStatusDescription** | Alt durum açıklaması                                                                                                      | Hayır            | string            |
 | **country**              | Olayın gerçekleştiği ülke (alpha-3)                                                                                       | Hayır            | string            |
 | **city**                 | Olayın gerçekleştiği şehir                                                                                                | Hayır            | string            |
 | **zip**                  | Posta kodu                                                                                                                | Hayır            | string            |
 | **location**             | Lokasyon detayı                                                                                                           | Hayır            | string            |
+
+<a name="trackingStatuses"></a>
+
+### Takip Durumları
+
+`checkpoints` en yeniden en eskiye sıralıdır; gönderinin güncel durumu ilk elemanın `status` değeridir.
+
+`status` aşağıdaki sabit listeden döner. Navlungo kaynaklı hareketler boşluklu (`In Transit`), taşıyıcı (last mile) hareketleri birleşik (`InTransit`) yazımla gelir. Karşılaştırmayı boşlukları yok sayarak ve büyük/küçük harfe duyarsız yapın.
+
+| status                                        | Açıklama                                                                                                            |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `Pending`                                     | Taşıyıcıda henüz takip bilgisi yok                                                                                  |
+| `Info Received` / `InfoReceived`              | Gönderi bilgisi alındı, gönderi henüz teslim alınmadı                                                               |
+| `In Transit` / `InTransit`                    | Gönderi yolda (aktarma merkezi, gümrük işlemleri dahil)                                                             |
+| `Out For Delivery` / `OutForDelivery`         | Gönderi dağıtıma çıktı                                                                                              |
+| `Attempt Fail` / `AttemptFail`                | Teslimat denemesi başarısız oldu, taşıyıcı genellikle tekrar dener                                                  |
+| `Available For Pickup` / `AvailableForPickup` | Gönderi teslim noktasında, alıcının teslim alması bekleniyor                                                        |
+| `Delivered`                                   | Gönderi teslim edildi                                                                                               |
+| `Exception`                                   | Teslimatta sorun var (gümrük gecikmesi, hatalı adres, reddedilme, iade vb.); ayrıntı `subStatusMessage` alanındadır |
+| `Expired`                                     | Uzun süredir takip bilgisi gelmiyor                                                                                 |
 
 ---
 
