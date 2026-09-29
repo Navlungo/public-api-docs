@@ -27,7 +27,6 @@ Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza
 Bu api ile erişim sağlanacak tüm kaynaklara OAuth2 protokolü ile oluşturulan access tokenların gönderilmesi gerekmektedir. Navlungo API'lerinde yetkilendirme senaryoya ve istemci tanımına göre iki farklı şekilde yapılır. Bunlar;
 
 - Authorization Code(varsayılan yetkilendirme türü)
-- Client Credentials (varsayılan olarak verilmez. Sadece server to server kullanımlar için uygundur. Senaryonuz client-credentials akışı gerektiriyorsa Navlungo ekibi ile senaryonunun üzerinden geçmeniz gerekmektedir.)
 
 #### 2.1. Authorization Code
 
@@ -98,14 +97,6 @@ Navlungo.com authorization_code'u başarı ile ürettiği durumda;
 - Entegrasyonlar yapılırken client tarafından sağlanan url'ye (callback_url) üretilen authorization code'u querystring üzerindeki code parametresiyle gönderir.
 - İstemci tarafından yapılan ilk istekteki diğer tüm querystring parametrelerini ve değerlerini de callback url'ye geri döndürür.
 - İstemci aldığı authorization code ile daha sonra [Token Apisi](./token.md) yardımı ile access token ve refresh token alabilir.
-
-#### 2.2. Client Credentials
-
-Bu akışta Navlungo'nun istemciye verdiği bilgiler ile ( client_id ve client_secret ) ile istemci adına access_token yaratılır. Alınan bu access_token ile **istemci adına uygun Navlungo api kaynakları üzerinde işlem yapılabilir**. Client credentials akışı id ve secret bilgisinin gönderilmesini gerektirdiği için bu akış tipinde yapılacak token istekleri mutlaka güvenli bir **server side** uygulama tarafından yapılmalıdır. Id ve secret bilgileri istenmeyen kişiler tarafından ele geçirilirse istemci adına işlem yapabilirler.
-
-Akıştaki bariz güvenlik çekinceleri sebebi ile Oauth2 protokolü client_credentials akışında refresh_token yaratımına izin vermemektedir.
-
-**ÖNEMLİ** : Bu yetkilendirme mekanizması her senaryoyu desteklememektedir. Varsayılan olarak Navlungo entegrasyon başvurusu yapıldığında authorization code mekanizması için tanımlama yapılır!
 
 ---
 
