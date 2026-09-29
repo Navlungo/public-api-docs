@@ -202,3 +202,7 @@ Doğrulama ve yetkilendirme hatası nesnesi
 [Teklif Apisi](./rates.md)</br>
 [Gönderi Apisi](./shipment.md)</br>
 [Gönderi Takip Apisi](./cargoTracking.md)</br>
+
+### Postman Koleksiyonu
+
+[Navlungo-Shipping-API.postman_collection.json](./Navlungo-Shipping-API.postman_collection.json) dosyasını Postman'e import edin, `clientId` ve `clientSecret` değişkenlerini doldurun. Koleksiyon varsayılan olarak QA adreslerini kullanır; token'ı otomatik alır ve `1. Teklif al` yanıtındaki `reference`, `searchId`, `rateId` değerlerini sonraki isteklere taşır. Production için `baseUrl` ve `identityUrl` değişkenlerini değiştirin.

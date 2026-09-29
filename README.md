@@ -39,3 +39,4 @@ Hangi modelin size uygun olduğuna Navlungo entegrasyon ekibi ile birlikte karar
 [Teklif Apisi](./shipping-api/rates.md)</br>
 [Gönderi Apisi](./shipping-api/shipment.md)</br>
 [Gönderi Takip Apisi](./shipping-api/cargoTracking.md)</br>
+[Postman Koleksiyonu](./shipping-api/Navlungo-Shipping-API.postman_collection.json)</br>

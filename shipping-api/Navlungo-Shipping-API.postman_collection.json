@@ -1,0 +1,996 @@
+{
+  "info": {
+    "name": "Navlungo Shipping API v1",
+    "_postman_id": "6f0d2a8e-8c1e-4f2b-9a7d-3b1c5e9f7a21",
+    "description": "Navlungo Shipping API (client_credentials) icin ornek koleksiyon. Dokumantasyon: https://github.com/Navlungo/public-api-docs/tree/main/shipping-api\n\nKullanim:\n1. clientId ve clientSecret degiskenlerini doldurun (Navlungo tarafindan iletilir; secret yalnizca bir kez paylasilir).\n2. Ortam: varsayilan QA (api-qa / identity-qa). Production icin baseUrl = https://api.navlungo.com, identityUrl = https://identity.navlungo.com.\n3. Istekleri sirayla calistirin: 1. Teklif al -> 2. Teklifi sec -> 3-8. Token otomatik alinir; reference/searchId/rateId degiskenleri 1. adimda otomatik dolar.\n\nScope'lar: shipping_rates_write, shipping_shipments_write, shipping_shipments_read, shipping_labels_write. Client'a tanimli olmayan scope istenirse token uretilmez; scope degiskenini client'inizin scope'lariyla sinirlayin.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "(function () {",
+          "  // Token yoksa veya suresi dolmak uzereyse client_credentials ile yeni token alir.",
+          "  // Kimlik bilgileri collection/environment degiskenlerinden okunur; token collection degiskenine yazilir.",
+          "  const expiresAt = Number(pm.collectionVariables.get('tokenExpiresAt') || 0);",
+          "  const hasToken = !!pm.collectionVariables.get('accessToken');",
+          "  if (hasToken && Date.now() < expiresAt - 60000) return;",
+          "  if (pm.request.url.toString().indexOf('/connect/token') !== -1) return;",
+          "",
+          "  const clientId = pm.variables.get('clientId');",
+          "  const clientSecret = pm.variables.get('clientSecret');",
+          "  if (!clientId || !clientSecret) { console.warn('clientId / clientSecret degiskenlerini doldurun'); return; }",
+          "",
+          "  pm.sendRequest({",
+          "    url: pm.variables.get('identityUrl') + '/connect/token',",
+          "    method: 'POST',",
+          "    header: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+          "    body: { mode: 'urlencoded', urlencoded: [",
+          "      { key: 'grant_type', value: 'client_credentials' },",
+          "      { key: 'client_id', value: clientId },",
+          "      { key: 'client_secret', value: clientSecret },",
+          "      { key: 'scope', value: pm.variables.get('scope') }",
+          "    ]}",
+          "  }, (err, res) => {",
+          "    if (err || res.code !== 200) { console.error('Token alinamadi', err || res.json()); return; }",
+          "    const json = res.json();",
+          "    pm.collectionVariables.set('accessToken', json.access_token);",
+          "    pm.collectionVariables.set('tokenExpiresAt', String(Date.now() + json.expires_in * 1000));",
+          "  });",
+          "})();"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api-qa.navlungo.com",
+      "description": "Production: https://api.navlungo.com"
+    },
+    {
+      "key": "identityUrl",
+      "value": "https://identity-qa.navlungo.com",
+      "description": "Production: https://identity.navlungo.com"
+    },
+    {
+      "key": "clientId",
+      "value": "",
+      "description": "Navlungo tarafindan iletilen client id"
+    },
+    {
+      "key": "clientSecret",
+      "value": "",
+      "description": "Navlungo tarafindan iletilen client secret (paylasmayin)"
+    },
+    {
+      "key": "scope",
+      "value": "shipping_rates_write shipping_shipments_write shipping_shipments_read shipping_labels_write",
+      "description": "Token'da istenecek scope'lar"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "description": "Otomatik dolar"
+    },
+    {
+      "key": "tokenExpiresAt",
+      "value": "",
+      "description": "Otomatik dolar"
+    },
+    {
+      "key": "reference",
+      "value": "",
+      "description": "1. Teklif al yanitindan otomatik dolar"
+    },
+    {
+      "key": "searchId",
+      "value": "",
+      "description": "1. Teklif al yanitindan otomatik dolar"
+    },
+    {
+      "key": "rateId",
+      "value": "",
+      "description": "1. Teklif al yanitindan ilk teklif; baska teklif icin elle degistirin"
+    },
+    {
+      "key": "selectedServices",
+      "value": "[]",
+      "description": "JSON dizi; 1. Teklif al zorunlu servisleri otomatik yazar"
+    },
+    {
+      "key": "shipmentId",
+      "value": "",
+      "description": "2. Teklifi sec yanitindan otomatik dolar"
+    },
+    {
+      "key": "trackingNumber",
+      "value": "",
+      "description": "2. Teklifi sec yanitindan otomatik dolar"
+    },
+    {
+      "key": "uploadUrl",
+      "value": "",
+      "description": "6. Belge ekle yanitindan otomatik dolar"
+    }
+  ],
+  "item": [
+    {
+      "name": "Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "url": {
+          "raw": "{{identityUrl}}/connect/token",
+          "host": [
+            "{{identityUrl}}"
+          ],
+          "path": [
+            "connect",
+            "token"
+          ]
+        },
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials"
+            },
+            {
+              "key": "client_id",
+              "value": "{{clientId}}"
+            },
+            {
+              "key": "client_secret",
+              "value": "{{clientSecret}}"
+            },
+            {
+              "key": "scope",
+              "value": "{{scope}}"
+            }
+          ]
+        },
+        "description": "client_credentials akisi ile access token uretir (3600 sn, refresh token yok). Diger istekler token'i otomatik alir; bu istek yalnizca elle almak/incelemek icin."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Token alindi', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "if (json.access_token) {",
+              "  pm.collectionVariables.set('accessToken', json.access_token);",
+              "  pm.collectionVariables.set('tokenExpiresAt', String(Date.now() + json.expires_in * 1000));",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "url": {
+              "raw": "{{identityUrl}}/connect/token",
+              "host": [
+                "{{identityUrl}}"
+              ],
+              "path": [
+                "connect",
+                "token"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}"
+                },
+                {
+                  "key": "scope",
+                  "value": "{{scope}}"
+                }
+              ]
+            },
+            "description": "client_credentials akisi ile access token uretir (3600 sn, refresh token yok). Diger istekler token'i otomatik alir; bu istek yalnizca elle almak/incelemek icin."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"access_token\": \"eyJhbGciOi...\",\n  \"expires_in\": 3600,\n  \"token_type\": \"Bearer\",\n  \"scope\": \"shipping_rates_write shipping_shipments_write shipping_shipments_read shipping_labels_write\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "1. Teklif al (createRates)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/rates",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "rates"
+          ]
+        },
+        "description": "Scope: shipping_rates_write. Her cagri yeni bir gonderi referansi acar. Yanittaki reference, searchId ve ilk teklifin rateId'si (zorunlu servisleriyle) collection degiskenlerine yazilir. Teklif yoksa 200 ve rates: [] doner.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"shipmentType\": \"sales\",\n  \"currency\": \"USD\",\n  \"weightUnit\": \"lb\",\n  \"dimensionUnit\": \"in\",\n  \"iossNumber\": null,\n  \"senderShippingAddress\": {\n    \"contactName\": \"Ayşe Yılmaz\",\n    \"companyName\": \"Yılmaz Tekstil A.Ş.\",\n    \"countryCode\": \"TR\",\n    \"stateCode\": null,\n    \"city\": \"İstanbul\",\n    \"town\": \"Kadıköy\",\n    \"postalCode\": \"34710\",\n    \"firstLine\": \"Caferağa Mah. Moda Cad. No:12\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"ayse@yilmaztekstil.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5321234567\",\n    \"identificationNumber\": \"1234567890\",\n    \"taxOffice\": \"Kadıköy\"\n  },\n  \"senderInvoiceAddress\": {\n    \"contactName\": \"Ayşe Yılmaz\",\n    \"companyName\": \"Yılmaz Tekstil A.Ş.\",\n    \"countryCode\": \"TR\",\n    \"stateCode\": null,\n    \"city\": \"İstanbul\",\n    \"town\": \"Kadıköy\",\n    \"postalCode\": \"34710\",\n    \"firstLine\": \"Caferağa Mah. Moda Cad. No:12\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"ayse@yilmaztekstil.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5321234567\",\n    \"identificationNumber\": \"1234567890\",\n    \"taxOffice\": \"Kadıköy\"\n  },\n  \"receiverAddress\": {\n    \"contactName\": \"John Carter\",\n    \"companyName\": null,\n    \"countryCode\": \"US\",\n    \"stateCode\": \"NY\",\n    \"city\": \"New York\",\n    \"postalCode\": \"10001\",\n    \"firstLine\": \"350 5th Ave Suite 4400\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"john.carter@example.com\",\n    \"phoneCode\": \"+1\",\n    \"phoneNumber\": \"2125550147\",\n    \"identificationNumber\": null\n  },\n  \"products\": [\n    {\n      \"description\": \"Cotton t-shirt, short sleeve\",\n      \"hsCode\": \"6109.10.00.12\",\n      \"quantity\": 10,\n      \"unitPrice\": 12.5,\n      \"currency\": \"USD\",\n      \"originCountry\": \"TR\"\n    }\n  ],\n  \"packages\": [\n    {\n      \"type\": \"box\",\n      \"quantity\": 2,\n      \"weight\": 4.4,\n      \"length\": 16,\n      \"width\": 12,\n      \"height\": 8\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Teklifler alindi', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "pm.collectionVariables.set('reference', String(json.reference));",
+              "pm.collectionVariables.set('searchId', json.searchId);",
+              "if (json.rates && json.rates.length) {",
+              "  const first = json.rates[0];",
+              "  pm.collectionVariables.set('rateId', first.rateId);",
+              "  const required = (first.services || []).filter(s => s.isRequired).map(s => s.code);",
+              "  pm.collectionVariables.set('selectedServices', JSON.stringify(required));",
+              "  console.log('Ilk teklif secildi:', first.carrier, first.serviceType, first.price, first.currency, '| zorunlu servisler:', required);",
+              "} else {",
+              "  console.warn('Teklif uretilemedi (rates bos)');",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/rates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "rates"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipmentType\": \"sales\",\n  \"currency\": \"USD\",\n  \"weightUnit\": \"lb\",\n  \"dimensionUnit\": \"in\",\n  \"iossNumber\": null,\n  \"senderShippingAddress\": {\n    \"contactName\": \"Ayşe Yılmaz\",\n    \"companyName\": \"Yılmaz Tekstil A.Ş.\",\n    \"countryCode\": \"TR\",\n    \"stateCode\": null,\n    \"city\": \"İstanbul\",\n    \"town\": \"Kadıköy\",\n    \"postalCode\": \"34710\",\n    \"firstLine\": \"Caferağa Mah. Moda Cad. No:12\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"ayse@yilmaztekstil.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5321234567\",\n    \"identificationNumber\": \"1234567890\",\n    \"taxOffice\": \"Kadıköy\"\n  },\n  \"senderInvoiceAddress\": {\n    \"contactName\": \"Ayşe Yılmaz\",\n    \"companyName\": \"Yılmaz Tekstil A.Ş.\",\n    \"countryCode\": \"TR\",\n    \"stateCode\": null,\n    \"city\": \"İstanbul\",\n    \"town\": \"Kadıköy\",\n    \"postalCode\": \"34710\",\n    \"firstLine\": \"Caferağa Mah. Moda Cad. No:12\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"ayse@yilmaztekstil.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5321234567\",\n    \"identificationNumber\": \"1234567890\",\n    \"taxOffice\": \"Kadıköy\"\n  },\n  \"receiverAddress\": {\n    \"contactName\": \"John Carter\",\n    \"companyName\": null,\n    \"countryCode\": \"US\",\n    \"stateCode\": \"NY\",\n    \"city\": \"New York\",\n    \"postalCode\": \"10001\",\n    \"firstLine\": \"350 5th Ave Suite 4400\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"john.carter@example.com\",\n    \"phoneCode\": \"+1\",\n    \"phoneNumber\": \"2125550147\",\n    \"identificationNumber\": null\n  },\n  \"products\": [\n    {\n      \"description\": \"Cotton t-shirt, short sleeve\",\n      \"hsCode\": \"6109.10.00.12\",\n      \"quantity\": 10,\n      \"unitPrice\": 12.5,\n      \"currency\": \"USD\",\n      \"originCountry\": \"TR\"\n    }\n  ],\n  \"packages\": [\n    {\n      \"type\": \"box\",\n      \"quantity\": 2,\n      \"weight\": 4.4,\n      \"length\": 16,\n      \"width\": 12,\n      \"height\": 8\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"reference\": 458213,\n  \"searchId\": \"3f0c9a4e-7b2d-4c7e-9a1b-2e5d6f7a8b9c\",\n  \"rates\": [\n    {\n      \"rateId\": \"9b7e2c11-4d3a-4f6e-8c2a-1d2e3f4a5b6c\",\n      \"price\": 48.9,\n      \"currency\": \"USD\",\n      \"serviceType\": \"express\",\n      \"carrier\": \"United Parcel Service\",\n      \"minTransitTime\": 3,\n      \"maxTransitTime\": 5,\n      \"description\": \"UPS Express Saver\",\n      \"chargeableWeight\": 4.0,\n      \"services\": [\n        {\n          \"code\": \"ddp\",\n          \"price\": 6.5,\n          \"currency\": \"USD\",\n          \"isRequired\": false\n        },\n        {\n          \"code\": \"customs-tax-duty\",\n          \"price\": 11.2,\n          \"currency\": \"USD\",\n          \"isRequired\": true\n        }\n      ]\n    }\n  ]\n}"
+        },
+        {
+          "name": "400 Ayni ulke (yetki yok)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/rates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "rates"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipmentType\": \"sales\",\n  \"currency\": \"USD\",\n  \"weightUnit\": \"lb\",\n  \"dimensionUnit\": \"in\",\n  \"iossNumber\": null,\n  \"senderShippingAddress\": {\n    \"contactName\": \"Ayşe Yılmaz\",\n    \"companyName\": \"Yılmaz Tekstil A.Ş.\",\n    \"countryCode\": \"TR\",\n    \"stateCode\": null,\n    \"city\": \"İstanbul\",\n    \"town\": \"Kadıköy\",\n    \"postalCode\": \"34710\",\n    \"firstLine\": \"Caferağa Mah. Moda Cad. No:12\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"ayse@yilmaztekstil.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5321234567\",\n    \"identificationNumber\": \"1234567890\",\n    \"taxOffice\": \"Kadıköy\"\n  },\n  \"senderInvoiceAddress\": {\n    \"contactName\": \"Ayşe Yılmaz\",\n    \"companyName\": \"Yılmaz Tekstil A.Ş.\",\n    \"countryCode\": \"TR\",\n    \"stateCode\": null,\n    \"city\": \"İstanbul\",\n    \"town\": \"Kadıköy\",\n    \"postalCode\": \"34710\",\n    \"firstLine\": \"Caferağa Mah. Moda Cad. No:12\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"ayse@yilmaztekstil.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5321234567\",\n    \"identificationNumber\": \"1234567890\",\n    \"taxOffice\": \"Kadıköy\"\n  },\n  \"receiverAddress\": {\n    \"contactName\": \"John Carter\",\n    \"companyName\": null,\n    \"countryCode\": \"US\",\n    \"stateCode\": \"NY\",\n    \"city\": \"New York\",\n    \"postalCode\": \"10001\",\n    \"firstLine\": \"350 5th Ave Suite 4400\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"john.carter@example.com\",\n    \"phoneCode\": \"+1\",\n    \"phoneNumber\": \"2125550147\",\n    \"identificationNumber\": null\n  },\n  \"products\": [\n    {\n      \"description\": \"Cotton t-shirt, short sleeve\",\n      \"hsCode\": \"6109.10.00.12\",\n      \"quantity\": 10,\n      \"unitPrice\": 12.5,\n      \"currency\": \"USD\",\n      \"originCountry\": \"TR\"\n    }\n  ],\n  \"packages\": [\n    {\n      \"type\": \"box\",\n      \"quantity\": 2,\n      \"weight\": 4.4,\n      \"length\": 16,\n      \"width\": 12,\n      \"height\": 8\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"code\": \"shipment.fromanddestinationcountrycannotbesame.error\",\n  \"message\": \"From and destintipon country can not be the same.\",\n  \"data\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "2. Teklifi sec (createShipment)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/shipments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "shipments"
+          ]
+        },
+        "description": "Scope: shipping_shipments_write. reference, searchId, rateId ve selectedServices 1. adimdan otomatik gelir. Teklifte isRequired: true olan servisler selectedServices icinde olmali.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reference\": {{reference}},\n  \"searchId\": \"{{searchId}}\",\n  \"rateId\": \"{{rateId}}\",\n  \"selectedServices\": {{selectedServices}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Gonderi olusturuldu', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "if (json.shipmentId) {",
+              "  pm.collectionVariables.set('shipmentId', json.shipmentId);",
+              "  pm.collectionVariables.set('trackingNumber', json.trackingNumber);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": {{reference}},\n  \"searchId\": \"{{searchId}}\",\n  \"rateId\": \"{{rateId}}\",\n  \"selectedServices\": {{selectedServices}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"shipmentId\": \"b7e6c1a2-9f3d-4e2b-8a1c-7d5f6e8a9b0c\",\n  \"reference\": 458213,\n  \"trackingNumber\": \"NVL000000458213\",\n  \"trackingUrl\": \"https://navlungo.com/track?trackingNumber=NVL000000458213\",\n  \"packageLabels\": [\n    \"458213-1\",\n    \"458213-2\"\n  ],\n  \"totalPrice\": 62.1,\n  \"currency\": \"USD\",\n  \"chargeableWeight\": 4.0\n}"
+        }
+      ]
+    },
+    {
+      "name": "3. Gonderi detayi (getShipment)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/shipments?reference={{reference}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "shipments"
+          ],
+          "query": [
+            {
+              "key": "reference",
+              "value": "{{reference}}"
+            }
+          ]
+        },
+        "description": "Scope: shipping_shipments_read."
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments?reference=458213",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments"
+              ],
+              "query": [
+                {
+                  "key": "reference",
+                  "value": "458213"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"shipmentId\": \"b7e6c1a2-9f3d-4e2b-8a1c-7d5f6e8a9b0c\",\n  \"reference\": 458213,\n  \"status\": \"awaiting-warehouse-arrival\",\n  \"trackingNumber\": \"NVL000000458213\",\n  \"carrier\": \"United Parcel Service\",\n  \"serviceType\": \"express\",\n  \"price\": {\n    \"amount\": 62.1,\n    \"currency\": \"USD\"\n  },\n  \"chargeableWeight\": 4.0,\n  \"warehouseArrivalDate\": null,\n  \"dispatchDate\": null,\n  \"iossNumber\": null,\n  \"senderAddress\": {\n    \"contactName\": \"Ayşe Yılmaz\",\n    \"companyName\": \"Yılmaz Tekstil A.Ş.\",\n    \"countryCode\": \"TR\",\n    \"stateCode\": null,\n    \"postalCode\": \"34710\",\n    \"city\": \"İstanbul\",\n    \"town\": \"Kadıköy\",\n    \"firstLine\": \"Caferağa Mah. Moda Cad. No:12\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"ayse@yilmaztekstil.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5321234567\"\n  },\n  \"receiverAddress\": {\n    \"contactName\": \"John Carter\",\n    \"companyName\": null,\n    \"countryCode\": \"US\",\n    \"stateCode\": \"NY\",\n    \"postalCode\": \"10001\",\n    \"city\": \"New York\",\n    \"town\": null,\n    \"firstLine\": \"350 5th Ave Suite 4400\",\n    \"secondLine\": null,\n    \"thirdLine\": null,\n    \"email\": \"john.carter@example.com\",\n    \"phoneCode\": \"+1\",\n    \"phoneNumber\": \"2125550147\"\n  },\n  \"products\": [\n    {\n      \"description\": \"Cotton t-shirt, short sleeve\",\n      \"hsCode\": \"6109.10.00.12\",\n      \"originCountryCode\": \"TR\",\n      \"unitPrice\": 12.5,\n      \"currency\": \"USD\",\n      \"quantity\": 10\n    }\n  ],\n  \"packages\": [\n    {\n      \"type\": \"box\",\n      \"weight\": 2.0,\n      \"length\": 40.64,\n      \"height\": 20.32,\n      \"width\": 30.48\n    },\n    {\n      \"type\": \"box\",\n      \"weight\": 2.0,\n      \"length\": 40.64,\n      \"height\": 20.32,\n      \"width\": 30.48\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "4. Takip (getTracking)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/shipments/{{reference}}/tracking",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "shipments",
+            "{{reference}}",
+            "tracking"
+          ]
+        },
+        "description": "Scope: shipping_shipments_read. lastMileTrackingNumber yalnizca can_access_last_mile_tracking yetkisi ile doner. Takip numarasi atanmadan once 400 trackingnotfound.error; yeniden deneyin."
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/306889/tracking",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "306889",
+                "tracking"
+              ]
+            },
+            "description": ""
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"reference\": 306889,\n  \"trackingNumber\": \"NVL000000306889\",\n  \"lastMileTrackingNumber\": \"1Z9A77910409209526\",\n  \"originCountry\": \"TUR\",\n  \"destinationCountry\": \"USA\",\n  \"pickupDate\": \"23.09.2026 08:29\",\n  \"expectedDeliveryDate\": null,\n  \"carrier\": \"NVL\",\n  \"originLocation\": \"İstanbul İstanbul,34710,TR,Turkey TUR\",\n  \"destinationLocation\": \"New York New York,10001,US,United States  USA\",\n  \"checkpoints\": [\n    {\n      \"checkpointTime\": \"23.09.2026 09:22\",\n      \"status\": \"In Transit\",\n      \"subStatusMessage\": \"In Transit\",\n      \"subStatusDescription\": \"Shipment on the way\",\n      \"country\": \"TUR\",\n      \"city\": \"İstanbul\",\n      \"zip\": \"34710\",\n      \"location\": \"İstanbul,34710,TR,Turkey\"\n    },\n    {\n      \"checkpointTime\": \"23.09.2026 08:29\",\n      \"status\": \"Info Received\",\n      \"subStatusMessage\": \"Info Received\",\n      \"subStatusDescription\": \"The carrier received a request from the shipper and is about to pick up the shipment\",\n      \"country\": \"TUR\",\n      \"city\": \"İstanbul\",\n      \"zip\": \"34710\",\n      \"location\": \"İstanbul,34710,TR,Turkey\"\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "5. Etiket olustur (createLabel)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/shipments/{{reference}}/labels",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "shipments",
+            "{{reference}}",
+            "labels"
+          ]
+        },
+        "description": "Scope: shipping_labels_write + yetki can_create_labels. Govde yok. Idempotent: zaten olusmussa created: false. label yalnizca can_download_labels yetkisi ile ve dosya uretilmisse doner."
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/458213/labels",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "458213",
+                "labels"
+              ]
+            },
+            "description": ""
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"trackingNumber\": \"NVL000000458213\",\n  \"lastMileTrackingNumber\": \"1Z999AA10123456784\",\n  \"lastMileCarrier\": \"ups\",\n  \"created\": true,\n  \"label\": {\n    \"contentType\": \"application/pdf\",\n    \"base64\": \"JVBERi0xLjQK...\"\n  }\n}"
+        },
+        {
+          "name": "401 Yetki yok (can_create_labels)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/458213/labels",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "458213",
+                "labels"
+              ]
+            },
+            "description": ""
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"type\": \"Authentication/InvalidClaim\",\n  \"status\": 401,\n  \"problemCode\": 0,\n  \"title\": null,\n  \"detail\": null,\n  \"path\": \"/api/shipping/v1/shipments/458213/labels\",\n  \"alerts\": [],\n  \"extensions\": {}\n}"
+        }
+      ]
+    },
+    {
+      "name": "6. Belge ekle (uploadDocuments)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/shipments/{{reference}}/documents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "shipments",
+            "{{reference}}",
+            "documents"
+          ]
+        },
+        "description": "Scope: shipping_shipments_write. Her belge icin S3 yukleme adresi doner; dosyayi 5 dakika icinde ayri bir PUT ile, Content-Type yanittaki contentType olacak sekilde yukleyin. Ilk adres uploadUrl degiskenine yazilir.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"documents\": [\n    { \"fileName\": \"invoice-{{reference}}.pdf\", \"type\": \"original-invoice\" },\n    { \"fileName\": \"earsiv-{{reference}}.pdf\", \"type\": \"e-archive\", \"eArchiveInfo\": { \"date\": \"2026-09-15T00:00:00\", \"number\": \"ABC2026000000001\" } }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Belge kaydi acildi', () => pm.response.to.have.status(200));",
+              "const json = pm.response.json();",
+              "if (json.documents && json.documents.length) {",
+              "  pm.collectionVariables.set('uploadUrl', json.documents[0].uploadUrl);",
+              "  console.log('Dosyayi 5 dakika icinde PUT ile yukleyin. Content-Type:', json.documents[0].contentType);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/458213/documents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "458213",
+                "documents"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documents\": [\n    { \"fileName\": \"invoice-{{reference}}.pdf\", \"type\": \"original-invoice\" },\n    { \"fileName\": \"earsiv-{{reference}}.pdf\", \"type\": \"e-archive\", \"eArchiveInfo\": { \"date\": \"2026-09-15T00:00:00\", \"number\": \"ABC2026000000001\" } }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"documents\": [\n    {\n      \"fileName\": \"invoice-458213.pdf\",\n      \"type\": \"original-invoice\",\n      \"contentType\": \"application/pdf\",\n      \"uploadUrl\": \"https://navlungo-prod-shipment-docs.s3.eu-west-1.amazonaws.com/458213/original-invoice/invoice-458213.pdf?X-Amz-Expires=300&X-Amz-Signature=...\"\n    }\n  ],\n  \"alreadyExistingFileNames\": [\n    \"earsiv-458213.pdf\"\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "7. ETGB indirme adresi (getEtgbDownloadUrl)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/shipments/{{reference}}/etgb/download-url",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "shipments",
+            "{{reference}}",
+            "etgb",
+            "download-url"
+          ]
+        },
+        "description": "Scope: shipping_shipments_read. Yalnizca teslim edilmis gonderi; adres 2 dakika icinde kullanilmali. Kayit Excel listesinden ise fileName ve downloadUrl null."
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/458213/etgb/download-url",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "458213",
+                "etgb",
+                "download-url"
+              ]
+            },
+            "description": ""
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"reference\": 458213,\n  \"etgbNumber\": \"26341300EX000123\",\n  \"fileName\": \"26341300EX000123.pdf\",\n  \"downloadUrl\": \"https://navlungo-prod-etgb-docs.s3.eu-west-1.amazonaws.com/pdf_files/2026/9/21/26341300EX000123.pdf?X-Amz-Expires=120&X-Amz-Signature=...\"\n}"
+        },
+        {
+          "name": "400 Teslim edilmedi",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/458213/etgb/download-url",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "458213",
+                "etgb",
+                "download-url"
+              ]
+            },
+            "description": ""
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"code\": \"shipmentnotdelivered.error\",\n  \"message\": \"Shipment is not delivered. Cannot download ETGB document.\",\n  \"data\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "8. Iptal (voidShipment)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/shipments/{{reference}}/void",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "shipments",
+            "{{reference}}",
+            "void"
+          ]
+        },
+        "description": "Scope: shipping_shipments_write. Depoya ulasmamis gonderiyi iptal eder; govde yok. Iptal tasiyicida acilmis etiketi geri almaz."
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/458213/void",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "458213",
+                "void"
+              ]
+            },
+            "description": ""
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"reference\": 458213,\n  \"status\": \"cancelled\",\n  \"cancelledAt\": \"17.09.2026 10:15\"\n}"
+        },
+        {
+          "name": "400 Zaten iptal",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/shipments/458213/void",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "shipments",
+                "458213",
+                "void"
+              ]
+            },
+            "description": ""
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"code\": \"shipment.shipmentalreadycancelled.error\",\n  \"message\": \"Shipment is already cancelled\",\n  \"data\": []\n}"
+        }
+      ]
+    }
+  ]
+}
