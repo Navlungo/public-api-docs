@@ -2,7 +2,7 @@
   "info": {
     "name": "Navlungo Shipping API v1",
     "_postman_id": "6f0d2a8e-8c1e-4f2b-9a7d-3b1c5e9f7a21",
-    "description": "Navlungo Shipping API (client_credentials) icin ornek koleksiyon. Dokumantasyon: https://github.com/Navlungo/public-api-docs/tree/main/shipping-api\n\nKullanim:\n1. clientId ve clientSecret degiskenlerini doldurun (Navlungo tarafindan iletilir; secret yalnizca bir kez paylasilir).\n2. Ortam: varsayilan QA (api-qa / identity-qa). Uretim icin baseUrl = https://api.navlungo.com, identityUrl = https://identity.navlungo.com.\n3. Istekleri sirayla calistirin: 1. Teklif al -> 2. Teklifi sec -> 3-8. Token otomatik alinir; reference/searchId/rateId degiskenleri 1. adimda otomatik dolar.\n\nScope'lar: shipping_rates_write, shipping_shipments_write, shipping_shipments_read, shipping_labels_write. Client'a tanimli olmayan scope istenirse token uretilmez; scope degiskenini client'inizin scope'lariyla sinirlayin.",
+    "description": "Navlungo Shipping API (client_credentials) icin ornek koleksiyon. Dokumantasyon: https://github.com/Navlungo/public-api-docs/tree/main/shipping-api\n\nKullanim:\n1. clientId ve clientSecret degiskenlerini doldurun (Navlungo tarafindan iletilir; secret yalnizca bir kez paylasilir).\n2. Ortam: varsayilan QA (api-qa / identity-qa). Production icin baseUrl = https://api.navlungo.com, identityUrl = https://identity.navlungo.com.\n3. Istekleri sirayla calistirin: 1. Teklif al -> 2. Teklifi sec -> 3-8. Token otomatik alinir; reference/searchId/rateId degiskenleri 1. adimda otomatik dolar.\n\nScope'lar: shipping_rates_write, shipping_shipments_write, shipping_shipments_read, shipping_labels_write. Client'a tanimli olmayan scope istenirse token uretilmez; scope degiskenini client'inizin scope'lariyla sinirlayin.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -58,12 +58,12 @@
     {
       "key": "baseUrl",
       "value": "https://api-qa.navlungo.com",
-      "description": "Uretim: https://api.navlungo.com"
+      "description": "Production: https://api.navlungo.com"
     },
     {
       "key": "identityUrl",
       "value": "https://identity-qa.navlungo.com",
-      "description": "Uretim: https://identity.navlungo.com"
+      "description": "Production: https://identity.navlungo.com"
     },
     {
       "key": "clientId",
