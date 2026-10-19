@@ -135,7 +135,7 @@ _Scope_ : shipping_shipments_read
 
 #### Açıklama
 
-Gönderi detayını döndürür. Teklif seçilmemişse `trackingNumber`, `carrier`, `serviceType` ve `price` alanları `null` gelir.
+Gönderi detayını döndürür. Teklif seçilmemişse `trackingNumber`, `carrier`, `serviceType`, `price` ve `packageLabels` alanları `null` gelir.
 
 #### Rate Limit
 
@@ -175,7 +175,8 @@ Gönderi detayını döndürür. Teklif seçilmemişse `trackingNumber`, `carrie
   "senderAddress": { "contactName": "Ayşe Yılmaz", "companyName": "Yılmaz Tekstil A.Ş.", "countryCode": "TR", "stateCode": null, "postalCode": "34710", "city": "İstanbul", "town": "Kadıköy", "firstLine": "Caferağa Mah. Moda Cad. No:12", "secondLine": null, "thirdLine": null, "email": "ayse@yilmaztekstil.com", "phoneCode": "+90", "phoneNumber": "5321234567" },
   "receiverAddress": { "contactName": "John Carter", "companyName": null, "countryCode": "US", "stateCode": "NY", "postalCode": "10001", "city": "New York", "town": null, "firstLine": "350 5th Ave Suite 4400", "secondLine": null, "thirdLine": null, "email": "john.carter@example.com", "phoneCode": "+1", "phoneNumber": "2125550147" },
   "products": [ { "description": "Cotton t-shirt, short sleeve", "hsCode": "6109.10.00.12", "originCountryCode": "TR", "unitPrice": 12.5, "currency": "USD", "quantity": 10 } ],
-  "packages": [ { "type": "box", "weight": 2.0, "length": 40.64, "height": 20.32, "width": 30.48 }, { "type": "box", "weight": 2.0, "length": 40.64, "height": 20.32, "width": 30.48 } ]
+  "packages": [ { "type": "box", "weight": 2.0, "length": 40.64, "height": 20.32, "width": 30.48 }, { "type": "box", "weight": 2.0, "length": 40.64, "height": 20.32, "width": 30.48 } ],
+  "packageLabels": ["458213-1", "458213-2"]
 }
 ```
 
@@ -202,6 +203,7 @@ Gönderi detayını döndürür. Teklif seçilmemişse `trackingNumber`, `carrie
 | **receiverAddress** <br>_zorunlu_        | Alıcı adresi                                                                                                                      | [Address](#address)                       |
 | **products** <br>_zorunlu_               | Ürünler                                                                                                                           | < [ProductDetail](#productDetail) > array |
 | **packages** <br>_zorunlu_               | Paketler. Her satır tek bir paketi temsil eder; ölçüler her zaman kg/cm                                                           | < [PackageDetail](#packageDetail) > array |
+| **packageLabels** <br>_opsiyonel_        | Paket etiket numaraları ([createShipment](#createShipment) yanıtındakiyle aynı). Teklif seçilmemişse `null`                       | < string > array                          |
 
 <a name="price"></a>
 
