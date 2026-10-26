@@ -51,12 +51,12 @@ Belirtilen mağaza için sipariş bilgileri ve paket detayları kullanılarak te
 
 #### Yanıtlar
 
-| HTTP Kodu | Açıklama                                                       | Şema                                      |
-| --------- | -------------------------------------------------------------- | ----------------------------------------- |
-| **200**   | Başarılı                                                       | [OrderQuoteResponse](#orderQuoteResponse) |
-| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz.          | [Error](#error)                           |
-| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [Error](#error)                           |
-| **500**   | İstek sırasında beklenmedik bir hata oluştu.                   | [Error](#error)                           |
+| HTTP Kodu | Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Şema                                      |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **200**   | Başarılı                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | [OrderQuoteResponse](#orderQuoteResponse) |
+| **400**   | İstek doğrulamasında hata oluştu veya istek geçersiz. Ürün tanımlayıcısı hataları ([AB Ürün Tanımlayıcıları](#euProductIdentifiers)):<br> `producterrors.merchantproductidentifierrequiredforeuropeanunion.error`, `producterrors.nonstandardisedmanufacturerproductidentifierrequiredforeuropeanunion.error` - Alıcı AB üye ülkesinde, sipariş toplamı 150 EUR veya altında ve ürün tanımlayıcısı eksik<br> `Common/Validation` - Ürün tanımlayıcısı 100 karakteri aşıyor (`extensions.validationErrors`) | [Error](#error)                           |
+| **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş                                                                                                                                                                                                                                                                                                                                                                                                                                             | [Error](#error)                           |
+| **500**   | İstek sırasında beklenmedik bir hata oluştu.                                                                                                                                                                                                                                                                                                                                                                                                                                                               | [Error](#error)                           |
 
 <a name="definitions"></a>
 
@@ -114,13 +114,43 @@ Belirtilen mağaza için sipariş bilgileri ve paket detayları kullanılarak te
 
 ### OrderItem
 
-| Ad                            | Açıklama        | Şema   |
-| ----------------------------- | --------------- | ------ |
-| **quantity** <br>_zorunlu_    | Ürün adedi      | int    |
-| **price** <br>_zorunlu_       | Ürün fiyatı     | string |
-| **description** <br>_zorunlu_ | Ürün açıklaması | string |
-| **sku** <br>_zorunlu_         | Stok Kodu       | string |
-| **hsCode** <br>_zorunlu_      | Ürün HS kodu    | string |
+| Ad                                                               | Açıklama                                                                                                                                                                                                                                                                                   | Şema   |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| **quantity** <br>_zorunlu_                                       | Ürün adedi                                                                                                                                                                                                                                                                                 | int    |
+| **price** <br>_zorunlu_                                          | Ürün fiyatı                                                                                                                                                                                                                                                                                | string |
+| **description** <br>_zorunlu_                                    | Ürün açıklaması                                                                                                                                                                                                                                                                            | string |
+| **sku** <br>_zorunlu_                                            | Stok Kodu. `merchantProductIdentifier` gönderilmezse ve en fazla 100 karakterse satıcı ürün tanımlayıcısı olarak kullanılır                                                                                                                                                                | string |
+| **hsCode** <br>_zorunlu_                                         | Ürün HS kodu                                                                                                                                                                                                                                                                               | string |
+| **merchantProductIdentifier** <br>_opsiyonel_                    | Satıcı ürün tanımlayıcısı (Merchant PID), genellikle satıcının SKU'su. Alıcı AB üye ülkesinde ve sipariş toplamı 150 EUR veya altındaysa zorunlu (`document` paketler hariç), en fazla 100 karakter. Gönderilmezse `sku` kullanılır. Bkz. [AB Ürün Tanımlayıcıları](#euProductIdentifiers) | string |
+| **nonStandardisedManufacturerProductIdentifier** <br>_opsiyonel_ | Üreticinin standart dışı ürün tanımlayıcısı (NS-PID), örneğin üreticinin model veya parça numarası. Alıcı AB üye ülkesinde ve sipariş toplamı 150 EUR veya altındaysa zorunlu (`document` paketler hariç), en fazla 100 karakter. Bkz. [AB Ürün Tanımlayıcıları](#euProductIdentifiers)    | string |
+| **standardisedManufacturerProductIdentifier** <br>_opsiyonel_    | Standart ürün tanımlayıcısı (S-PID): GTIN, EAN, UPC veya ISBN, en fazla 100 karakter. Ürünün standart tanımlayıcısı varsa gönderilmelidir                                                                                                                                                  | string |
+
+<a name="euProductIdentifiers"></a>
+
+#### AB Ürün Tanımlayıcıları (PID)
+
+AB gümrük düzenlemesi gereği 1 Kasım 2026'dan itibaren AB'ye giden gönderilerde gümrük beyanındaki her ürün için ürün tanımlayıcıları gerekir. Navlungo bu kuralı alıcı ülkesi (`order.receiverAddress.countryCode`) AB üyesi olan ve ürünlerin toplam tutarı (`quantity` × `price`) EUR karşılığı **150 EUR veya altında** olan siparişlerde uygular. `order.currencyCode` EUR değilse tutar, gönderinin oluşturulduğu günün kuruyla EUR'a çevrilir. Kontrol bu istekte, gönderi oluşturulurken yapılır; eksik tanımlayıcı varsa gönderi ve teklif oluşturulmaz.
+
+- `merchantProductIdentifier` ve `nonStandardisedManufacturerProductIdentifier` her ürün için zorunludur. Boş ya da yalnızca boşluk içeren değer eksik sayılır; istek `400` ile `producterrors.merchantproductidentifierrequiredforeuropeanunion.error` veya `producterrors.nonstandardisedmanufacturerproductidentifierrequiredforeuropeanunion.error` döner.
+- `merchantProductIdentifier` gönderilmezse ürünün `sku` değeri (en fazla 100 karakterse) satıcı ürün tanımlayıcısı olarak kullanılır. SKU'su dolu ürünlerde yalnızca `nonStandardisedManufacturerProductIdentifier` eklemek yeterlidir.
+- `document` tipindeki paketlerde bu alanlar zorunlu değildir.
+- `standardisedManufacturerProductIdentifier` zorunlu değildir; ürünün GTIN, EAN, UPC veya ISBN kodu varsa gönderilmelidir.
+- Değerlerin başındaki ve sonundaki boşluklar kırpılır. Üç alan da en fazla 100 karakter olabilir; aşan değerde istek `400` ile `Common/Validation` döner ve alan `extensions.validationErrors` içinde belirtilir.
+- Toplamı 150 EUR'yu aşan AB siparişlerinde ve AB dışındaki alıcılarda alanlar opsiyoneldir.
+- AB gönderilerinde girilen değerler tutardan bağımsız olarak taşıyıcıya iletilir. Bazı taşıyıcılar 150 EUR üzerindeki gönderilerde de bu bilgileri isteyebileceği için AB gönderilerinde tutardan bağımsız olarak gönderilmesi önerilir.
+
+Alıcısı AB üye ülkesinde ve toplamı 150 EUR veya altında olan (`currencyCode` `EUR`, 2 × 25 EUR = 50 EUR) bir sipariş için örnek ürün:
+
+```
+"orderItems": [
+  {
+    "sku": "TS-COTTON-M-WHT", "description": "Cotton t-shirt, short sleeve", "quantity": 2, "price": 25, "hsCode": "610910000000",
+    "merchantProductIdentifier": "TS-COTTON-M-WHT",
+    "nonStandardisedManufacturerProductIdentifier": "YT-6109-M",
+    "standardisedManufacturerProductIdentifier": "8690000000001"
+  }
+]
+```
 
 <a name="package"></a>
 
