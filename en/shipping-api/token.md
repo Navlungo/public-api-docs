@@ -4,7 +4,7 @@
 
 ## Overview
 
-This API issues the access token to be used in Shipping API calls through the OAuth2 **client_credentials** flow. The token is obtained from the Navlungo identity server; a different host from the Shipping API endpoints is used.
+Through the OAuth2 **client_credentials** flow, this API issues the access token used in Shipping API calls. The token is obtained from the Navlungo identity server; a different host from the Shipping API endpoints is used.
 
 ### Version Information
 

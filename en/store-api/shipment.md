@@ -338,7 +338,7 @@ Retrieves the download link of the ETGB (Electronic Commerce Customs Declaration
 
 Uploads documents for the specified shipment. The user must be authorized for this operation.
 
-The API returns an AWS S3 presigned URL for uploading the documents. This URL is valid for 10 minutes. The client must upload the file to the specified URL within this period. When the endpoint response is successful, the system assumes that the file has been uploaded. Therefore, this endpoint should only be called when the file will be uploaded immediately afterwards.
+The API returns an AWS S3 presigned URL for uploading the documents. This URL is valid for 10 minutes. The client must upload the file to the specified URL within this period. When the endpoint response is successful, the system assumes that the file has been uploaded. Therefore, this endpoint should be used when the file is to be uploaded immediately.
 
 #### Rate Limit
 

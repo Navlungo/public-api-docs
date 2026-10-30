@@ -80,7 +80,7 @@ The client sends the request for the authorization code, which it will later use
 | Name                              | Description                                                                                                                                                                                                                                          |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **client_id** <br>_required_      | The unique client id Navlungo provides to the solution partner                                                                                                                                                                                       |
-| **code_challenge** <br>_required_ | Information used to re-verify the client in the later stages of the flow. Before starting the authorization_code flow, the client hashes a random value it generated with SHA256, encodes it with base64 and sends the resulting hash in this field. |
+| **code_challenge** <br>_required_ | Information used to re-verify the client in the later stages of the flow. The client generates a random value before starting the authorization_code flow, hashes it with SHA256, encodes it with base64 and sends the resulting hash in this field. |
 
 Example authorization code request created by the client;
 

@@ -17,7 +17,7 @@ The Navlungo API gives Navlungo solution partners programmatic access to shipmen
 | Section                                  | Acts on behalf of                          | Authorization                       | Scope                                                                                                                       |
 | ---------------------------------------- | ------------------------------------------ | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | [Store API](./store-api/README.md)       | A Navlungo **user** (marketplace scenario) | OAuth2 authorization_code (default) | Creating/updating stores, creating orders, express quotes, converting an order into a shipment, labels, tracking, documents |
-| [Shipping API](./shipping-api/README.md) | The **client** itself, server to server    | OAuth2 client_credentials           | Getting rates, creating shipments, labels, documents, tracking, ETGB and void operations, all under a single client account |
+| [Shipping API](./shipping-api/README.md) | The **client** directly, server to server  | OAuth2 client_credentials           | Getting rates, creating shipments, labels, documents, tracking, ETGB and void operations, all under a single client account |
 
 Which model suits you is decided together with the Navlungo integration team; the client credentials are defined accordingly.
 

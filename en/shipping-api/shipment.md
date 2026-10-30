@@ -405,11 +405,11 @@ Opens a document record for the shipment and returns, for each document, the add
 
 ##### ShipmentDocument
 
-| Name                            | Description                                                                                | Schema                        |
-| ------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------- |
-| **fileName** <br>_required_     | File name, at most 255 characters, unique within the shipment                              | string                        |
-| **type** <br>_required_         | Document type. See [Value Lists](./README.md#valueLists) `documents[].type`                | string                        |
-| **eArchiveInfo** <br>_optional_ | e-Archive information. Required if `type` is `e-archive`; must not be sent for other types | [EArchiveInfo](#eArchiveInfo) |
+| Name                            | Description                                                                        | Schema                        |
+| ------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------- |
+| **fileName** <br>_required_     | File name, at most 255 characters, unique within the shipment                      | string                        |
+| **type** <br>_required_         | Document type. See [Value Lists](./README.md#valueLists) `documents[].type`        | string                        |
+| **eArchiveInfo** <br>_optional_ | e-Archive information. Required if `type` is `e-archive`; not sent for other types | [EArchiveInfo](#eArchiveInfo) |
 
 <a name="eArchiveInfo"></a>
 
