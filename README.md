@@ -1,5 +1,7 @@
 # Navlungo Api
 
+> 🇬🇧 [English](./en/README.md)
+
 <a name="overview"></a>
 
 ## Önemli Notlar

@@ -1,5 +1,7 @@
 # Navlungo Api — Mağaza ve Express Teklif (Store API)
 
+> 🇬🇧 [English](../en/store-api/README.md)
+
 > Bu bölüm kullanıcı adına (authorization_code) çalışan Mağaza / Sipariş / Express Teklif entegrasyonunu anlatır. Sunucudan sunucuya (client_credentials) çalışan yeni gönderi entegrasyonu için [Shipping API](../shipping-api/README.md) bölümüne bakın.
 
 <a name="overview"></a>
