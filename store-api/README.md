@@ -20,7 +20,8 @@ Navlungo Api ile, Navlungo çözüm ortaklarına express teklif arama ve mağaza
 - Mağaza Apisi ile;
   - Mağaza ekleme, güncelleme ve silme işlemleri,
   - Sipariş oluşturma,
-  - Bir siparişi Navlungo'da sevkiyata dönüştürme işlemleri yapılabilir.
+  - Bir siparişi Navlungo'da sevkiyata dönüştürme işlemleri,
+  - Sevkiyatlar için adresten toplama (pickup) talebi oluşturma, iptal etme ve listeleme işlemleri yapılabilir.
 
 ---
 
@@ -150,3 +151,4 @@ Yukarıdaki iki senaryoda da sevkiyat oluşturma akışı şu şekilde çalış�
 [Mağaza Apisi](./store.md)</br>
 [Kargo Takip Apisi](./cargoTracking.md)</br>
 [Shipment Api](./shipment.md)</br>
+[Toplama Apisi](./pickup.md)</br>
