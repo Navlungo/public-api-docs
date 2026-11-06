@@ -124,6 +124,11 @@
       "key": "uploadUrl",
       "value": "",
       "description": "6. Belge ekle yanitindan otomatik dolar"
+    },
+    {
+      "key": "pickupReference",
+      "value": "",
+      "description": "9. Toplama talebi olustur yanitindan otomatik dolar"
     }
   ],
   "item": [
@@ -989,6 +994,361 @@
           ],
           "cookie": [],
           "body": "{\n  \"code\": \"shipment.shipmentalreadycancelled.error\",\n  \"message\": \"Shipment is already cancelled\",\n  \"data\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "9. Toplama talebi olustur (createPickup)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "try {",
+              "  const r = pm.response.json();",
+              "  if (r && r.reference) pm.collectionVariables.set('pickupReference', r.reference);",
+              "} catch (e) {}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/pickups",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "pickups"
+          ]
+        },
+        "description": "Scope: shipping_pickups_write (scope degiskenine ekleyin). Teklifi secilmis gonderi icin toplama talebi acar; saat araligi sabit 10:00-15:00. Pazar, gecmis tarih ve ayni gun icin 09:00 TRT sonrasi reddedilir. Yanittaki reference pickupReference degiskenine yazilir.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"shipmentReferences\": [\n    {{reference}}\n  ],\n  \"pickupDate\": \"10.11.2026 00:00\",\n  \"address\": {\n    \"countryCode\": \"TR\",\n    \"city\": \"Ankara\",\n    \"town\": \"Cankaya\",\n    \"postalCode\": \"06690\",\n    \"addressLine\": \"Ataturk Bulvari No 1\"\n  },\n  \"contact\": {\n    \"name\": \"Ayse Yilmaz\",\n    \"email\": \"ayse@example.com\",\n    \"phone\": {\n      \"code\": \"+90\",\n      \"number\": \"5551112233\"\n    }\n  },\n  \"note\": \"Zili calin\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/pickups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "pickups"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipmentReferences\": [\n    458213\n  ],\n  \"pickupDate\": \"10.11.2026 00:00\",\n  \"address\": {\n    \"countryCode\": \"TR\",\n    \"city\": \"Ankara\",\n    \"town\": \"Cankaya\",\n    \"postalCode\": \"06690\",\n    \"addressLine\": \"Ataturk Bulvari No 1\"\n  },\n  \"contact\": {\n    \"name\": \"Ayse Yilmaz\",\n    \"email\": \"ayse@example.com\",\n    \"phone\": {\n      \"code\": \"+90\",\n      \"number\": \"5551112233\"\n    }\n  },\n  \"note\": \"Zili calin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"reference\": \"1793000000\",\n  \"status\": \"created\",\n  \"pickupDate\": \"10.11.2026 00:00\",\n  \"timeWindowStart\": \"10:00\",\n  \"timeWindowEnd\": \"15:00\",\n  \"address\": {\n    \"countryCode\": \"TR\",\n    \"city\": \"Ankara\",\n    \"town\": \"Cankaya\",\n    \"postalCode\": \"06690\",\n    \"addressLine\": \"Ataturk Bulvari No 1\"\n  },\n  \"contact\": {\n    \"name\": \"Ayse Yilmaz\",\n    \"email\": \"ayse@example.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5551112233\"\n  },\n  \"shipmentReferences\": [\n    458213\n  ],\n  \"note\": \"Zili calin\",\n  \"createdAt\": \"05.11.2026 10:15\",\n  \"cancelReason\": null\n}"
+        },
+        {
+          "name": "400 Gecersiz tarih",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/pickups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "pickups"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipmentReferences\": [\n    458213\n  ],\n  \"pickupDate\": \"10.11.2026 00:00\",\n  \"address\": {\n    \"countryCode\": \"TR\",\n    \"city\": \"Ankara\",\n    \"town\": \"Cankaya\",\n    \"postalCode\": \"06690\",\n    \"addressLine\": \"Ataturk Bulvari No 1\"\n  },\n  \"contact\": {\n    \"name\": \"Ayse Yilmaz\",\n    \"email\": \"ayse@example.com\",\n    \"phone\": {\n      \"code\": \"+90\",\n      \"number\": \"5551112233\"\n    }\n  },\n  \"note\": \"Zili calin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"code\": \"pickupdatenotallowed.error\",\n  \"message\": \"Pickup is not allowed on Sundays.\",\n  \"data\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "10. Toplama talebini iptal et (cancelPickup)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/pickups/{{pickupReference}}/cancel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "pickups",
+            "{{pickupReference}}",
+            "cancel"
+          ]
+        },
+        "description": "Scope: shipping_pickups_write. Yalnizca created ve scheduled statusundeki talepler iptal edilebilir; bagli gonderiler serbest kalir.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Planlar degisti\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/pickups/1793000000/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "pickups",
+                "1793000000",
+                "cancel"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Planlar degisti\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"reference\": \"1793000000\",\n  \"status\": \"cancelled\",\n  \"pickupDate\": \"10.11.2026 00:00\",\n  \"timeWindowStart\": \"10:00\",\n  \"timeWindowEnd\": \"15:00\",\n  \"address\": {\n    \"countryCode\": \"TR\",\n    \"city\": \"Ankara\",\n    \"town\": \"Cankaya\",\n    \"postalCode\": \"06690\",\n    \"addressLine\": \"Ataturk Bulvari No 1\"\n  },\n  \"contact\": {\n    \"name\": \"Ayse Yilmaz\",\n    \"email\": \"ayse@example.com\",\n    \"phoneCode\": \"+90\",\n    \"phoneNumber\": \"5551112233\"\n  },\n  \"shipmentReferences\": [\n    458213\n  ],\n  \"note\": \"Zili calin\",\n  \"createdAt\": \"05.11.2026 10:15\",\n  \"cancelReason\": \"Planlar degisti\"\n}"
+        },
+        {
+          "name": "400 Iptal edilemez",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/pickups/1793000000/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "pickups",
+                "1793000000",
+                "cancel"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Planlar degisti\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"code\": \"pickuprequests.wrongstatus.error\",\n  \"message\": \"Pickup request status is not suitable for this operation.\",\n  \"data\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "11. Toplama taleplerini listele (getPickups)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/shipping/v1/pickups?currentPage=1&pageSize=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "shipping",
+            "v1",
+            "pickups"
+          ],
+          "query": [
+            {
+              "key": "currentPage",
+              "value": "1"
+            },
+            {
+              "key": "pageSize",
+              "value": "10"
+            },
+            {
+              "key": "status",
+              "value": "created",
+              "disabled": true
+            },
+            {
+              "key": "shipmentReference",
+              "value": "{{reference}}",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Scope: shipping_pickups_read. currentPage (>=1) ve pageSize (1-100) zorunludur; status (created, scheduled, picked-up, cancelled) ve shipmentReference istege baglidir."
+      },
+      "response": [
+        {
+          "name": "200 Basarili",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shipping/v1/pickups?currentPage=1&pageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shipping",
+                "v1",
+                "pickups"
+              ],
+              "query": [
+                {
+                  "key": "currentPage",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"currentPage\": 1,\n  \"pageCount\": 1,\n  \"pageSize\": 10,\n  \"totalRecordCount\": 1,\n  \"results\": [\n    {\n      \"reference\": \"1793000000\",\n      \"status\": \"created\",\n      \"pickupDate\": \"10.11.2026 00:00\",\n      \"timeWindowStart\": \"10:00\",\n      \"timeWindowEnd\": \"15:00\",\n      \"address\": {\n        \"countryCode\": \"TR\",\n        \"city\": \"Ankara\",\n        \"town\": \"Cankaya\",\n        \"postalCode\": \"06690\",\n        \"addressLine\": \"Ataturk Bulvari No 1\"\n      },\n      \"contact\": {\n        \"name\": \"Ayse Yilmaz\",\n        \"email\": \"ayse@example.com\",\n        \"phoneCode\": \"+90\",\n        \"phoneNumber\": \"5551112233\"\n      },\n      \"shipmentReferences\": [\n        458213\n      ],\n      \"note\": \"Zili calin\",\n      \"createdAt\": \"05.11.2026 10:15\",\n      \"cancelReason\": null\n    }\n  ]\n}"
         }
       ]
     }

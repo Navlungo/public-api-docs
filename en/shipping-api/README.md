@@ -38,6 +38,10 @@ Each endpoint is protected by a scope. When obtaining a token, the scopes of the
 | **shipping_shipments_write** | [createShipment](./shipment.md#createShipment), [uploadDocuments](./shipment.md#uploadDocuments), [voidShipment](./shipment.md#voidShipment)    |
 | **shipping_shipments_read**  | [getShipment](./shipment.md#getShipment), [getTracking](./cargoTracking.md#getTracking), [getEtgbDownloadUrl](./shipment.md#getEtgbDownloadUrl) |
 | **shipping_labels_write**    | [createLabel](./shipment.md#createLabel)                                                                                                        |
+| **shipping_pickups_write**   | [createPickup](./pickup.md#createPickup), [cancelPickup](./pickup.md#cancelPickup)                                                              |
+| **shipping_pickups_read**    | [getPickups](./pickup.md#getPickups)                                                                                                            |
+
+The pickup scopes (`shipping_pickups_write`, `shipping_pickups_read`) are granted by default to every client, including keys created through self-service; add them to the `scope` parameter of the token request.
 
 If the token does not contain the required scope, the endpoint returns `401` with an error of type `Authentication/InvalidScope`.
 
@@ -68,8 +72,9 @@ Some capabilities are granted in the client definition, independently of scopes.
 1. The client sends the address, product and package information with [createRates](./rates.md#createRates). Navlungo opens a shipment record and returns the `reference`, `searchId` and the list of rates (`rates`).
 2. The client selects a rate by sending the `reference`, `searchId` and the `rateId` of the chosen rate with [createShipment](./shipment.md#createShipment). The shipment moves to the "awaiting warehouse arrival" status and a Navlungo tracking number is assigned.
 3. Optionally, a carrier label is created with [createLabel](./shipment.md#createLabel) and documents are added to the shipment with [uploadDocuments](./shipment.md#uploadDocuments).
-4. The shipment status and tracking events are monitored with [getShipment](./shipment.md#getShipment) and [getTracking](./cargoTracking.md#getTracking).
-5. A shipment that has not yet arrived at the warehouse can be voided with [voidShipment](./shipment.md#voidShipment); the ETGB (Electronic Commerce Customs Declaration) document of a delivered shipment is obtained with [getEtgbDownloadUrl](./shipment.md#getEtgbDownloadUrl).
+4. Optionally, a pickup request is opened with [createPickup](./pickup.md#createPickup) so that the shipments are collected from the address; requests are listed with [getPickups](./pickup.md#getPickups) and cancelled with [cancelPickup](./pickup.md#cancelPickup). The pickup scopes are included in the key by default.
+5. The shipment status and tracking events are monitored with [getShipment](./shipment.md#getShipment) and [getTracking](./cargoTracking.md#getTracking).
+6. A shipment that has not yet arrived at the warehouse can be voided with [voidShipment](./shipment.md#voidShipment); the ETGB (Electronic Commerce Customs Declaration) document of a delivered shipment is obtained with [getEtgbDownloadUrl](./shipment.md#getEtgbDownloadUrl).
 
 **Points to Note**
 
@@ -112,6 +117,9 @@ Limits are applied per client, with a 10-second sliding window. When exceeded, `
 | POST api/shipping/v1/shipments/{reference}/documents        | 5            |
 | GET api/shipping/v1/shipments/{reference}/etgb/download-url | 5            |
 | POST api/shipping/v1/shipments/{reference}/void             | 5            |
+| POST api/shipping/v1/pickups                                | 5            |
+| POST api/shipping/v1/pickups/{reference}/cancel             | 5            |
+| GET api/shipping/v1/pickups?currentPage=&pageSize=          | 20           |
 
 ### Error Responses
 
@@ -204,6 +212,7 @@ Validation and authorization error object
 [Rates API](./rates.md)</br>
 [Shipment API](./shipment.md)</br>
 [Shipment Tracking API](./cargoTracking.md)</br>
+[Pickup API](./pickup.md)</br>
 
 ### Postman Collection
 
