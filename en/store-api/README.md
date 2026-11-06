@@ -20,7 +20,8 @@ The Navlungo API aims to help Navlungo solution partners build the most suitable
 - With the Store API,
   - Creating, updating and deleting stores,
   - Creating orders,
-  - Converting an order into a shipment in Navlungo can be done.
+  - Converting an order into a shipment in Navlungo,
+  - Creating, cancelling and listing pickup requests for shipments can be done.
 
 ---
 
@@ -150,3 +151,4 @@ In both of the scenarios above, the shipment creation flow works as follows;
 [Store API](./store.md)</br>
 [Cargo Tracking API](./cargoTracking.md)</br>
 [Shipment API](./shipment.md)</br>
+[Pickup API](./pickup.md)</br>
