@@ -152,8 +152,8 @@ Opens a single pickup request for one or more shipments. The request is created 
 
 | Name                    | Description        | Schema                      |
 | ----------------------- | ------------------ | --------------------------- |
-| **name** <br>_required_  | Full name          | string                      |
-| **email** <br>_required_ | Valid email address | string                     |
+| **name** <br>_required_  | Full name. At most 50 characters          | string                      |
+| **email** <br>_required_ | Valid email address. At most 100 characters | string                     |
 | **phone** <br>_required_ | Phone              | [PickupPhone](#pickupPhone) |
 
 <a name="pickupPhone"></a>
@@ -162,8 +162,8 @@ Opens a single pickup request for one or more shipments. The request is created 
 
 | Name                     | Description                  | Schema |
 | ------------------------ | ---------------------------- | ------ |
-| **code** <br>_required_   | Country dialing code (`+90`) | string |
-| **number** <br>_required_ | Phone number                 | string |
+| **code** <br>_required_   | Country dialing code (`+90`). At most 25 characters | string |
+| **number** <br>_required_ | Phone number. At most 21 characters                 | string |
 
 ---
 

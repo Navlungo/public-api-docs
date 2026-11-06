@@ -154,8 +154,8 @@ Bir veya birden fazla gönderi için tek bir toplama talebi açar. Talep `create
 
 | Ad                      | Açıklama               | Şema                        |
 | ----------------------- | ---------------------- | --------------------------- |
-| **name** <br>_zorunlu_  | Ad soyad               | string                      |
-| **email** <br>_zorunlu_ | Geçerli e-posta adresi | string                      |
+| **name** <br>_zorunlu_  | Ad soyad. En fazla 50 karakter               | string                      |
+| **email** <br>_zorunlu_ | Geçerli e-posta adresi. En fazla 100 karakter | string                      |
 | **phone** <br>_zorunlu_ | Telefon                | [PickupPhone](#pickupPhone) |
 
 <a name="pickupPhone"></a>
@@ -164,8 +164,8 @@ Bir veya birden fazla gönderi için tek bir toplama talebi açar. Talep `create
 
 | Ad                       | Açıklama                  | Şema   |
 | ------------------------ | ------------------------- | ------ |
-| **code** <br>_zorunlu_   | Ülke telefon kodu (`+90`) | string |
-| **number** <br>_zorunlu_ | Telefon numarası          | string |
+| **code** <br>_zorunlu_   | Ülke telefon kodu (`+90`). En fazla 25 karakter | string |
+| **number** <br>_zorunlu_ | Telefon numarası. En fazla 21 karakter          | string |
 
 ---
 
