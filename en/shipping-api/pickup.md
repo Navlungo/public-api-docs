@@ -74,7 +74,7 @@ Opens a single pickup request for one or more shipments. The request is created 
 | --------- | ----------- | ------ |
 | **200**   | Successful  | [PickupResponse](#pickupResponse) |
 | **400**   | `pickupdatenotallowed.error` - The pickup date is invalid (Sunday, past date, or same day at 09:00 TRT or later)<br> `shipmentratenotselected.error` - No rate has been selected for the shipment<br> `shipmentcancelled.error` - The shipment is cancelled<br> `shipmentalreadyinwarehouse.error` - The shipment has arrived at the warehouse<br> `pickuprequests.pickuprequestedinnotavailablearea.error` - The address was not found in the pickup coverage or the area is not served<br> `pickuprequests.alreadyexistrequestforcurrentshipments.error` - One of the shipments already has a pickup request<br> `pickuprequests.faileduetocarrierexception.error`, `pickuprequests.faileduetoproposalexception.error`, `pickuprequests.failedduetochargeableweightorshipmentcountexception.error` - The pickup rules do not allow the request | [Error](#error) |
-| **400**   | Field validation error (e.g. `shipmentReferences` empty or more than 50, missing `address`/`contact` fields, invalid email, `note` longer than 500 characters) | [ProblemDetails](#problemDetails) |
+| **400**   | Field validation error (e.g. `shipmentReferences` empty or more than 50, missing `address`/`contact` fields, invalid email, `addressLine` over 200 or `note` over 500 characters, non-digit phone number or a `+90` number that is not 10 digits starting with 5) | [ProblemDetails](#problemDetails) |
 | **401**   | Authorization error. The access token is invalid, has expired or does not have the `shipping_pickups_write` scope | [ProblemDetails](#problemDetails) |
 | **404**   | `record.not.found` - One of the shipments was not found or belongs to another account | [Error](#error) |
 | **429**   | Rate limit exceeded | [Error](#error) |
@@ -141,10 +141,10 @@ Opens a single pickup request for one or more shipments. The request is created 
 | Name                          | Description                                                             | Schema |
 | ----------------------------- | ----------------------------------------------------------------------- | ------ |
 | **countryCode** <br>_required_ | Country code, ISO 3166-1 alpha-2 (e.g. `TR`)                           | string |
-| **city** <br>_required_       | City name (must match the name in the pickup coverage list)             | string |
-| **town** <br>_required_       | Town (district) name (must match the name in the pickup coverage list)  | string |
+| **city** <br>_required_       | City name (must match the name in the pickup coverage list; case and Turkish characters are ignored, `Istanbul` = `İstanbul`) | string |
+| **town** <br>_required_       | Town (district) name (must match the name in the pickup coverage list; case and Turkish characters are ignored, `Cankaya` = `Çankaya`) | string |
 | **postalCode** <br>_required_ | Postal code (must match the code in the pickup coverage list)           | string |
-| **addressLine** <br>_required_ | Street address. At most 500 characters                                 | string |
+| **addressLine** <br>_required_ | Street address. At most 200 characters | string |
 
 <a name="pickupContactRequest"></a>
 
@@ -152,7 +152,7 @@ Opens a single pickup request for one or more shipments. The request is created 
 
 | Name                    | Description        | Schema                      |
 | ----------------------- | ------------------ | --------------------------- |
-| **name** <br>_required_  | Full name. At most 50 characters          | string                      |
+| **name** <br>_required_  | Full name. At most 150 characters | string                      |
 | **email** <br>_required_ | Valid email address. At most 100 characters | string                     |
 | **phone** <br>_required_ | Phone              | [PickupPhone](#pickupPhone) |
 
@@ -162,8 +162,8 @@ Opens a single pickup request for one or more shipments. The request is created 
 
 | Name                     | Description                  | Schema |
 | ------------------------ | ---------------------------- | ------ |
-| **code** <br>_required_   | Country dialing code (`+90`). At most 25 characters | string |
-| **number** <br>_required_ | Phone number. At most 21 characters                 | string |
+| **code** <br>_required_   | Country dialing code (`+90`). Digits only, optional leading `+`. At most 25 characters | string |
+| **number** <br>_required_ | Phone number. Digits only, at most 21 characters. For `+90` a 10-digit number starting with 5 (`5551112233`) | string |
 
 ---
 

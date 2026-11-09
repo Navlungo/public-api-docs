@@ -76,7 +76,7 @@ Bir veya birden fazla gönderi için tek bir toplama talebi açar. Talep `create
 | --------- | -------- | ---- |
 | **200**   | Başarılı | [PickupResponse](#pickupResponse) |
 | **400**   | `pickupdatenotallowed.error` - Toplama tarihi geçersiz (Pazar, geçmiş tarih veya aynı gün için 09:00 TRT sonrası)<br> `shipmentratenotselected.error` - Gönderi için teklif seçilmemiş<br> `shipmentcancelled.error` - Gönderi iptal edilmiş<br> `shipmentalreadyinwarehouse.error` - Gönderi depoya ulaşmış<br> `pickuprequests.pickuprequestedinnotavailablearea.error` - Adres toplama bölgelerinde bulunamadı veya bölgeye hizmet verilmiyor<br> `pickuprequests.alreadyexistrequestforcurrentshipments.error` - Gönderilerden biri için zaten toplama talebi var<br> `pickuprequests.faileduetocarrierexception.error`, `pickuprequests.faileduetoproposalexception.error`, `pickuprequests.failedduetochargeableweightorshipmentcountexception.error` - Toplama kuralları talebe izin vermiyor<br> `value.is.invalid` - Gönderiler aynı gönderici hesabına ait değil<br> `unauthorizedplatformaccess.error` - Platform bilgisi geçersiz | [Error](#error) |
-| **400**   | Alan doğrulama hatası (örn. `shipmentIds` boş veya 50'den fazla, `address`/`contact` alanları eksik, hatalı e-posta, `note` 500 karakterden uzun) | [ProblemDetails](#problemDetails) |
+| **400**   | Alan doğrulama hatası (örn. `shipmentIds` boş veya 50'den fazla, `address`/`contact` alanları eksik, hatalı e-posta, `addressLine` 200 veya `note` 500 karakterden uzun, telefon numarasında rakam dışı karakter veya `+90` için 5 ile başlamayan/10 haneli olmayan numara) | [ProblemDetails](#problemDetails) |
 | **401**   | Yetkilendirme hatası. Access token geçersiz veya süresi dolmuş | [ProblemDetails](#problemDetails) |
 | **404**   | `record.not.found` - Gönderilerden biri bulunamadı veya başka bir kullanıcıya ait | [Error](#error) |
 | **429**   | Rate limit aşıldı | [Error](#error) |
@@ -143,10 +143,10 @@ Bir veya birden fazla gönderi için tek bir toplama talebi açar. Talep `create
 | Ad                            | Açıklama | Şema |
 | ----------------------------- | -------- | ---- |
 | **countryCode** <br>_zorunlu_ | Ülke kodu, ISO 3166-1 alpha-2 (örn. `TR`) | string |
-| **city** <br>_zorunlu_        | Şehir adı (toplama bölgeleri listesindeki adla eşleşmelidir) | string |
-| **town** <br>_zorunlu_        | İlçe adı (toplama bölgeleri listesindeki adla eşleşmelidir) | string |
+| **city** <br>_zorunlu_        | Şehir adı (toplama bölgeleri listesindeki adla eşleşmelidir; büyük/küçük harf ve Türkçe karakter farkı gözetilmez, `Istanbul` = `İstanbul`) | string |
+| **town** <br>_zorunlu_        | İlçe adı (toplama bölgeleri listesindeki adla eşleşmelidir; büyük/küçük harf ve Türkçe karakter farkı gözetilmez, `Cankaya` = `Çankaya`) | string |
 | **postalCode** <br>_zorunlu_  | Posta kodu (toplama bölgeleri listesindeki kodla eşleşmelidir) | string |
-| **addressLine** <br>_zorunlu_ | Açık adres. En fazla 500 karakter | string |
+| **addressLine** <br>_zorunlu_ | Açık adres. En fazla 200 karakter | string |
 
 <a name="pickupContactRequest"></a>
 
@@ -154,7 +154,7 @@ Bir veya birden fazla gönderi için tek bir toplama talebi açar. Talep `create
 
 | Ad                      | Açıklama               | Şema                        |
 | ----------------------- | ---------------------- | --------------------------- |
-| **name** <br>_zorunlu_  | Ad soyad. En fazla 50 karakter               | string                      |
+| **name** <br>_zorunlu_  | Ad soyad. En fazla 150 karakter | string                      |
 | **email** <br>_zorunlu_ | Geçerli e-posta adresi. En fazla 100 karakter | string                      |
 | **phone** <br>_zorunlu_ | Telefon                | [PickupPhone](#pickupPhone) |
 
@@ -164,8 +164,8 @@ Bir veya birden fazla gönderi için tek bir toplama talebi açar. Talep `create
 
 | Ad                       | Açıklama                  | Şema   |
 | ------------------------ | ------------------------- | ------ |
-| **code** <br>_zorunlu_   | Ülke telefon kodu (`+90`). En fazla 25 karakter | string |
-| **number** <br>_zorunlu_ | Telefon numarası. En fazla 21 karakter          | string |
+| **code** <br>_zorunlu_   | Ülke telefon kodu (`+90`). Yalnızca rakam, başta isteğe bağlı `+`. En fazla 25 karakter | string |
+| **number** <br>_zorunlu_ | Telefon numarası. Yalnızca rakam, en fazla 21 karakter. `+90` için 5 ile başlayan 10 haneli numara (`5551112233`) | string |
 
 ---
 
