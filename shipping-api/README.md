@@ -38,6 +38,10 @@ Her endpoint bir scope ile korunur. Token alırken kullanılacak endpointlerin s
 | **shipping_shipments_write** | [createShipment](./shipment.md#createShipment), [uploadDocuments](./shipment.md#uploadDocuments), [voidShipment](./shipment.md#voidShipment)    |
 | **shipping_shipments_read**  | [getShipment](./shipment.md#getShipment), [getTracking](./cargoTracking.md#getTracking), [getEtgbDownloadUrl](./shipment.md#getEtgbDownloadUrl) |
 | **shipping_labels_write**    | [createLabel](./shipment.md#createLabel)                                                                                                        |
+| **shipping_pickups_write**   | [createPickup](./pickup.md#createPickup), [cancelPickup](./pickup.md#cancelPickup)                                                              |
+| **shipping_pickups_read**    | [getPickups](./pickup.md#getPickups)                                                                                                            |
+
+Toplama scope'ları (`shipping_pickups_write`, `shipping_pickups_read`) self-servis ile oluşturulan anahtarlar dahil tüm client'lara varsayılan olarak verilir; token isteğinde `scope` parametresine eklenmeleri yeterlidir.
 
 Token'da ilgili scope yoksa endpoint `401` ve `Authentication/InvalidScope` tipinde hata döner.
 
@@ -68,8 +72,9 @@ Bazı yetenekler scope'tan bağımsız olarak client tanımında verilir. Bu yet
 1. Client, [createRates](./rates.md#createRates) ile adres, ürün ve paket bilgilerini gönderir. Navlungo bir gönderi kaydı açar ve `reference`, `searchId` ve teklif listesini (`rates`) döndürür.
 2. Client, [createShipment](./shipment.md#createShipment) ile `reference`, `searchId` ve seçtiği teklifin `rateId` değerini göndererek teklifi seçer. Gönderi "depoya ulaşması bekleniyor" statüsüne geçer ve Navlungo takip numarası atanır.
 3. İsteğe bağlı olarak [createLabel](./shipment.md#createLabel) ile taşıyıcı etiketi oluşturulur, [uploadDocuments](./shipment.md#uploadDocuments) ile gönderiye belge eklenir.
-4. [getShipment](./shipment.md#getShipment) ve [getTracking](./cargoTracking.md#getTracking) ile gönderi durumu ve takip hareketleri izlenir.
-5. Depoya ulaşmamış gönderi [voidShipment](./shipment.md#voidShipment) ile iptal edilebilir; teslim edilen gönderinin ETGB belgesi [getEtgbDownloadUrl](./shipment.md#getEtgbDownloadUrl) ile alınır.
+4. İsteğe bağlı olarak [createPickup](./pickup.md#createPickup) ile gönderilerin adresten toplanması için toplama talebi açılır; [getPickups](./pickup.md#getPickups) ile talepler listelenir, [cancelPickup](./pickup.md#cancelPickup) ile iptal edilir. Toplama scope'ları anahtara varsayılan olarak tanımlıdır.
+5. [getShipment](./shipment.md#getShipment) ve [getTracking](./cargoTracking.md#getTracking) ile gönderi durumu ve takip hareketleri izlenir.
+6. Depoya ulaşmamış gönderi [voidShipment](./shipment.md#voidShipment) ile iptal edilebilir; teslim edilen gönderinin ETGB belgesi [getEtgbDownloadUrl](./shipment.md#getEtgbDownloadUrl) ile alınır.
 
 **Dikkat Edilmesi Gereken Noktalar**
 
@@ -112,6 +117,9 @@ Sınırlar client bazında, 10 saniyelik kayan pencere ile uygulanır. Aşıldı
 | POST api/shipping/v1/shipments/{reference}/documents        | 5             |
 | GET api/shipping/v1/shipments/{reference}/etgb/download-url | 5             |
 | POST api/shipping/v1/shipments/{reference}/void             | 5             |
+| POST api/shipping/v1/pickups                                | 5             |
+| POST api/shipping/v1/pickups/{reference}/cancel             | 5             |
+| GET api/shipping/v1/pickups?currentPage=&pageSize=          | 20            |
 
 ### Hata Yanıtları
 
@@ -204,6 +212,7 @@ Doğrulama ve yetkilendirme hatası nesnesi
 [Teklif Apisi](./rates.md)</br>
 [Gönderi Apisi](./shipment.md)</br>
 [Gönderi Takip Apisi](./cargoTracking.md)</br>
+[Toplama Apisi](./pickup.md)</br>
 
 ### Postman Koleksiyonu
 
